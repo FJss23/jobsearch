@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: 'postgres:15.1-alpine'
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_jobsearch_vol:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+    networks:
+      - postgres_network
+
+  redis:
+    restart: always
+    image: 'redis:7.0.8-alpine'
+    ports:
+      - 6379:6379
+    networks:
+      - redis_network
+
+  # pgadmin:
+  #   image: 'dpage/pgadmin4'
+  #   ports:
+  #     - 81:80
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - pgadmin_vol:/var/lib/pgadmin
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - postgres_network
+
+networks:
+  postgres_network:
+    driver: bridge
+  redis_network:
+
+volumes:
+  pg_jobsearch_vol:
+  # pgadmin_vol:

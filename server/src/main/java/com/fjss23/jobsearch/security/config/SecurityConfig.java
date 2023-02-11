@@ -7,6 +7,12 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -22,11 +28,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((requests) -> requests
+                .cors()
+                .and()
+                .authorizeHttpRequests((requests) -> requests
                     .requestMatchers("/api/v*/registration/**").permitAll()
                     .anyRequest().authenticated()
-            )
-            .authenticationProvider(daoAuthenticationProvider());
+                )
+                .authenticationProvider(daoAuthenticationProvider())
+                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
         return http.build();
     }
@@ -39,4 +48,13 @@ public class SecurityConfig {
         return provider;
     }
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        var config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 }

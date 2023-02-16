@@ -4,5 +4,5 @@ public enum AppUserRole {
     CANDIDATE,
     COMPANY,
     COMPANY_ADMIN,
-    APP_ADMIN
+    APP_ADMIN,
 }

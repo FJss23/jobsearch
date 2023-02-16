@@ -11,7 +11,11 @@ public class ConfirmationToken {
     LocalDateTime expiresAt;
     LocalDateTime confirmedAt;
 
-    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt) {
+    public ConfirmationToken(
+        String token,
+        LocalDateTime createdAt,
+        LocalDateTime expiresAt
+    ) {
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
@@ -58,13 +62,18 @@ public class ConfirmationToken {
         this.confirmedAt = confirmedAt;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConfirmationToken that = (ConfirmationToken) o;
-        return Objects.equals(id, that.id) && Objects.equals(token, that.token) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expiresAt, that.expiresAt) && Objects.equals(confirmedAt, that.confirmedAt);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(token, that.token) &&
+            Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(expiresAt, that.expiresAt) &&
+            Objects.equals(confirmedAt, that.confirmedAt)
+        );
     }
 
     @Override

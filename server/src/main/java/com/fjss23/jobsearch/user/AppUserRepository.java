@@ -1,9 +1,8 @@
 package com.fjss23.jobsearch.user;
 
-import org.springframework.stereotype.Repository;
-
-import javax.swing.text.html.Option;
 import java.util.Optional;
+import javax.swing.text.html.Option;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class AppUserRepository {
@@ -12,7 +11,5 @@ public class AppUserRepository {
         return null;
     }
 
-    void save(AppUser user){
-
-    }
+    void save(AppUser user) {}
 }

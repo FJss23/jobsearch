@@ -1,6 +1,7 @@
-package com.fjss23.jobsearch.security.config;
+package com.fjss23.jobsearch.security;
 
 import com.fjss23.jobsearch.user.AppUserService;
+import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,15 +13,16 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
 @Configuration
 public class SecurityConfig {
 
     private final AppUserService appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public SecurityConfig(AppUserService appUserService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SecurityConfig(
+        AppUserService appUserService,
+        BCryptPasswordEncoder bCryptPasswordEncoder
+    ) {
         this.appUserService = appUserService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -30,9 +32,12 @@ public class SecurityConfig {
         http
             .cors()
             .and()
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/api/v*/registration/**").permitAll()
-                .anyRequest().authenticated()
+            .authorizeHttpRequests(requests ->
+                requests
+                    .requestMatchers("/api/v*/registration/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
             )
             .authenticationProvider(daoAuthenticationProvider())
             .csrf()
@@ -54,7 +59,9 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         var config = new CorsConfiguration();
         config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(
+            Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")
+        );
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

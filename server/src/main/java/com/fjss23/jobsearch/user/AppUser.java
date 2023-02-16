@@ -1,12 +1,11 @@
 package com.fjss23.jobsearch.user;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class AppUser implements UserDetails {
 
@@ -19,7 +18,16 @@ public class AppUser implements UserDetails {
     private Boolean locked = false;
     private Boolean enabled = false;
 
-    public AppUser(Long id, String firstName, String lastName, String email, String password, AppUserRole userRole, Boolean locked, Boolean enabled) {
+    public AppUser(
+        Long id,
+        String firstName,
+        String lastName,
+        String email,
+        String password,
+        AppUserRole userRole,
+        Boolean locked,
+        Boolean enabled
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,7 +40,9 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+            userRole.name()
+        );
         return Collections.singletonList(authority);
     }
 
@@ -131,11 +141,29 @@ public class AppUser implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppUser that = (AppUser) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(password, that.password) && userRole == that.userRole && Objects.equals(locked, that.locked) && Objects.equals(enabled, that.enabled);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(firstName, that.firstName) &&
+            Objects.equals(lastName, that.lastName) &&
+            Objects.equals(email, that.email) &&
+            Objects.equals(password, that.password) &&
+            userRole == that.userRole &&
+            Objects.equals(locked, that.locked) &&
+            Objects.equals(enabled, that.enabled)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, password, userRole, locked, enabled);
+        return Objects.hash(
+            id,
+            firstName,
+            lastName,
+            email,
+            password,
+            userRole,
+            locked,
+            enabled
+        );
     }
 }

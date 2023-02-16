@@ -8,7 +8,7 @@ public class RegistrationService {
 
     private final AppUserService userService;
 
-    public RegistrationService(AppUserService userService){
+    public RegistrationService(AppUserService userService) {
         this.userService = userService;
     }
 

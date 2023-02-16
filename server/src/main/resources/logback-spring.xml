@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
-    <!--<springProfile name="dev">-->
+    <springProfile name="dev">
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -10,5 +10,22 @@
         <root level="debug">
             <appender-ref ref="STDOUT" />
         </root>
-    <!--</springProfile>-->
+    </springProfile>
+
+    <springProfile name="prod">
+        <property name="LOG_FILE" value="jobsearch-spring-boot-api" />
+        <property name="LOG_DIR" value="/var/logs/application" />
+
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_DIR}/${LOG_FILE}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_DIR}/%d{yyyy/MM}/${LOG_FILE}.gz</fileNamePattern>
+                <totalSizeCap>3GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <root level="warn">
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
 </configuration>

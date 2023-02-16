@@ -28,14 +28,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
-                .authorizeHttpRequests((requests) -> requests
-                    .requestMatchers("/api/v*/registration/**").permitAll()
-                    .anyRequest().authenticated()
-                )
-                .authenticationProvider(daoAuthenticationProvider())
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+            .cors()
+            .and()
+            .authorizeHttpRequests((requests) -> requests
+                .requestMatchers("/api/v*/registration/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .authenticationProvider(daoAuthenticationProvider())
+            .csrf()
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .ignoringRequestMatchers("/api/v*/registration/**");
 
         return http.build();
     }
@@ -51,7 +53,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         var config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("localhost:3000"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

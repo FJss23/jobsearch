@@ -4,6 +4,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
+/**
+ * Based on:
+ * - https://www.baeldung.com/spring-mvc-custom-validator
+ */
 public class FieldsValueMatchValidator
     implements ConstraintValidator<FieldsValueMatch, Object> {
 

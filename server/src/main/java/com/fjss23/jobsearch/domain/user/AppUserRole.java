@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.user;
+package com.fjss23.jobsearch.domain.user;
 
 public enum AppUserRole {
     CANDIDATE,

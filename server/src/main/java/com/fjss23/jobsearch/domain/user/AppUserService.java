@@ -1,6 +1,7 @@
-package com.fjss23.jobsearch.user;
+package com.fjss23.jobsearch.domain.user;
 
-import com.fjss23.jobsearch.registration.token.ConfirmationToken;
+import com.fjss23.jobsearch.domain.registration.token.ConfirmationToken;
+import com.fjss23.jobsearch.domain.registration.token.ConfirmationTokenService;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,21 +13,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserService implements UserDetailsService {
 
-    private final AppUserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
+
+    private static final int VALID_TOKEN_TIME_IN_MINUTES = 20;
 
     public AppUserService(
-        AppUserRepository userRepository,
-        BCryptPasswordEncoder bCryptPasswordEncoder
+        AppUserRepository appUserRepository,
+        BCryptPasswordEncoder bCryptPasswordEncoder,
+        ConfirmationTokenService confirmationTokenService
     ) {
-        this.userRepository = userRepository;
+        this.appUserRepository = appUserRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email)
         throws UsernameNotFoundException {
-        return userRepository
+        return appUserRepository
             .findByEmail(email)
             .orElseThrow(() ->
                 new UsernameNotFoundException(
@@ -36,27 +42,35 @@ public class AppUserService implements UserDetailsService {
     }
 
     public String signUpUser(AppUser user) {
-        boolean exists = userRepository
+        boolean exists = appUserRepository
             .findByEmail(user.getUsername())
             .isPresent();
 
         if (exists) {
             // TODO: Check if the same person is trying to register again
-            throw new IllegalArgumentException("email.taken");
+            throw new IllegalArgumentException("error.email.taken");
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(
             user.getPassword()
         );
         user.setPassword(encodedPassword);
-        userRepository.save(user);
+        appUserRepository.save(user);
 
         String token = UUID.randomUUID().toString();
         var confirmationToken = new ConfirmationToken(
             token,
+            user.getEmail(),
             LocalDateTime.now(),
-            LocalDateTime.now().plusMinutes(20)
+            LocalDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES)
         );
-        return "";
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        return token;
+    }
+
+    public int enableAppUser(String email) {
+        return appUserRepository.enableAppUser(email);
     }
 }

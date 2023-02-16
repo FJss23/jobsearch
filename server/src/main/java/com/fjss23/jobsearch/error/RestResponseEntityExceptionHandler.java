@@ -16,6 +16,10 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * More information and examples:
+ * - https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
+ */
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
     extends ResponseEntityExceptionHandler {

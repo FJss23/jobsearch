@@ -1,8 +1,8 @@
-package com.fjss23.jobsearch.user;
+package com.fjss23.jobsearch.domain.user;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,26 +17,10 @@ public class AppUser implements UserDetails {
     private AppUserRole userRole;
     private Boolean locked = false;
     private Boolean enabled = false;
+    private LocalDateTime loggedAt;
+    private Long companyId;
 
-    public AppUser(
-        Long id,
-        String firstName,
-        String lastName,
-        String email,
-        String password,
-        AppUserRole userRole,
-        Boolean locked,
-        Boolean enabled
-    ) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.userRole = userRole;
-        this.locked = locked;
-        this.enabled = enabled;
-    }
+    public AppUser() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -136,34 +120,19 @@ public class AppUser implements UserDetails {
         this.enabled = enabled;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AppUser that = (AppUser) o;
-        return (
-            Objects.equals(id, that.id) &&
-            Objects.equals(firstName, that.firstName) &&
-            Objects.equals(lastName, that.lastName) &&
-            Objects.equals(email, that.email) &&
-            Objects.equals(password, that.password) &&
-            userRole == that.userRole &&
-            Objects.equals(locked, that.locked) &&
-            Objects.equals(enabled, that.enabled)
-        );
+    public LocalDateTime getLoggedAt() {
+        return loggedAt;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-            id,
-            firstName,
-            lastName,
-            email,
-            password,
-            userRole,
-            locked,
-            enabled
-        );
+    public void setLoggedAt(LocalDateTime loggedAt) {
+        this.loggedAt = loggedAt;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

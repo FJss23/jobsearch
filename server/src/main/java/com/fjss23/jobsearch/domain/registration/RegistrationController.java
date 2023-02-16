@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.registration;
+package com.fjss23.jobsearch.domain.registration;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,17 +23,11 @@ public class RegistrationController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public String register(@Valid @RequestBody RegistrationRequestDto request) {
-        logger.debug("trying to register!");
-        registrationService.register(request);
-        return "You're now registered!";
+        return registrationService.register(request);
     }
 
-    @GetMapping
-    public String helloWorld() {
-        logger.info(
-            "Example log from {}",
-            RegistrationController.class.getSimpleName()
-        );
-        return "Hello World2";
+    @GetMapping(path = "confirm")
+    public String verifyRegistration(@RequestParam("token") String token) {
+        return registrationService.confirmToken(token);
     }
 }

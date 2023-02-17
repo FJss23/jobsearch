@@ -5,6 +5,7 @@ server/.env
 server/.mvn/wrapper/maven-wrapper.jar
 server/!**/src/main/**/target/
 server/!**/src/test/**/target/
+server/volume
 
 # IntelliJ IDEA
 server/.idea

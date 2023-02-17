@@ -26,6 +26,7 @@ you can change the application.properties or add the `-Dspring.profiles.active=d
 Production Environment
 
 You have to pass the flag for production profile.
+For now, store the AWS credentials in a `~/.aws/credentials`
 
 **Server**
 - `java -jar -Dspring.profiles.active=prod XXX.jar`

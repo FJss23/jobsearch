@@ -39,6 +39,7 @@ public class RegistrationService {
         var token = appUserService.signUpUser(appUser);
         var confirmationLink =
             "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+
         emailService.sendToken(
             appUser.getFirstName(),
             appUser.getEmail(),
@@ -63,7 +64,7 @@ public class RegistrationService {
         ) throw new IllegalStateException("Token expired");
 
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(confirmationToken.getEmail());
+        appUserService.enableAppUser(confirmationToken.getAppUserEmail());
 
         return "confirmed";
     }

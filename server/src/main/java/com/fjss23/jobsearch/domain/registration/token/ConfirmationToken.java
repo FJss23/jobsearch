@@ -5,25 +5,35 @@ import java.util.Objects;
 
 public class ConfirmationToken {
 
+    private String id;
     private String token;
-    private String email;
-    LocalDateTime createdAt;
-    LocalDateTime expiresAt;
-    LocalDateTime confirmedAt;
+    private String appUserEmail;
+    private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
+    private LocalDateTime confirmedAt;
 
     public ConfirmationToken() {}
 
     public ConfirmationToken(
         String token,
-        String email,
+        String appUserEmail,
         LocalDateTime createdAt,
         LocalDateTime expiresAt
     ) {
         this.token = token;
-        this.email = email;
+        this.appUserEmail = appUserEmail;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.confirmedAt = null;
+        this.id = null;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getToken() {
@@ -34,12 +44,12 @@ public class ConfirmationToken {
         this.token = token;
     }
 
-    public String getEmail() {
-        return email;
+    public String getAppUserEmail() {
+        return appUserEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAppUserEmail(String appUserEmail) {
+        this.appUserEmail = appUserEmail;
     }
 
     public LocalDateTime getCreatedAt() {

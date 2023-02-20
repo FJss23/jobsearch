@@ -1,6 +1,6 @@
 #!/bin/bash
 # Remeber to make the file executable... chmod +x ./init_aws.sh
-
+#
 # ----------------------- SES -----------------------
 
 # Step 1: Verify the email address

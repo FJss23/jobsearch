@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +25,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
+    @Async
     public void sendToken(
         String firstName,
         String to,
@@ -41,11 +43,13 @@ public class EmailService {
             firstName +
             ". To complete the registration process click following link: " +
             confirmationLink;
+
         var simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(EMAIL_NO_REPLY);
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(message);
-        // this.mailSender.send(simpleMailMessage);
+        logger.info("Email sent.\n {}", simpleMailMessage.toString());
+        //this.mailSender.send(simpleMailMessage);
     }
 }

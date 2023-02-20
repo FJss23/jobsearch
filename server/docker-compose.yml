@@ -25,18 +25,20 @@ services:
 
   localstack:
     container_name: localstack_main
-    image: 'localstack/localstack:latest'
+    image: 'localstack/localstack:1.4'
     ports:
       - 127.0.0.1:4566:4566            # LocalStack Gateway
       - 127.0.0.1:4510-4559:4510-4559  # external services port range
     environment:
-      - SERVICES=s3,ses
-      - DEBUG=${DEBUG:-1}
-      - DOCKER_HOST=unix:///var/run/docker.sock
+      AWS_ACCESS_KEY_ID: 'foo'
+      AWS_SECRET_ACCESS_KEY: 'bar'
+      DEFAULT_REGION: 'eu-west-3'
+      DEBUG: ${DEBUG:-1}
+      DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
+      - ./scripts/init_aws.sh:/etc/localstack/init/ready.d/init_aws.sh
       - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./scripts/create_bucket.sh:/docker-entrypoint-initaws.d/create_bucket.sh
 
   # pgadmin:
   #   image: 'dpage/pgadmin4'

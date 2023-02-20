@@ -16,6 +16,20 @@ Development Environment
 By default, the server will run in development mode (dev profile), if you want to specify the prod mode,
 you can change the application.properties or add the `-Dspring.profiles.active=dev` flag when executing.
 
+Check if the init_aws.sh script was correctly executed.
+```bash
+curl -s localhost:4566/_localstack/init | jq .
+```
+Check the available services
+```bash
+curl -s localhost:4566/health | jq .
+```
+
+Check the messages of ses
+```bash
+http://localhost:4566/_localstack/ses
+``
+
 **Server**
 - `docker-compose run`
 - `mvn spring-boot:run`
@@ -40,5 +54,9 @@ in the volume `pg_jobsearch_vol`). If the process of setup up the project doesn'
 to execute the script again, we have can delete the volumes with `docker-compose down --volumnes`.
 
 
+Access directly into the localstack container
+```bash
+docker exec -t <container_id> /bin/bash
+```
 ## TODO
 - [ ] Should I use Docker Swarm instead of docker-compose?

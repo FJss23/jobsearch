@@ -1,6 +1,7 @@
 #!/bin/bash
+
 # Remeber to make the file executable... chmod +x ./init_aws.sh
-#
+
 # ----------------------- SES -----------------------
 
 # Step 1: Verify the email address
@@ -14,8 +15,12 @@ aws ses list-identities \
     --endpoint-url http://localhost:4566
 
 # ----------------------- S3 -----------------------
+
 # Step 1: Create the bucket
-# aws --endpoint-url=http://localhost:4566 s3 mb s3://jobsearch_bucket
-#
+aws s3 mb s3://jobsearch-bucket \
+    --endpoint-url http://localhost:4566
+
 # Step 2: Confirm if it was created
-# aws --endpoint-url=http://localhost:4566 s3 ls
+aws s3 ls \
+    --endpoint-url http://localhost:4566
+

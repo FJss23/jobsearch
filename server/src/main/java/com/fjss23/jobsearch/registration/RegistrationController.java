@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.domain.registration;
+package com.fjss23.jobsearch.registration;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

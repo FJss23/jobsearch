@@ -1,6 +1,6 @@
 package com.fjss23.jobsearch.security;
 
-import com.fjss23.jobsearch.domain.user.AppUserService;
+import com.fjss23.jobsearch.user.AppUserService;
 import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

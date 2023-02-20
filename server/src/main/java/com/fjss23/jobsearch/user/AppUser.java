@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.domain.user;
+package com.fjss23.jobsearch.user;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

@@ -1,9 +1,10 @@
-package com.fjss23.jobsearch.domain.user;
+package com.fjss23.jobsearch.user;
 
-import com.fjss23.jobsearch.domain.registration.token.ConfirmationToken;
-import com.fjss23.jobsearch.domain.registration.token.ConfirmationTokenService;
+import com.fjss23.jobsearch.registration.token.ConfirmationToken;
+import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

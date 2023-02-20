@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.domain.registration.token;
+package com.fjss23.jobsearch.registration.token;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

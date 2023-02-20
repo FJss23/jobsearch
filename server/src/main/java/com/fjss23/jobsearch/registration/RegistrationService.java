@@ -1,13 +1,14 @@
-package com.fjss23.jobsearch.domain.registration;
+package com.fjss23.jobsearch.registration;
 
-import com.fjss23.jobsearch.domain.email.EmailService;
-import com.fjss23.jobsearch.domain.registration.token.ConfirmationToken;
-import com.fjss23.jobsearch.domain.registration.token.ConfirmationTokenService;
-import com.fjss23.jobsearch.domain.user.AppUser;
-import com.fjss23.jobsearch.domain.user.AppUserRole;
-import com.fjss23.jobsearch.domain.user.AppUserService;
-import java.time.LocalDate;
+import com.fjss23.jobsearch.email.EmailService;
+import com.fjss23.jobsearch.registration.token.ConfirmationToken;
+import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
+import com.fjss23.jobsearch.user.AppUser;
+import com.fjss23.jobsearch.user.AppUserRole;
+import com.fjss23.jobsearch.user.AppUserService;
+
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

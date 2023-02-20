@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.domain.registration;
+package com.fjss23.jobsearch.registration;
 
 import com.fjss23.jobsearch.validation.FieldsValueMatch;
 import jakarta.validation.constraints.*;

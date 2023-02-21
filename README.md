@@ -28,6 +28,7 @@ curl -s localhost:4566/health | jq .
 Check the messages of ses
 ```bash
 http://localhost:4566/_localstack/ses
+http://localhost:4566/_aws/ses
 ``
 
 **Server**

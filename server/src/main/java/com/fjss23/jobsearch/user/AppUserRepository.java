@@ -1,9 +1,10 @@
 package com.fjss23.jobsearch.user;
 
+import java.sql.Types;
 import java.util.Optional;
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,8 +22,7 @@ public class AppUserRepository {
 
     Optional<AppUser> findByEmail(String email) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        String sql =
-            """
+        String sql = """
             SELECT
                 appuser_id as id,
                 first_name,
@@ -36,20 +36,22 @@ public class AppUserRepository {
                 company_id
             FROM jobsearch.appuser
             WHERE email = :email;
-            """;
+        """;
         params.addValue("email", email);
         try {
-            var appUsers = jdbcTemplate.queryForObject(sql, params, appUserRowMapper);
+            var appUsers = jdbcTemplate.queryForObject(
+                sql,
+                params,
+                appUserRowMapper
+            );
             return Optional.of(appUsers);
-        } catch(EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
     }
 
     void save(AppUser appUser) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        String sql =
-            """
+        String sql = """
             INSERT INTO jobsearch.appuser(
                 first_name,
                 last_name,
@@ -60,24 +62,16 @@ public class AppUserRepository {
                 enabled,
                 created_by)
             VALUES(
-                :first_name,
-                :last_name,
+                :firstName,
+                :lastName,
                 :email,
                 :password,
-                :role,
+                cast(:userRole.name as appuser_role),
                 :locked,
                 :enabled,
-                :created_by);
-            """;
-        params.addValue("first_name", appUser.getFirstName());
-        params.addValue("last_name", appUser.getLastName());
-        params.addValue("email", appUser.getEmail());
-        params.addValue("password", appUser.getPassword());
-        params.addValue("role", appUser.getUserRole().toString());
-        params.addValue("locked", appUser.getLocked());
-        params.addValue("enabled", appUser.isEnabled());
-        params.addValue("created_by", appUser.getEmail());
-        jdbcTemplate.update(sql, params);
+                :createdBy);
+        """;
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(appUser));
     }
 
     public int enableAppUser(String email) {

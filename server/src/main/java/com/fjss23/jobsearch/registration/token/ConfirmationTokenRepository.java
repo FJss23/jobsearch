@@ -1,8 +1,10 @@
 package com.fjss23.jobsearch.registration.token;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ConfirmationTokenRepository {
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
     private BeanPropertyRowMapper<ConfirmationToken> confirmationTokenRowMapper;
 
     public ConfirmationTokenRepository(
@@ -31,24 +33,21 @@ public class ConfirmationTokenRepository {
                 appuser_email)
             VALUES(
                 :token,
-                :expires_at,
-                :appuser_email);
+                :expiresAt,
+                :appUserEmail);
             """;
-        params.addValue("token", token.getToken());
-        params.addValue("expires_at", token.getExpiresAt());
-        params.addValue("appuser_email", token.getAppUserEmail());
-        jdbcTemplate.update(sql, params);
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(token));
     }
 
-    public int updateConfirmedAt(String token, LocalDateTime now) {
+    public int updateConfirmedAt(String token, OffsetDateTime now) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
             """
             UPDATE jobsearch.confirmation_token
-            SET confirmed_at = :confirmed_at
+            SET confirmed_at = :confirmedAt
             WHERE token = :token;
             """;
-        params.addValue(":confirmed_at", now);
+        params.addValue(":confirmedAt", now);
         params.addValue(":token", token);
         return jdbcTemplate.update(sql, params);
     }
@@ -60,10 +59,10 @@ public class ConfirmationTokenRepository {
             SELECT
                 confirmation_token_id as id,
                 token,
-                expires_at,
-                confirmed_at,
-                appuser_email,
-                created_at
+                expires_at as expiresAt,
+                confirmed_at as confirmedAt,
+                appuser_email as appUserEmail,
+                created_at as createdAt
             FROM jobsearch.confirmation_token
             WHERE token = :token;
             """;

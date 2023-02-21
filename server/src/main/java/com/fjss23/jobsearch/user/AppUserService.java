@@ -3,8 +3,8 @@ package com.fjss23.jobsearch.user;
 import com.fjss23.jobsearch.registration.token.ConfirmationToken;
 import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -62,8 +62,8 @@ public class AppUserService implements UserDetailsService {
         var confirmationToken = new ConfirmationToken(
             token,
             user.getEmail(),
-            LocalDateTime.now(),
-            LocalDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES)
+            OffsetDateTime.now(),
+            OffsetDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES)
         );
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);

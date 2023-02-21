@@ -1,6 +1,7 @@
 package com.fjss23.jobsearch.registration.token;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 public class ConfirmationToken {
@@ -8,24 +9,26 @@ public class ConfirmationToken {
     private String id;
     private String token;
     private String appUserEmail;
-    private LocalDateTime createdAt;
-    private LocalDateTime expiresAt;
-    private LocalDateTime confirmedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime expiresAt;
+    private OffsetDateTime confirmedAt;
 
-    public ConfirmationToken() {}
+    public ConfirmationToken() { }
 
-    public ConfirmationToken(
-        String token,
-        String appUserEmail,
-        LocalDateTime createdAt,
-        LocalDateTime expiresAt
-    ) {
+    public ConfirmationToken(String id, String token, String appUserEmail, OffsetDateTime createdAt, OffsetDateTime expiresAt, OffsetDateTime confirmedAt) {
+        this.id = id;
         this.token = token;
         this.appUserEmail = appUserEmail;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.confirmedAt = null;
-        this.id = null;
+        this.confirmedAt = confirmedAt;
+    }
+
+    public ConfirmationToken(String token, String email, OffsetDateTime createdAt, OffsetDateTime expiresAt) {
+        this.token = token;
+        this.appUserEmail = email;
+        this.createdAt = createdAt;
+        this.expiresAt = expiresAt;
     }
 
     public String getId() {
@@ -52,27 +55,27 @@ public class ConfirmationToken {
         this.appUserEmail = appUserEmail;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getExpiresAt() {
+    public OffsetDateTime getExpiresAt() {
         return expiresAt;
     }
 
-    public void setExpiresAt(LocalDateTime expiresAt) {
+    public void setExpiresAt(OffsetDateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
 
-    public LocalDateTime getConfirmedAt() {
+    public OffsetDateTime getConfirmedAt() {
         return confirmedAt;
     }
 
-    public void setConfirmedAt(LocalDateTime confirmedAt) {
+    public void setConfirmedAt(OffsetDateTime confirmedAt) {
         this.confirmedAt = confirmedAt;
     }
 }

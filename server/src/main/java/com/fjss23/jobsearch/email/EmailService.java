@@ -2,32 +2,24 @@ package com.fjss23.jobsearch.email;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.ses.SesClient;
+import software.amazon.awssdk.services.ses.model.*;
 
-/**
- * Some examples:
- * - https://docs.awspring.io/spring-cloud-aws/docs/2.4.1/reference/html/index.html#sending-mails
- * - https://www.baeldung.com/spring-email
- */
 @Service
 public class EmailService {
 
     private static final Logger logger = LoggerFactory.getLogger(
         EmailService.class
     );
-    private JavaMailSender mailSender;
 
+    private final SesClient sesClient;
     private static final String EMAIL_NO_REPLY = "noreply@jobsearch.com";
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    public EmailService(SesClient sesClient) {
+        this.sesClient = sesClient;
     }
 
-    @Async
     public void sendToken(
         String firstName,
         String to,
@@ -46,12 +38,53 @@ public class EmailService {
             ". To complete the registration process click following link: " +
             confirmationLink;
 
-        var simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(EMAIL_NO_REPLY);
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(message);
-        logger.info("Email sent.\n {}", simpleMailMessage.toString());
-        this.mailSender.send(simpleMailMessage);
+        this.send(this.EMAIL_NO_REPLY, to, subject, message);
+    }
+
+    private void send(
+        String sender,
+        String recipient,
+        String subject,
+        String bodyHTML
+    ) {
+
+        try {
+            logger.info(
+                "Attempting to send an email through Amazon SES " +
+                "using the AWS SDK for Java..."
+            );
+
+            Destination destination = Destination.builder()
+                .toAddresses(recipient)
+                .build();
+
+            Content content = Content.builder()
+                .data(bodyHTML)
+                .build();
+
+            Content sub = Content.builder()
+                .data(subject)
+                .build();
+
+            Body body = Body.builder()
+                .html(content)
+                .build();
+
+            Message msg = Message.builder()
+                .subject(sub)
+                .body(body)
+                .build();
+
+            SendEmailRequest emailRequest = SendEmailRequest.builder()
+                .destination(destination)
+                .message(msg)
+                .source(sender)
+                .build();
+
+            sesClient.sendEmail(emailRequest);
+            logger.info("email was sent");
+        } catch (Exception e) {
+            logger.error("Couldn't send the email \n {}", e);
+        }
     }
 }

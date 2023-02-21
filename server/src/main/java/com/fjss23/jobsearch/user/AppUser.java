@@ -15,10 +15,11 @@ public class AppUser implements UserDetails {
     private String email;
     private String password;
     private AppUserRole userRole;
-    private Boolean locked = false;
-    private Boolean enabled = false;
+    private boolean locked = false;
+    private boolean enabled = false;
     private LocalDateTime loggedAt;
     private Long companyId;
+    private String createdBy;
 
     public AppUser() {}
 
@@ -104,19 +105,15 @@ public class AppUser implements UserDetails {
         this.userRole = userRole;
     }
 
-    public Boolean getLocked() {
-        return locked;
-    }
-
-    public void setLocked(Boolean locked) {
+    public void setLocked(boolean locked) {
         this.locked = locked;
     }
 
-    public Boolean getEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -134,5 +131,21 @@ public class AppUser implements UserDetails {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public boolean getLocked() {
+        return locked;
+    }
+
+    public boolean setLocked() {
+        return locked;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }

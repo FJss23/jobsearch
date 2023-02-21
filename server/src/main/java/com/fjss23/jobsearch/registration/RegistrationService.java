@@ -6,8 +6,8 @@ import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 import com.fjss23.jobsearch.user.AppUser;
 import com.fjss23.jobsearch.user.AppUserRole;
 import com.fjss23.jobsearch.user.AppUserService;
-
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +36,7 @@ public class RegistrationService {
         appUser.setEmail(request.email());
         appUser.setPassword(request.password());
         appUser.setUserRole(AppUserRole.CANDIDATE);
+        appUser.setCreatedBy(request.email());
 
         var token = appUserService.signUpUser(appUser);
         var confirmationLink =
@@ -59,9 +60,9 @@ public class RegistrationService {
             confirmationToken.getConfirmedAt() != null
         ) throw new IllegalStateException("Email already confirmed");
 
-        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        OffsetDateTime expiredAt = confirmationToken.getExpiresAt();
         if (
-            expiredAt.isBefore(LocalDateTime.now())
+            expiredAt.isBefore(OffsetDateTime.now())
         ) throw new IllegalStateException("Token expired");
 
         confirmationTokenService.setConfirmedAt(token);

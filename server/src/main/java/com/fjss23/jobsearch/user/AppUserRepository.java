@@ -79,7 +79,7 @@ public class AppUserRepository {
         String sql =
             """
             UPDATE jobsearch.appuser
-            SET enabled = :enabled
+            SET enabled = true
             WHERE email = :email;
             """;
         params.addValue("email", email);

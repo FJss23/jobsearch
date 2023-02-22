@@ -39,7 +39,7 @@ public class ConfirmationTokenRepository {
         jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(token));
     }
 
-    public int updateConfirmedAt(String token, OffsetDateTime now) {
+    public int updateConfirmedAt(String token, OffsetDateTime date) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
             """
@@ -47,8 +47,8 @@ public class ConfirmationTokenRepository {
             SET confirmed_at = :confirmedAt
             WHERE token = :token;
             """;
-        params.addValue(":confirmedAt", now);
-        params.addValue(":token", token);
+        params.addValue("confirmedAt", date);
+        params.addValue("token", token);
         return jdbcTemplate.update(sql, params);
     }
 
@@ -59,10 +59,10 @@ public class ConfirmationTokenRepository {
             SELECT
                 confirmation_token_id as id,
                 token,
-                expires_at as expiresAt,
-                confirmed_at as confirmedAt,
+                expires_at,
+                confirmed_at,
                 appuser_email as appUserEmail,
-                created_at as createdAt
+                created_at
             FROM jobsearch.confirmation_token
             WHERE token = :token;
             """;

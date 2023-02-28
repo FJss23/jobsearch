@@ -1,21 +1,19 @@
 package com.fjss23.jobsearch.user;
 
-import java.sql.Types;
 import java.util.Optional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AppUserRepository {
+public class AppUserRepositoryImpl {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final BeanPropertyRowMapper<AppUser> appUserRowMapper;
 
-    public AppUserRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public AppUserRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.appUserRowMapper = new BeanPropertyRowMapper<>(AppUser.class);
     }
@@ -50,8 +48,8 @@ public class AppUserRepository {
         }
     }
 
-    void save(AppUser appUser) {
-        String sql = """
+    void create(AppUser appUser) {
+        /*String sql = """
             INSERT INTO jobsearch.appuser(
                 first_name,
                 last_name,
@@ -71,7 +69,7 @@ public class AppUserRepository {
                 :enabled,
                 :createdBy);
         """;
-        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(appUser));
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(appUser));*/
     }
 
     public int enableAppUser(String email) {

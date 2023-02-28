@@ -47,3 +47,15 @@ client/.vercel
 # typescript
 client/*.tsbuildinfo
 client/next-env.d.ts
+
+# testing
+client/coverage
+
+# production
+client/build
+
+# misc
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local

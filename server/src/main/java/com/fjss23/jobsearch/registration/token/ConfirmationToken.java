@@ -1,8 +1,6 @@
 package com.fjss23.jobsearch.registration.token;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 public class ConfirmationToken {
 

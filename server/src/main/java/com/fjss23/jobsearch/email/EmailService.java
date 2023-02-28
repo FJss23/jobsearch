@@ -42,10 +42,10 @@ public class EmailService {
     }
 
     private void send(
-        String sender,
-        String recipient,
+        String from,
+        String to,
         String subject,
-        String bodyHTML
+        String message
     ) {
 
         try {
@@ -55,11 +55,11 @@ public class EmailService {
             );
 
             Destination destination = Destination.builder()
-                .toAddresses(recipient)
+                .toAddresses(to)
                 .build();
 
             Content content = Content.builder()
-                .data(bodyHTML)
+                .data(message)
                 .build();
 
             Content sub = Content.builder()
@@ -78,7 +78,7 @@ public class EmailService {
             SendEmailRequest emailRequest = SendEmailRequest.builder()
                 .destination(destination)
                 .message(msg)
-                .source(sender)
+                .source(from)
                 .build();
 
             sesClient.sendEmail(emailRequest);

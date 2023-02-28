@@ -1,19 +1,21 @@
 package com.fjss23.jobsearch.user;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AppUserRepositoryImpl {
+public class AppUserRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final BeanPropertyRowMapper<AppUser> appUserRowMapper;
 
-    public AppUserRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public AppUserRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.appUserRowMapper = new BeanPropertyRowMapper<>(AppUser.class);
     }
@@ -34,7 +36,7 @@ public class AppUserRepositoryImpl {
                 company_id
             FROM jobsearch.appuser
             WHERE email = :email;
-        """;
+            """;
         params.addValue("email", email);
         try {
             var appUsers = jdbcTemplate.queryForObject(
@@ -48,8 +50,28 @@ public class AppUserRepositoryImpl {
         }
     }
 
-    void create(AppUser appUser) {
-        /*String sql = """
+    public List<AppUser> findAll() {
+        String sql = """
+            SELECT
+                appuser_id as id,
+                first_name,
+                last_name,
+                email,
+                password,
+                role as userRole,
+                locked,
+                enabled,
+                logged_at,
+                company_id,
+                created_by
+            FROM
+                jobsearch.appuser;
+            """;
+        return jdbcTemplate.query(sql, appUserRowMapper);
+    }
+
+    public void create(AppUser appUser) {
+        String sql = """
             INSERT INTO jobsearch.appuser(
                 first_name,
                 last_name,
@@ -68,8 +90,8 @@ public class AppUserRepositoryImpl {
                 :locked,
                 :enabled,
                 :createdBy);
-        """;
-        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(appUser));*/
+            """;
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(appUser));
     }
 
     public int enableAppUser(String email) {

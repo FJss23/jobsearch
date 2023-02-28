@@ -2,8 +2,9 @@ package com.fjss23.jobsearch.user;
 
 import com.fjss23.jobsearch.registration.token.ConfirmationToken;
 import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
-import java.time.LocalDateTime;
+
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -56,7 +57,7 @@ public class AppUserService implements UserDetailsService {
             user.getPassword()
         );
         user.setPassword(encodedPassword);
-        appUserRepository.save(user);
+        appUserRepository.create(user);
 
         String token = UUID.randomUUID().toString();
         var confirmationToken = new ConfirmationToken(
@@ -73,5 +74,9 @@ public class AppUserService implements UserDetailsService {
 
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
+    }
+
+    public List<AppUser> getAllUsers() {
+        return appUserRepository.findAll();
     }
 }

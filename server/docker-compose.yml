@@ -24,15 +24,14 @@ services:
       - redis_network
 
   localstack:
-    container_name: localstack_main
     image: 'localstack/localstack:1.4'
     ports:
       - 127.0.0.1:4566:4566            # LocalStack Gateway
       - 127.0.0.1:4510-4559:4510-4559  # external services port range
     environment:
-      AWS_ACCESS_KEY_ID: 'foo'
-      AWS_SECRET_ACCESS_KEY: 'bar'
-      DEFAULT_REGION: 'eu-west-3'
+      # AWS_ACCESS_KEY_ID: 'foo'
+      # AWS_SECRET_ACCESS_KEY: 'bar'
+      # DEFAULT_REGION: 'eu-west-3'
       DEBUG: ${DEBUG:-1}
       DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
@@ -40,18 +39,20 @@ services:
       - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
-  # pgadmin:
-  #   image: 'dpage/pgadmin4'
-  #   ports:
-  #     - 81:80
-  #   depends_on:
-  #     - postgres
-  #   volumes:
-  #     - pgadmin_vol:/var/lib/pgadmin
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - postgres_network
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    ports:
+      - 81:80
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_vol:/var/lib/pgadmin
+    env_file:
+      - .env
+    networks:
+      - postgres_network
+    logging:
+      driver: none
 
 networks:
   postgres_network:
@@ -60,4 +61,4 @@ networks:
 
 volumes:
   pg_jobsearch_vol:
-  # pgadmin_vol:
+  pgadmin_vol:

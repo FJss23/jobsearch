@@ -34,7 +34,10 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests(requests ->
                 requests
-                    .requestMatchers("/api/v*/registration/**")
+                    .requestMatchers(
+                        "/api/v*/registration/**",
+                        "/api/v*/email/**"
+                    )
                     .permitAll()
                     .anyRequest()
                     .authenticated()
@@ -42,7 +45,10 @@ public class SecurityConfig {
             .authenticationProvider(daoAuthenticationProvider())
             .csrf()
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .ignoringRequestMatchers("/api/v*/registration/**");
+            .ignoringRequestMatchers(
+                "/api/v*/registration/**",
+                "/api/v*/email/**"
+            );
 
         return http.build();
     }

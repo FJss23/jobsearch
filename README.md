@@ -24,6 +24,15 @@ Check the available services
 ```bash
 curl -s localhost:4566/health | jq .
 ```
+Check the status of docker-compose
+```bash
+docker-compose ps
+```
+Enter the localstack docker container
+```bash
+docker-compose exec localstack bash
+```
+Inside the container you can execute `awslocal`, it comes by defaul in the container.
 
 Check the messages of ses
 ```bash
@@ -58,6 +67,13 @@ to execute the script again, we have can delete the volumes with `docker-compose
 Access directly into the localstack container
 ```bash
 docker exec -t <container_id> /bin/bash
+
+
+Using pgadmin?
+host:           postgres
+maintaince db:  jobsearch_db
+user:           ...
+password:       ...
 ```
 ## TODO
 - [ ] Should I use Docker Swarm instead of docker-compose?

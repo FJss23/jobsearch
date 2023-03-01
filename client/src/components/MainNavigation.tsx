@@ -5,9 +5,9 @@ function MainNavigation() {
     <header>
       <nav>
         <ul>
+          <li><NavLink to="/">JobSearch</NavLink></li>
           <li><NavLink to="/jobs">Jobs</NavLink></li>
           <li><NavLink to="/login">Login</NavLink></li>
-          <li><NavLink to="/enterprise">Enterprise</NavLink></li>
         </ul>
       </nav>
     </header>

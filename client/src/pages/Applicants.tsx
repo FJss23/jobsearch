@@ -6,10 +6,10 @@ const data: { name: string, status: string }[] = [
   { name: 'Full Stack', status: 'Pending' }
 ]
 
-const JobApplicationsPage = () => {
+const ApplicantsPage = () => {
   return (
     <>
-      <h1>Job Applications</h1>
+      <h1>Applicants</h1>
       <table>
         <thead>
           <tr>
@@ -21,13 +21,13 @@ const JobApplicationsPage = () => {
           {data.map(row =>
             <tr>
               <td><Link to="">{row.name}</Link></td>
-              <td>{row.status}</td>
             </tr>
           )}
         </tbody>
       </table>
-    </>
-  );
-};
 
-export default JobApplicationsPage;
+    </>
+  )
+}
+
+export default ApplicantsPage;

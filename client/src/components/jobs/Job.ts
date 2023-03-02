@@ -1,15 +1,37 @@
 export interface Tag {
+  id: string;
   name: string;
 }
 
-export interface JobDescription {
-  jobId: string
-  title: string
-  location: string
-  remoteType: string
-  companyName: string
-  createdAt: Date
-  imgUrl: string
-  tags: Tag[]
-};
+export type JobCardDescription = Pick<
+  JobDescription,
+  "id" | "title" | "location" | "workplaceType" | "createdAt" | "company" | "tags"
+>;
 
+export interface JobDescription {
+  id: string;
+  title: string;
+  industry?: string;
+  salaryFrom: number;
+  salaryUpTo: number;
+  coin: string;
+  location: string;
+  workdayType: string;
+  description: string;
+  workplaceType: string;
+  howToApply?: string;
+  createdAt: Date;
+  company: Company;
+  tags: Tag[];
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  description: string;
+  logoUrl?: string;
+  twitter?: string;
+  facebook?: string;
+  instagram?: string;
+  website?: string;
+}

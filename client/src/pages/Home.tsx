@@ -1,4 +1,4 @@
-import LatestsJobs from "../components/jobs/LatestsJobs";
+import JobList from "../components/jobs/JobList";
 import SearchBar from "../components/jobs/SearchBar";
 import PopularTechnologies from "../components/PopularTechnologies";
 
@@ -7,7 +7,7 @@ function HomePage() {
     <>
       <h1>Job Search</h1>
       <SearchBar />
-      <LatestsJobs />
+      <JobList />
       <PopularTechnologies />
     </>
   );

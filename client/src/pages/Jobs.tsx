@@ -1,5 +1,14 @@
+import JobList from "../components/jobs/JobList";
+import SearchBar from "../components/jobs/SearchBar";
+
 const JobsPage = () => {
-  return <h1>This is the jobs page</h1>
-}
+  return (
+    <>
+      <h1>Jobs page</h1>
+      <SearchBar />
+      <JobList />
+    </>
+  );
+};
 
 export default JobsPage;

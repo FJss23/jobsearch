@@ -1,43 +1,42 @@
 import { Link } from "react-router-dom";
-import { JobDescription } from "./Job";
+import { JobCardDescription } from "./Job";
 
-const JobCard: React.FC<JobDescription> = ({
-  jobId,
+const JobCard: React.FC<JobCardDescription> = ({
+  id,
   title,
   location,
-  remoteType,
-  companyName,
+  workplaceType,
+  company,
   createdAt,
-  imgUrl,
   tags,
-}: JobDescription) => {
+}: JobCardDescription) => {
   const encodedTitle = encodeURIComponent(title)
     .replaceAll("/", "-");
-  const encodedCompanyName = encodeURIComponent(companyName)
+  const encodedCompanyName = encodeURIComponent(company.name)
     .replaceAll("/", "-");
 
   return (
     <article>
       <header>
         <Link
-          to={`/jobs/${encodedCompanyName}/${encodedTitle}/${jobId}`}
+          to={`/jobs/${encodedCompanyName}/${company.id}/${encodedTitle}/${id}`}
         >
           <h2>{title}</h2>
         </Link>
-        <Link to={`/jobs/${encodedCompanyName}`}>
-          <p>{companyName}</p>
+        <Link to={`/company/${encodedCompanyName}/${company.id}`}>
+          <p>{company.name}</p>
         </Link>
         <span>{createdAt.getTime()}</span>
       </header>
       <img
-        src={imgUrl}
-        alt={`Logo of the company ${companyName}`}
+        src={company.logoUrl}
+        alt={`Logo of the company ${company.name}`}
         width="100px"
         height="100px"
       />
       <div>
         <span>{location}</span>
-        <span>{remoteType}</span>
+        <span>{workplaceType}</span>
       </div>
       <ul>
         {tags.map((tag) => (

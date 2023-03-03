@@ -12,16 +12,16 @@ services:
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     env_file:
       - .env
-    networks:
-      - postgres_network
+    # networks:
+    #   - postgres_network
 
   redis:
     restart: always
     image: 'redis:7.0.8-alpine'
     ports:
       - 6379:6379
-    networks:
-      - redis_network
+    # networks:
+    #   - redis_network
 
   localstack:
     image: 'localstack/localstack:1.4'
@@ -38,6 +38,8 @@ services:
       - ./scripts/init_aws.sh:/etc/localstack/init/ready.d/init_aws.sh
       - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   pgadmin:
     image: 'dpage/pgadmin4'
@@ -49,15 +51,15 @@ services:
       - pgadmin_vol:/var/lib/pgadmin
     env_file:
       - .env
-    networks:
-      - postgres_network
+    # networks:
+    #   - postgres_network
     logging:
       driver: none
-
-networks:
-  postgres_network:
-    driver: bridge
-  redis_network:
+#
+# networks:
+#   postgres_network:
+#     driver: bridge
+#   redis_network:
 
 volumes:
   pg_jobsearch_vol:

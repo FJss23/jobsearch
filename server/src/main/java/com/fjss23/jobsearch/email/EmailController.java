@@ -27,9 +27,9 @@ public class EmailController {
     }
 
     @PostMapping("sns-bounce")
-    public void snsEmailBounce(@RequestBody AwsSnsConfirmationRequestDto requestDto) {
-        logger.info("Bounce-SNS email");
-        confirmSub(requestDto.subscriptionToken(), requestDto.topicArn());
+    public void snsEmailBounce(@RequestBody String request) {
+        logger.info("Bounce-SNS email, {}", request);
+        //confirmSub(requestDto.subscriptionToken(), requestDto.topicArn());
     }
 
     @PostMapping("sns-complaint")

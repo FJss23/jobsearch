@@ -15,18 +15,18 @@ aws configure set aws_secret_access_key bar \
 aws configure set region eu-west-3 \
     --profile localstack
 
-export AWS_DEFAULT_PROFILE=localstack
-
-aws configure list
+aws configure list --profile localstack
 
 # ----------------------- SNS -----------------------
 echo -e "\n=========== SNS ===========\n"
 
 # Step 1: Create the topics
-BOUNCE_ARN=$(awslocal sns create-topic \
+BOUNCE_ARN=$(aws sns create-topic \
     --name bounce_email_ses \
     --region eu-west-3 \
     --output text \
+    --endpoint-url http://localhost:4566 \
+    --profile localstack \
     --query 'TopicArn')
 
 # COMPLAINT_ARN=$(awslocal sns create-topic \
@@ -44,11 +44,13 @@ BOUNCE_ARN=$(awslocal sns create-topic \
 # Step 2: Create a subscription of the topic
 BASE_URL="http://host.docker.internal:8080/api/v1/email"
 
-awslocal sns subscribe \
+aws sns subscribe \
     --topic-arn $BOUNCE_ARN \
     --protocol http \
     --notification-endpoint $BASE_URL/sns-bounce \
-    --region eu-west-3
+    --region eu-west-3 \
+    --endpoint-url http://localhost:4566 \
+    --profile localstack
 
 # awslocal sns subscribe \
 #     --topic-arn $COMPLAINT_ARN  \
@@ -94,7 +96,7 @@ awslocal sns subscribe \
 # awslocal ses list-identities
 
 # ----------------------- S3 -----------------------
-echo -e "\n=========== S3 ===========\n"
+# echo -e "\n=========== S3 ===========\n"
 
 # Step 1: Create the bucket
 # awslocal s3 mb s3://jobsearch-bucket

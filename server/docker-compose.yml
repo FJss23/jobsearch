@@ -2,16 +2,14 @@ version: '3.8'
 
 services:
 
-  api:
-    image: 'api-jobsearch:latest'
-    container_name: 'api_jbs'
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
+  # api:
+  #   image: 'api-jobsearch:latest'
+  #   container_name: 'api_jbs'
+  #   ports:
+  #     - 8080:8080
+  #   depends_on:
+  #     - postgres
       # - redis
-    # networks:
-    #   - api-postgres
 
   postgres:
     image: 'postgres:15.1-alpine'
@@ -25,17 +23,13 @@ services:
       - ./scripts/init_user.sql:/docker-entrypoint-initdb.d/init_user.sql
     env_file:
       - .env
-    # networks:
-    #   - api-postgres
 
-  # redis:
-  #   container_name: 'redis_jbs'
-  #   image: 'redis:7.0.8-alpine'
-  #   restart: always
-  #   ports:
-  #     - 6379:6379
-    # networks:
-    #   - redis_network
+  redis:
+    container_name: 'redis_jbs'
+    image: 'redis:7.0.8-alpine'
+    restart: always
+    ports:
+      - 6379:6379
 
   localstack:
     image: 'localstack/localstack:1.4'
@@ -44,9 +38,6 @@ services:
       - 127.0.0.1:4566:4566            # LocalStack Gateway
       - 127.0.0.1:4510-4559:4510-4559  # external services port range
     environment:
-      # AWS_ACCESS_KEY_ID: 'foo'
-      # AWS_SECRET_ACCESS_KEY: 'bar'
-      # DEFAULT_REGION: 'eu-west-3'
       DEBUG: ${DEBUG:-1}
       DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
@@ -55,33 +46,22 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - 'host.docker.internal:host-gateway'
-    depends_on:
-      - api
-    # healthcheck:
-    #   test: ['CMD', 'curl', '-f', 'http://host.docker.internal:8080/api/v1/email/health']
-    #   interval: 15s
-    #   timeout: 10s
-    #   retries: 3
+    # depends_on:
+    #   - api
 
-  # pgadmin:
-  #   image: 'dpage/pgadmin4'
-  #   container_name: 'pgmadin_jbs'
-  #   ports:
-  #     - 81:80
-  #   depends_on:
-  #     - postgres
-  #   volumes:
-  #     - pgadmin_vol:/var/lib/pgadmin
-  #   env_file:
-  #     - .env
-  #   # networks:
-  #   #   - postgres_network
-  #   logging:
-  #     driver: none
-#
-# networks:
-#   api-postgres:
-#   redis_network:
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    container_name: 'pgmadin_jbs'
+    ports:
+      - 81:80
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_vol:/var/lib/pgadmin
+    env_file:
+      - .env
+    logging:
+      driver: none
 
 volumes:
   pg_jobsearch_vol:

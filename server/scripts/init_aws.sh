@@ -127,3 +127,10 @@ aws s3 ls \
     --endpoint-url http://localhost:4566 \
     --profile localstack
 
+# --------------------------------------------------
+aws sns publish \
+    --topic-arn arn:aws:sns:eu-west-3:000000000000:bounce_email_ses \
+    --message "Hello World!" \
+    --region eu-west-3 \
+    --endpoint-url http://localhost:4566 \
+    --profile localstack

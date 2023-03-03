@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.aws;
+package com.fjss23.jobsearch.email;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

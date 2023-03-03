@@ -1,6 +1,6 @@
 package com.fjss23.jobsearch.registration;
 
-import com.fjss23.jobsearch.validation.FieldsValueMatch;
+import com.fjss23.jobsearch.user.validation.FieldsValueMatch;
 import jakarta.validation.constraints.*;
 
 @FieldsValueMatch.List(

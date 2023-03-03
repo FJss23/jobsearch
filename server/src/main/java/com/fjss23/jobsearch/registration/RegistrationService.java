@@ -1,12 +1,12 @@
 package com.fjss23.jobsearch.registration;
 
-import com.fjss23.jobsearch.email.EmailService;
+import com.fjss23.jobsearch.email.ses.EmailService;
 import com.fjss23.jobsearch.registration.token.ConfirmationToken;
 import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 import com.fjss23.jobsearch.user.AppUser;
 import com.fjss23.jobsearch.user.AppUserRole;
 import com.fjss23.jobsearch.user.AppUserService;
-import java.time.LocalDateTime;
+
 import java.time.OffsetDateTime;
 
 import org.springframework.stereotype.Service;

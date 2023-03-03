@@ -1,6 +1,7 @@
 package com.fjss23.jobsearch.user;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -18,9 +19,13 @@ public class AppUser implements UserDetails {
     private AppUserRole userRole;
     private boolean locked = false;
     private boolean enabled = false;
-    private LocalDateTime loggedAt;
+    private OffsetDateTime loggedAt;
     private Long companyId;
+
+    private OffsetDateTime createdAt;
     private String createdBy;
+    private OffsetDateTime updatedAt;
+    private String updatedBy;
 
     public AppUser() {}
 
@@ -118,11 +123,11 @@ public class AppUser implements UserDetails {
         this.enabled = enabled;
     }
 
-    public LocalDateTime getLoggedAt() {
+    public OffsetDateTime getLoggedAt() {
         return loggedAt;
     }
 
-    public void setLoggedAt(LocalDateTime loggedAt) {
+    public void setLoggedAt(OffsetDateTime loggedAt) {
         this.loggedAt = loggedAt;
     }
 

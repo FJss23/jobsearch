@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class JobOfferSerive {
+public class JobOfferService {
 
     private final JobOfferRepository jobOfferRepository;
 
-    public JobOfferSerive(JobOfferRepository jobOfferRepository) {
+    public JobOfferService(JobOfferRepository jobOfferRepository) {
         this.jobOfferRepository = jobOfferRepository;
     }
 

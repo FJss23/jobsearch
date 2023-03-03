@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.interceptor;
+package com.fjss23.jobsearch.i18n;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
-public class GlobalInterceptor implements WebMvcConfigurer {
+public class LocaleInterceptor implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

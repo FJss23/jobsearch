@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.validation;
+package com.fjss23.jobsearch.user.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

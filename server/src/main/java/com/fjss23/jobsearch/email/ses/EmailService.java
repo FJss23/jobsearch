@@ -1,7 +1,8 @@
-package com.fjss23.jobsearch.email;
+package com.fjss23.jobsearch.aws.ses;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fjss23.jobsearch.aws.sns.SubscriptionConfirmationSns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

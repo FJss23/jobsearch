@@ -1,7 +1,6 @@
-package com.fjss23.jobsearch.email;
+package com.fjss23.jobsearch.aws.sns;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonKey;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record SubscriptionConfirmationSns(

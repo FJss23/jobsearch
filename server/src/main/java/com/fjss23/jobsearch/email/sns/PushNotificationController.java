@@ -1,5 +1,6 @@
-package com.fjss23.jobsearch.email;
+package com.fjss23.jobsearch.email.ses;
 
+import com.fjss23.jobsearch.email.sns.SubscriptionConfirmation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 /*
 * - Important: https://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.prepare.html
 * - The format of the body: https://docs.aws.amazon.com/sns/latest/dg/sns-message-and-json-formats.html
-* - You should check the appropriate headers from aws.
+* - TODO: You should check the appropriate headers from aws.
 * - AWS sends the confirmation in json string (content-type: text/plain)
 */
 @RestController
@@ -28,21 +29,22 @@ public class EmailController {
 
     @PostMapping("sns-bounce")
     public void snsEmailBounce(@RequestBody String params) {
-        SubscriptionConfirmationSns subInfo = emailService.getReqInfo(params);
+        SubscriptionConfirmation subInfo = emailService.getReqInfo(params);
         logger.info("Bounce-SNS email. Token: {}. Topic ARN: {}", subInfo.Token(), subInfo.TopicArn());
+        // TODO: no need to subscribe always, this endpoint will be hitted multiple times
         emailService.confirmSub(subInfo.Token(), subInfo.TopicArn());
     }
 
     @PostMapping("sns-complaint")
     public void snsEmailComplaint(@RequestBody String params) {
-        SubscriptionConfirmationSns subInfo = emailService.getReqInfo(params);
+        SubscriptionConfirmation subInfo = emailService.getReqInfo(params);
         logger.info("Complaint-SNS email. Token: {}. Topic ARN: {}", subInfo.Token(), subInfo.TopicArn());
         emailService.confirmSub(subInfo.Token(), subInfo.TopicArn());
     }
 
     @PostMapping("sns-delivered")
     public void snsEmailDelivered(@RequestBody String params) {
-        SubscriptionConfirmationSns subInfo = emailService.getReqInfo(params);
+        SubscriptionConfirmation subInfo = emailService.getReqInfo(params);
         logger.info("Delivered-SNS email. Token: {}. Topic ARN: {}", subInfo.Token(), subInfo.TopicArn());
         emailService.confirmSub(subInfo.Token(), subInfo.TopicArn());
     }

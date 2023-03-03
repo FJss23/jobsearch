@@ -4,6 +4,7 @@ services:
 
   postgres:
     image: 'postgres:15.1-alpine'
+    container_name: 'postgres_jbs'
     restart: always
     ports:
       - 5432:5432
@@ -25,6 +26,7 @@ services:
 
   localstack:
     image: 'localstack/localstack:1.4'
+    container_name: 'localstack_jbs'
     ports:
       - 127.0.0.1:4566:4566            # LocalStack Gateway
       - 127.0.0.1:4510-4559:4510-4559  # external services port range
@@ -41,6 +43,7 @@ services:
 
   pgadmin:
     image: 'dpage/pgadmin4'
+    container_name: 'pgmadin_jbs'
     ports:
       - 81:80
     depends_on:

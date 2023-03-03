@@ -2,6 +2,17 @@ version: '3.8'
 
 services:
 
+  api:
+    image: 'api-jobsearch:latest'
+    container_name: 'api_jbs'
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      # - redis
+    # networks:
+    #   - api-postgres
+
   postgres:
     image: 'postgres:15.1-alpine'
     container_name: 'postgres_jbs'
@@ -10,17 +21,19 @@ services:
       - 5432:5432
     volumes:
       - pg_jobsearch_vol:/var/lib/postgresql/data
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql
+      - ./scripts/init_user.sql:/docker-entrypoint-initdb.d/init_user.sql
     env_file:
       - .env
     # networks:
-    #   - postgres_network
+    #   - api-postgres
 
-  redis:
-    restart: always
-    image: 'redis:7.0.8-alpine'
-    ports:
-      - 6379:6379
+  # redis:
+  #   container_name: 'redis_jbs'
+  #   image: 'redis:7.0.8-alpine'
+  #   restart: always
+  #   ports:
+  #     - 6379:6379
     # networks:
     #   - redis_network
 
@@ -41,27 +54,33 @@ services:
       - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  pgadmin:
-    image: 'dpage/pgadmin4'
-    container_name: 'pgmadin_jbs'
-    ports:
-      - 81:80
+      - 'host.docker.internal:host-gateway'
     depends_on:
-      - postgres
-    volumes:
-      - pgadmin_vol:/var/lib/pgadmin
-    env_file:
-      - .env
-    # networks:
-    #   - postgres_network
-    logging:
-      driver: none
+      - api
+    # healthcheck:
+    #   test: ['CMD', 'curl', '-f', 'http://host.docker.internal:8080/api/v1/email/health']
+    #   interval: 15s
+    #   timeout: 10s
+    #   retries: 3
+
+  # pgadmin:
+  #   image: 'dpage/pgadmin4'
+  #   container_name: 'pgmadin_jbs'
+  #   ports:
+  #     - 81:80
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - pgadmin_vol:/var/lib/pgadmin
+  #   env_file:
+  #     - .env
+  #   # networks:
+  #   #   - postgres_network
+  #   logging:
+  #     driver: none
 #
 # networks:
-#   postgres_network:
-#     driver: bridge
+#   api-postgres:
 #   redis_network:
 
 volumes:

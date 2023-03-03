@@ -194,13 +194,7 @@ CREATE TABLE IF NOT EXISTS jobsearch.confirmation_token(
     FOREIGN KEY (appuser_email) REFERENCES jobsearch.appuser (email)
 );
 
--- Create a user to be used in the app
-CREATE USER jobsearch_user NOSUPERUSER NOCREATEROLE INHERIT ENCRYPTED PASSWORD 'user';
--- GRANT CONNECT ON DATABASE jobsearch_db TO jobsearch_user;
-
--- GRANT USAGE ON SCHEMA jobsearch TO jobsearch_user;
--- GRANT SELECT, INSERT, DELETE, UPDATE ON ALL TABLES IN SCHEMA jobsearch TO jobsearch_user;
-
+-- Triggers
 CREATE FUNCTION update_value_updated_at() RETURNS TRIGGER AS $$
     BEGIN
        NEW.updated_at = now();

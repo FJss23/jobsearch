@@ -33,7 +33,7 @@ public abstract class AbstractIntegrationTest {
 
    @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.1-alpine")
-        .withFileSystemBind("./scripts/init.sql", "/docker-entrypoint-initdb.d/init.sql");
+        .withFileSystemBind("./scripts/init_schema.sql", "/docker-entrypoint-initdb.d/init_schema.sql");
 
    @Rule
     static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.4"))

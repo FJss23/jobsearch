@@ -85,7 +85,10 @@ echo -e "\n=========== SES ===========\n"
 BASE_EMAIL="noreply@jobsearch.com"
 
 aws ses verify-email-identity \
-    --email-address $BASE_EMAIL
+    --email-address $BASE_EMAIL \
+    --region eu-west-3 \
+    --endpoint-url http://localhost:4566 \
+    --profile localstack
 
 # Step 2: Susbscribe to the topics
 aws ses set-identity-notification-topic \

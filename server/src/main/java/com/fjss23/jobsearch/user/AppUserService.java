@@ -5,6 +5,7 @@ import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -78,5 +79,16 @@ public class AppUserService implements UserDetailsService {
 
     public List<AppUser> getAllUsers() {
         return appUserRepository.findAll();
+    }
+
+    public void getUser(String email, String password) {
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+        Optional<AppUser> user = appUserRepository.findByEmail(email);
+
+        if (user.isEmpty())
+            throw new IllegalArgumentException("invalid credentials");
+
+        if (!user.get().getPassword().equals(encodedPassword))
+            throw new IllegalArgumentException("invalid credentials");
     }
 }

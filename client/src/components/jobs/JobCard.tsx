@@ -1,45 +1,38 @@
 import { Link } from "react-router-dom";
 import { JobCardDescription } from "./Job";
 
-const JobCard: React.FC<JobCardDescription> = ({
-  id,
-  title,
-  location,
-  workplaceType,
-  company,
-  createdAt,
-  tags,
-}: JobCardDescription) => {
-  const encodedTitle = encodeURIComponent(title)
-    .replaceAll("/", "-");
-  const encodedCompanyName = encodeURIComponent(company.name)
-    .replaceAll("/", "-");
+const JobCard = (props: JobCardDescription) => {
+  const encodedTitle = encodeURIComponent(props.title).replaceAll("/", "-");
+  const encodedCompanyName = encodeURIComponent(props.company.name).replaceAll(
+    "/",
+    "-"
+  );
 
   return (
     <article>
       <header>
         <Link
-          to={`/jobs/${encodedCompanyName}/${company.id}/${encodedTitle}/${id}`}
+          to={`/jobs/${encodedCompanyName}/${props.company.id}/${encodedTitle}/${props.id}`}
         >
-          <h2>{title}</h2>
+          <h2>{props.title}</h2>
         </Link>
-        <Link to={`/company/${encodedCompanyName}/${company.id}`}>
-          <p>{company.name}</p>
+        <Link to={`/company/${encodedCompanyName}/${props.company.id}`}>
+          <p>{props.company.name}</p>
         </Link>
-        <span>{createdAt.getTime()}</span>
+        <span>{props.createdAt.getTime()}</span>
       </header>
       <img
-        src={company.logoUrl}
-        alt={`Logo of the company ${company.name}`}
+        src={props.company.logoUrl}
+        alt={`Logo of the company ${props.company.name}`}
         width="100px"
         height="100px"
       />
       <div>
-        <span>{location}</span>
-        <span>{workplaceType}</span>
+        <span>{props.location}</span>
+        <span>{props.workplaceType}</span>
       </div>
       <ul>
-        {tags.map((tag) => (
+        {props.tags.map((tag) => (
           <Link key={tag.name} to={`/${tag.name}`}>
             <li>{tag.name}</li>
           </Link>

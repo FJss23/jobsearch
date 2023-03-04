@@ -6,7 +6,7 @@ import ForgotPasswordPage from "./pages/ForgotPassword";
 import HomePage from "./pages/Home";
 import JobApplicationsPage from "./pages/JobApplications";
 import JobDetailsPage from "./pages/JobDetails";
-import JobsPage from "./pages/Jobs";
+import JobsPage, { loader as jobsLoader } from "./pages/Jobs";
 // import JobsRoot from "./pages/JobsRoot";
 import LoginPage from "./pages/Login";
 import NewCvPage from "./pages/NewCv";
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginPage /> },
       { path: "/forgot-password", element: <ForgotPasswordPage /> },
       { path: "/change-password", element: <ChangePasswordPage /> },
-      { path: "/jobs", element: <JobsPage /> },
+      { path: "/jobs", element: <JobsPage />, loader: jobsLoader },
       {
         path: "/jobs/:companyName/:companyId/:jobTitle/:jobId",
         element: <JobDetailsPage />,

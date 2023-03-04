@@ -12,9 +12,9 @@ public class JobOfferRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final BeanPropertyRowMapper<JobOffer> jobOfferRowMapper;
 
-    public JobOfferRepository(NamedParameterJdbcTemplate jdbcTemplate, BeanPropertyRowMapper<JobOffer> jobOfferRowMapper) {
+    public JobOfferRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.jobOfferRowMapper = jobOfferRowMapper;
+        this.jobOfferRowMapper = new BeanPropertyRowMapper<>(JobOffer.class);
     }
 
     public List<JobOffer> findAll() {

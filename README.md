@@ -77,3 +77,11 @@ password:       ...
 ```
 ## TODO
 - [ ] Should I use Docker Swarm instead of docker-compose?
+
+## Debug
+```bash
+mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
+```
+Then inside intellij create a profile just for debug, with the default information, just 
+add the `8000` port.
+

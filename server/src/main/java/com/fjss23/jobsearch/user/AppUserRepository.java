@@ -29,7 +29,7 @@ public class AppUserRepository {
                 last_name,
                 email,
                 password,
-                role,
+                role as userRole,
                 locked,
                 enabled,
                 logged_at,

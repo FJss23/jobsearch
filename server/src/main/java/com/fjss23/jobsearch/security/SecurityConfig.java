@@ -1,14 +1,13 @@
 package com.fjss23.jobsearch.security;
 
 import com.fjss23.jobsearch.user.AppUserService;
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -19,9 +18,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Value("${spring.websecurity.debug:false}")
@@ -45,12 +46,15 @@ public class SecurityConfig {
      * is only to protect against cross-domain attacks. If an attacker can read the cookie via
      * JavaScript, they’re already on the same domain as far as the browser knows, so they can
      * do anything they like anyway. (XSS is a much bigger hole than CSRF.)
+     *
+     * Spring provides an out of the box solution to exclude OPTIONS requests from authorization checks.
+     * The cors() method will add the Spring-provided CorsFilter to the application context,
+     * bypassing the authorization checks for OPTIONS requests
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors()
             .and()
-                .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(requests ->
                     requests
                         .requestMatchers(
@@ -82,23 +86,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    public AuthenticationManager authenticationManager() {
         // https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html
         var provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(this.bCryptPasswordEncoder);
         provider.setUserDetailsService(this.appUserService);
-        return provider;
+        return new ProviderManager(provider);
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        var config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        config.setAllowedMethods(
-            Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")
-        );
-        var source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

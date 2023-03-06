@@ -33,8 +33,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-        throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepository
             .findByEmail(email)
             .orElseThrow(() ->

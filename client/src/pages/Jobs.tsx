@@ -4,13 +4,13 @@ import JobList from "../components/jobs/JobList";
 import SearchBar from "../components/jobs/SearchBar";
 
 const JobsPage = () => {
-  const jobs = useLoaderData() as JobDescription;
+  const jobs = useLoaderData() as JobDescription[];
 
   return (
     <>
       <h1>Jobs page</h1>
       <SearchBar />
-      <JobList jobs={jobs} />
+      <JobList {...jobs} />
     </>
   );
 };

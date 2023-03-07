@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.auth;
 
+import com.fjss23.jobsearch.auth.login.LoginRequestDto;
 import com.fjss23.jobsearch.auth.registration.RegistrationRequestDto;
 import com.fjss23.jobsearch.auth.registration.RegistrationService;
 import jakarta.validation.Valid;

@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { JobDescription } from "../components/jobs/Job";
+import { JobCardDescription, JobDescription } from "../components/jobs/Job";
 import JobList from "../components/jobs/JobList";
 import SearchBar from "../components/jobs/SearchBar";
 
@@ -21,9 +21,9 @@ export async function loader() {
   const response = await fetch("http://localhost:8080/api/v1/jobs");
 
   if (!response.ok) {
-    console.log("error")
+    console.log("error", response)
   } else {
     const resData = await response.json();
-    return resData;
+    return resData as JobCardDescription[];
   }
 }

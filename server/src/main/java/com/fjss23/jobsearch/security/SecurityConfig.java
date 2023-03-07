@@ -56,7 +56,8 @@ public class SecurityConfig {
                            "/api/v*/registration/**",
                             "/api/v*/email/**",
                             "/api/v*/logout",
-                            "/api/v*/login"
+                            "/api/v*/login",
+                            "/api/v*/jobs"
                         )
                         .permitAll()
                         .anyRequest()
@@ -91,6 +92,6 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.debug(true);
+        return (web) -> web.debug(webSecurityDebug);
     }
 }

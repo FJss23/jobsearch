@@ -5,11 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/api/v1/jobs")
+@RestController
+@RequestMapping(path = "/api/v1/jobs")
 public class JobOfferController {
 
     private final JobOfferService jobOfferService;
@@ -24,6 +25,8 @@ public class JobOfferController {
 
     @GetMapping
     public List<JobOffer> getAllJobs() {
-        return jobOfferService.findAll();
+        var jobs = jobOfferService.findAll();
+        logger.info("{}", jobs);
+        return jobs;
     }
 }

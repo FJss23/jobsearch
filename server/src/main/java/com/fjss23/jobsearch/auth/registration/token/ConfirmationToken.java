@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.registration.token;
+package com.fjss23.jobsearch.auth.registration.token;
 
 import java.time.OffsetDateTime;
 

@@ -1,6 +1,5 @@
-package com.fjss23.jobsearch.registration.token;
+package com.fjss23.jobsearch.auth.registration.token;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
-package com.fjss23.jobsearch.registration;
+package com.fjss23.jobsearch.auth.registration;
 
+import com.fjss23.jobsearch.auth.registration.token.ConfirmationToken;
+import com.fjss23.jobsearch.auth.registration.token.ConfirmationTokenService;
 import com.fjss23.jobsearch.email.ses.EmailService;
-import com.fjss23.jobsearch.registration.token.ConfirmationToken;
-import com.fjss23.jobsearch.registration.token.ConfirmationTokenService;
 import com.fjss23.jobsearch.user.AppUser;
 import com.fjss23.jobsearch.user.AppUserRole;
 import com.fjss23.jobsearch.user.AppUserService;

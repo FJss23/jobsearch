@@ -26,7 +26,7 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
                     }
                 """)
             .when()
-            .post("/api/v1/registration")
+            .post("/api/v1/auth/registration")
             .then().log().ifValidationFails(LogDetail.ALL)
             .and().assertThat().statusCode(HttpStatus.CREATED.value());
 
@@ -45,7 +45,7 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
         //      "Subject": "Registration process jobsearch.com",
         //      "Body": {
         //        "text_part": null,
-        //        "html_part": "Welcome Francisco. To complete the registration process click following link: http://localhost:8080/api/v1/registration/confirm?token=12d5c91d-dea1-498f-8b53-f13738758d44"
+        //        "html_part": "Welcome Francisco. To complete the registration process click following link: http://localhost:8080/api/v1/auth/registration/confirm?token=12d5c91d-dea1-498f-8b53-f13738758d44"
         //      },
         //      "Timestamp": "2023-02-24T18:48:28"
         //    }

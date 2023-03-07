@@ -53,10 +53,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests ->
                     requests
                         .requestMatchers(
-                           "/api/v*/registration/**",
+                           "/api/v*/auth/registration/**",
                             "/api/v*/email/**",
-                            "/api/v*/logout",
-                            "/api/v*/login",
+                            "/api/v*/auth/logout",
+                            "/api/v*/auth/login",
                             "/api/v*/jobs"
                         )
                         .permitAll()
@@ -67,15 +67,15 @@ public class SecurityConfig {
                     csrfConfigurer
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers(
-                            "/api/v*/registration/**",
+                            "/api/v*/auth/registration/**",
                             "/api/v*/email/**",
-                            "/api/v*/logout",
-                            "/api/v*/login"
+                            "/api/v*/auth/logout",
+                            "/api/v*/auth/login"
                         )
                 )
                 .logout(logout ->
                     logout
-                        .logoutUrl("/api/v*/logout")
+                        .logoutUrl("/api/v*/auth/logout")
                         .deleteCookies("JSESSIONID"));
 
         return http.build();

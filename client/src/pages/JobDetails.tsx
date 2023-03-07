@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { JobDescription, Company, Tag } from "../components/jobs/Job";
+import { JobDescription, Company, Tag } from "../components/Jobs/Job";
 
 const tags: Tag[] = [
   { id: "1", name: "Java" },

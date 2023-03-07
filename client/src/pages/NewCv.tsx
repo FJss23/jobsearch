@@ -1,4 +1,4 @@
-import CvForm from "../components/CvForm";
+import CvForm from "../components/Cv/CvForm";
 
 const NewCvPage = () => {
   return(

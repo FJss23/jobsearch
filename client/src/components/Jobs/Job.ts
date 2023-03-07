@@ -35,3 +35,8 @@ export interface Company {
   instagram?: string;
   website?: string;
 }
+
+export type JobsProps = {
+  jobs:  JobDescription[]
+}
+

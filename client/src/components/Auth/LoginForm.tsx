@@ -3,7 +3,7 @@ import { Form } from "react-router-dom";
 const LoginForm = () => {
   return (
     <>
-      <Form method="post">
+      <Form method="post" action="/login">
         <div>
           <label htmlFor="email">Email</label>
           <input type="email" name="email" id="email" />

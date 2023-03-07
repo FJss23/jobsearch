@@ -1,7 +1,7 @@
-import { useLoaderData } from "react-router-dom";
-import { JobCardDescription, JobDescription } from "../components/jobs/Job";
-import JobList from "../components/jobs/JobList";
-import SearchBar from "../components/jobs/SearchBar";
+import { json, useLoaderData } from "react-router-dom";
+import { JobDescription } from "../components/Jobs/Job";
+import JobList from "../components/Jobs/JobList";
+import SearchBar from "../components/Jobs/SearchBar";
 
 const JobsPage = () => {
   const jobs = useLoaderData() as JobDescription[];
@@ -10,7 +10,7 @@ const JobsPage = () => {
     <>
       <h1>Jobs page</h1>
       <SearchBar />
-      <JobList {...jobs} />
+      <JobList jobs={jobs}/>
     </>
   );
 };
@@ -20,10 +20,16 @@ export default JobsPage;
 export async function loader() {
   const response = await fetch("http://localhost:8080/api/v1/jobs");
 
-  if (!response.ok) {
-    console.log("error", response)
-  } else {
-    const resData = await response.json();
-    return resData as JobCardDescription[];
+  if (!response.ok)
+    throw json({ message: "Couldn't get the information from the server" });
+
+  let data = []
+
+  try {
+    data = await response.json();
+  } catch (error) {
+    throw json({ message: "Couldn't convert the information from the server" });
   }
+
+  return data
 }

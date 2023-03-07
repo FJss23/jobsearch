@@ -1,12 +1,14 @@
 // import { JobCardDescription, Tag, Company } from "./Job";
-import { JobDescription } from "./Job";
+import { JobDescription, JobsProps } from "./Job";
 import JobCard from "./JobCard";
 
-const JobList = (props: JobDescription[]) => {
+const JobList = ({ jobs }: JobsProps) => {
+  if (jobs.length === 0) return <p>No jobs found</p>;
+
   return (
     <>
       <ul>
-        {props.map((job: JobDescription) => (
+        {jobs.map((job: JobDescription) => (
           <li key={job.id}>
             <JobCard {...job} />
           </li>

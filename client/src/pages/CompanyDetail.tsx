@@ -1,4 +1,4 @@
-import { Company } from "../components/jobs/Job";
+import { Company } from "../components/Jobs/Job";
 
 const company: Company = {
   id: "1",

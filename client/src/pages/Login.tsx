@@ -1,5 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ActionFunctionArgs, Link, redirect } from "react-router-dom";
+import { ActionFunctionArgs, json, Link, redirect } from "react-router-dom";
 import LoginForm from "../components/Auth/LoginForm";
 import { authActions } from "../store/auth";
 import { store } from "../store/store";
@@ -17,15 +16,25 @@ function LoginPage() {
 export default LoginPage;
 
 export async function action({ request }: ActionFunctionArgs) {
-  const data = await request.formData();
+  const formData = await request.formData();
 
   const credentials = {
-    email: data.get("email") as string,
-    password: data.get("password") as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
   };
 
-  await store.dispatch(login(credentials));
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
 
-  return redirect("/registration");
+    if (response.ok) store.dispatch(authActions.login());
+  } catch (err) {
+    return json({ message: "Error trying to authenticate" });
+  }
+  return redirect("/jobs");
 }
-

@@ -39,15 +39,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequestDto login) {
+    public void login(@Valid @RequestBody LoginRequestDto login) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
             login.email(), login.password()));
-
+        //Cookie cookie = new Cookie()
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @PostMapping("/logout")
-    public void logout() {
+    public void logout(@RequestBody String login) {
+        logger.info("login out!");
         SecurityContextHolder.clearContext();
     }
 

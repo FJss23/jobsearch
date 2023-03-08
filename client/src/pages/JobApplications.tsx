@@ -18,8 +18,8 @@ const JobApplicationsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map(row =>
-            <tr>
+          {data.map((row, index) =>
+            <tr key={index}>
               <td><Link to="">{row.name}</Link></td>
               <td>{row.status}</td>
             </tr>

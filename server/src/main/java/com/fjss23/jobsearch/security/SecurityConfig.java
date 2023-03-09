@@ -57,12 +57,17 @@ public class SecurityConfig {
                            "/api/v*/auth/registration/**",
                             "/api/v*/email/**",
                             "/api/v*/auth/logout",
-                            "/api/v*/auth/login",
+                            "/login",
                             "/api/v*/jobs"
                         )
                         .permitAll()
                         .anyRequest()
                         .authenticated()
+                )
+            .formLogin(login ->
+                    login
+                        .loginProcessingUrl("/api/v1/auth/login")
+                        .loginPage("/login")
                 )
                 .csrf(csrfConfigurer ->
                     csrfConfigurer
@@ -71,17 +76,17 @@ public class SecurityConfig {
                             "/api/v*/auth/registration/**",
                             "/api/v*/email/**",
                             "/api/v*/auth/logout",
-                            "/api/v*/auth/login"
+                            "/login"
                         )
                 )
                 .logout(logout ->
                     logout
-                        .deleteCookies("JSESSIONID").invalidateHttpSession(true))
-                .sessionManagement(session ->
-                    session
-                        .invalidSessionUrl("/api/v*/auth/logout?expired")
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false));
+                        .deleteCookies("JSESSIONID").invalidateHttpSession(true));
+//                .sessionManagement(session ->
+//                    session
+//                        .invalidSessionUrl("/api/v*/auth/logout?expired")
+//                        .maximumSessions(1)
+//                        .maxSessionsPreventsLogin(false))
 
         return http.build();
     }

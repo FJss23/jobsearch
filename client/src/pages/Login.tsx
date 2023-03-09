@@ -24,15 +24,18 @@ export async function action({ request }: ActionFunctionArgs) {
   };
 
   try {
-    const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+    // const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+    const response = await fetch("http://localhost:8080/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: 'include',
       body: JSON.stringify(credentials),
     });
 
-    if (response.ok) store.dispatch(authActions.login());
+    if (!response.ok) return json({ message: "Error trying to authenticate" });
+    store.dispatch(authActions.login());
   } catch (err) {
     return json({ message: "Error trying to authenticate" });
   }

@@ -38,13 +38,13 @@ public class AuthController {
         registrationService.confirmToken(token);
     }
 
-    @PostMapping("/login")
+   /* @PostMapping("/login")
     public void login(@Valid @RequestBody LoginRequestDto login) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
             login.email(), login.password()));
         //Cookie cookie = new Cookie()
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
+    }*/
 
     @PostMapping("/logout")
     public void logout(@RequestBody String login) {

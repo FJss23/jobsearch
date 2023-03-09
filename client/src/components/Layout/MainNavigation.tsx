@@ -7,7 +7,7 @@ function MainNavigation() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const isAuth = useAppSelector((state) => state.auth.user);
 
   const logoutHandler = async () => {
     try {
@@ -18,7 +18,6 @@ function MainNavigation() {
         },
         body: JSON.stringify({})
       });
-      console.log(response)
 
       if (response.ok) dispatch(authActions.logout());
 

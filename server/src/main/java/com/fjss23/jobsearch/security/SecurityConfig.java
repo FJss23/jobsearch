@@ -75,6 +75,13 @@ public class SecurityConfig {
                     )
                 )
             .build();
+
+            /*.logout(logout -> logout
+                .logoutUrl("/api/v1/auth/logout")
+                .deleteCookies("SESSION")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+            )*/
     }
 
     @Bean

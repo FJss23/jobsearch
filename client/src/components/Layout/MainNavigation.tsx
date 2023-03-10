@@ -19,8 +19,9 @@ function MainNavigation() {
         body: JSON.stringify({})
       });
 
-      if (response.ok) dispatch(authActions.logout());
+      if (!response.ok) return console.log("Something went wrong", response)
 
+      dispatch(authActions.logout());
       navigate("/");
     } catch (err) {
       console.log("You can't logout right now")

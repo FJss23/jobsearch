@@ -42,5 +42,5 @@ export async function action({ request }: ActionFunctionArgs) {
   } catch (err) {
     return json({ message: "Error trying to authenticate" });
   }
-  return redirect("/jobs");
+  return redirect("/applications");
 }

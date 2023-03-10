@@ -1,6 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ApplicationsPage, {
+  loader as applicationsLoader,
+} from "./pages/Applications";
 import ChangePasswordPage from "./pages/ChangePassword";
 import CompanyDetailPage from "./pages/CompanyDetail";
 import ErrorPage from "./pages/Error";
@@ -30,7 +33,12 @@ const router = createBrowserRouter([
       { path: "/jobs/:jobId", element: <JobDetailsPage /> },
       { path: "/company/:companyId", element: <CompanyDetailPage /> },
       { path: "/cv/new", element: <NewCvPage /> },
-      { path: "/applications", element: <JobApplicationsPage /> },
+      {
+        path: "/applications",
+        element: <ApplicationsPage />,
+        loader: applicationsLoader,
+      },
+      { path: "/applicants", element: <JobApplicationsPage /> },
     ],
   },
 ]);

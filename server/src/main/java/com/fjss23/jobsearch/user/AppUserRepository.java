@@ -22,7 +22,8 @@ public class AppUserRepository {
 
     Optional<AppUser> findByEmail(String email) {
         MapSqlParameterSource params = new MapSqlParameterSource();
-        String sql = """
+        String sql =
+            """
             SELECT
                 appuser_id as id,
                 first_name,
@@ -51,7 +52,8 @@ public class AppUserRepository {
     }
 
     public List<AppUser> findAll() {
-        String sql = """
+        String sql =
+            """
             SELECT
                 appuser_id as id,
                 first_name,
@@ -71,7 +73,8 @@ public class AppUserRepository {
     }
 
     public void create(AppUser appUser) {
-        String sql = """
+        String sql =
+            """
             INSERT INTO jobsearch.appuser(
                 first_name,
                 last_name,

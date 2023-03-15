@@ -26,22 +26,36 @@ public class PushNotificationService {
 
     void confirmSub(String subscriptionToken, String topicArn) {
         try {
-            ConfirmSubscriptionRequest request = ConfirmSubscriptionRequest.builder()
+            ConfirmSubscriptionRequest request = ConfirmSubscriptionRequest
+                .builder()
                 .token(subscriptionToken)
                 .topicArn(topicArn)
                 .build();
 
-            ConfirmSubscriptionResponse result = snsClient.confirmSubscription(request);
-            logger.info("\n\nStatus was " + result.sdkHttpResponse().statusCode() + "\n\nSubscription Arn: \n\n" + result.subscriptionArn());
+            ConfirmSubscriptionResponse result = snsClient.confirmSubscription(
+                request
+            );
+            logger.info(
+                "\n\nStatus was " +
+                result.sdkHttpResponse().statusCode() +
+                "\n\nSubscription Arn: \n\n" +
+                result.subscriptionArn()
+            );
         } catch (SnsException e) {
-            logger.error("There is an error... {}", e.awsErrorDetails().errorMessage());
+            logger.error(
+                "There is an error... {}",
+                e.awsErrorDetails().errorMessage()
+            );
         }
     }
 
     SubscriptionConfirmation getReqInfo(String params) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            SubscriptionConfirmation subInfo = objectMapper.readValue(params, SubscriptionConfirmation.class);
+            SubscriptionConfirmation subInfo = objectMapper.readValue(
+                params,
+                SubscriptionConfirmation.class
+            );
             return subInfo;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

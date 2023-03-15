@@ -21,8 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * - https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
  */
 @ControllerAdvice
-public class RestExceptionHandler
-    extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(
         ResponseEntityExceptionHandler.class

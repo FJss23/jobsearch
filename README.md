@@ -85,3 +85,18 @@ mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_
 Then inside intellij create a profile just for debug, with the default information, just 
 add the `8000` port.
 
+## Security workflow
+A few considerations has to be done. We are now using JWT tokens for authentication.
+When a user tries to authenticate, 2 tokens are generated, the regular "jwt token" and 
+the "jwt refresh token". 
+
+The jwt token is a short lived token and is stored in the browser "session storage".
+The jwt refresh token has a long lived duration and is stored in a httpOnly cookie.
+
+
+
+## Security options
+- Basic HTTP authentication
+- Session / Cookie
+- Plain JWT
+- Oauth / JWT or Oauth with Keycloack (an auth embedded provider)

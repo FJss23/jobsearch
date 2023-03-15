@@ -1,5 +1,7 @@
 package com.fjss23.jobsearch.user;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -7,14 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping(path = "/api/v1/users")
 public class AppUserController {
 
-    private final static Logger logger = LoggerFactory.getLogger(AppUserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(
+        AppUserController.class
+    );
 
     private final AppUserService appUserService;
 
@@ -24,23 +25,29 @@ public class AppUserController {
 
     @GetMapping
     public List<AppUserResponseDto> getAllUsers() {
-       return appUserService.getAllUsers()
-           .stream()
-           .map(
-               user -> new AppUserResponseDto(
-                   user.getFirstName(),
-                   user.getLastName(),
-                   user.getEmail(),
-                   user.getUserRole().name()))
-           .collect(Collectors.toList());
+        return appUserService
+            .getAllUsers()
+            .stream()
+            .map(user ->
+                new AppUserResponseDto(
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getUserRole().name()
+                )
+            )
+            .collect(Collectors.toList());
     }
 
     @GetMapping("/current")
-    public AppUserResponseDto getCurrent(@AuthenticationPrincipal AppUser appUser) {
+    public AppUserResponseDto getCurrent(
+        @AuthenticationPrincipal AppUser appUser
+    ) {
         return new AppUserResponseDto(
             appUser.getFirstName(),
             appUser.getLastName(),
             appUser.getEmail(),
-            appUser.getUserRole().name());
+            appUser.getUserRole().name()
+        );
     }
 }

@@ -29,7 +29,6 @@ export async function action({ request }: ActionFunctionArgs) {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: 'include',
       body: JSON.stringify(credentials),
     });
 
@@ -42,5 +41,5 @@ export async function action({ request }: ActionFunctionArgs) {
   } catch (err) {
     return json({ message: "Error trying to authenticate" });
   }
-  return redirect("/applications");
+  return redirect("/jobs");
 }

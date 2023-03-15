@@ -2,7 +2,6 @@ package com.fjss23.jobsearch.user;
 
 import com.fjss23.jobsearch.auth.registration.token.ConfirmationToken;
 import com.fjss23.jobsearch.auth.registration.token.ConfirmationTokenService;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,8 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email)
+        throws UsernameNotFoundException {
         return appUserRepository
             .findByEmail(email)
             .orElseThrow(() ->
@@ -84,10 +84,12 @@ public class AppUserService implements UserDetailsService {
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         Optional<AppUser> user = appUserRepository.findByEmail(email);
 
-        if (user.isEmpty())
-            throw new IllegalArgumentException("invalid credentials");
+        if (user.isEmpty()) throw new IllegalArgumentException(
+            "invalid credentials"
+        );
 
-        if (!user.get().getPassword().equals(encodedPassword))
-            throw new IllegalArgumentException("invalid credentials");
+        if (
+            !user.get().getPassword().equals(encodedPassword)
+        ) throw new IllegalArgumentException("invalid credentials");
     }
 }

@@ -31,14 +31,24 @@ public abstract class AbstractIntegrationTest {
     @LocalServerPort
     protected int localServerPort;
 
-   @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.1-alpine")
-        .withFileSystemBind("./scripts/init_schema.sql", "/docker-entrypoint-initdb.d/init_schema.sql");
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
+        "postgres:15.1-alpine"
+    )
+        .withFileSystemBind(
+            "./scripts/init_schema.sql",
+            "/docker-entrypoint-initdb.d/init_schema.sql"
+        );
 
-   @Rule
-    static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.4"))
-       .withFileSystemBind("./scripts/init_aws.sh", "/etc/localstack/init/ready.d/init_aws.sh")
-       .withServices(LocalStackContainer.Service.SES);
+    @Rule
+    static LocalStackContainer localStack = new LocalStackContainer(
+        DockerImageName.parse("localstack/localstack:1.4")
+    )
+        .withFileSystemBind(
+            "./scripts/init_aws.sh",
+            "/etc/localstack/init/ready.d/init_aws.sh"
+        )
+        .withServices(LocalStackContainer.Service.SES);
 
     @DynamicPropertySource
     static void redisProperties(DynamicPropertyRegistry registry) {
@@ -50,30 +60,36 @@ public abstract class AbstractIntegrationTest {
     @BeforeEach
     public void setUpAbstractIntegrationTest() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        requestSpec = new RequestSpecBuilder()
-            .setPort(localServerPort)
-            .addHeader(
-                HttpHeaders.CONTENT_TYPE,
-                MediaType.APPLICATION_JSON_VALUE
-            )
-            .build();
+        requestSpec =
+            new RequestSpecBuilder()
+                .setPort(localServerPort)
+                .addHeader(
+                    HttpHeaders.CONTENT_TYPE,
+                    MediaType.APPLICATION_JSON_VALUE
+                )
+                .build();
 
-        requestLocalStackSpec = new RequestSpecBuilder()
-            .setPort(4566)
-            .addHeader(
-                HttpHeaders.CONTENT_TYPE,
-                MediaType.APPLICATION_JSON_VALUE
-            )
-            .build();
+        requestLocalStackSpec =
+            new RequestSpecBuilder()
+                .setPort(4566)
+                .addHeader(
+                    HttpHeaders.CONTENT_TYPE,
+                    MediaType.APPLICATION_JSON_VALUE
+                )
+                .build();
     }
 
     SesClient sesClient() {
-        return SesClient.builder()
-            .endpointOverride(localStack.getEndpointOverride(LocalStackContainer.Service.SES))
+        return SesClient
+            .builder()
+            .endpointOverride(
+                localStack.getEndpointOverride(LocalStackContainer.Service.SES)
+            )
             .credentialsProvider(
                 StaticCredentialsProvider.create(
                     AwsBasicCredentials.create(
-                        localStack.getAccessKey(), localStack.getSecretKey()
+                        localStack.getAccessKey(),
+                        localStack.getSecretKey()
                     )
                 )
             )

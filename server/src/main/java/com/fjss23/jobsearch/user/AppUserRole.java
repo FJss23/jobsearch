@@ -8,11 +8,11 @@ public enum AppUserRole {
     COMPANY_ADMIN("ROLE_COMPANY_ADMIN"),
     APP_ADMIN("ROLE_APP_ADMIN");
 
-    AppUserRole() { }
+    AppUserRole() {}
 
     private String text;
 
-    AppUserRole(String text){
+    AppUserRole(String text) {
         this.text = text;
     }
 
@@ -23,16 +23,5 @@ public enum AppUserRole {
     @Override
     public String toString() {
         return text;
-    }
-
-    @JsonCreator
-    public static AppUserRole fromText(String text){
-        for(AppUserRole r : AppUserRole.values()){
-            String alternative = r.getText().substring(5);
-            if(r.getText().equals(text) || alternative.equals(text)){
-                return r;
-            }
-        }
-        throw new IllegalArgumentException();
     }
 }

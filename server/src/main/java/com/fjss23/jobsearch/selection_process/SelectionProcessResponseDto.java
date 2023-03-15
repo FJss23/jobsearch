@@ -7,5 +7,4 @@ public record SelectionProcessResponseDto(
     String jobofferId,
     Boolean discaredByCompany,
     OffsetDateTime lastTimeReviewed
-) {
-}
+) {}

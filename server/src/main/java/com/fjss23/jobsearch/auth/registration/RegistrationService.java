@@ -6,9 +6,7 @@ import com.fjss23.jobsearch.email.ses.EmailService;
 import com.fjss23.jobsearch.user.AppUser;
 import com.fjss23.jobsearch.user.AppUserRole;
 import com.fjss23.jobsearch.user.AppUserService;
-
 import java.time.OffsetDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +38,8 @@ public class RegistrationService {
 
         var token = appUserService.signUpUser(appUser);
         var confirmationLink =
-            "http://localhost:8080/api/v1/auth/registration/confirm?token=" + token;
+            "http://localhost:8080/api/v1/auth/registration/confirm?token=" +
+            token;
 
         emailService.sendToken(
             appUser.getFirstName(),

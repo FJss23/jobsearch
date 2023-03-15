@@ -14,7 +14,9 @@ import JobDetailsPage from "./pages/JobDetails";
 import JobsPage, { loader as jobsLoader } from "./pages/Jobs";
 import LoginPage, { action as loginAction } from "./pages/Login";
 import NewCvPage from "./pages/NewCv";
-import RegistrationPage from "./pages/Registration";
+import RegistrationPage, {
+  action as registrationAction,
+} from "./pages/Registration";
 import RootLayout from "./pages/Root";
 import { store } from "./store/store";
 
@@ -25,7 +27,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage />, loader: homeJobsLoader },
-      { path: "/registration", element: <RegistrationPage /> },
+      {
+        path: "/registration",
+        element: <RegistrationPage />,
+        action: registrationAction,
+      },
       { path: "/login", element: <LoginPage />, action: loginAction },
       { path: "/forgot-password", element: <ForgotPasswordPage /> },
       { path: "/change-password", element: <ChangePasswordPage /> },

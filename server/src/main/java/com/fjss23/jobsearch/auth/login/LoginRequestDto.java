@@ -11,5 +11,4 @@ public record LoginRequestDto(
     @NotEmpty(message = "{error.not-empty.password}")
     @Size(min = 6, max = 40, message = "{error.size.password}")
     String password
-) {
-}
+) {}

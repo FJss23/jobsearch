@@ -7,5 +7,4 @@ public record SubscriptionConfirmation(
     String Token,
     String TopicArn,
     String SubscribeURL
-) {
-}
+) {}

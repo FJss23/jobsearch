@@ -1,22 +1,22 @@
 package com.fjss23.jobsearch;
 
-import io.restassured.filter.log.LogDetail;
 import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.given;
 import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
+
+import io.restassured.filter.log.LogDetail;
+import java.net.MalformedURLException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import java.net.MalformedURLException;
-
-import static io.restassured.RestAssured.given;
 
 public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void when_register_with_invalid_fields_then_return_errors_for_each_field() {
         given(requestSpec)
-            .body("""
+            .body(
+                """
                     {
                         "firstName": "Francisco",
                         "lastName": "Riedemann",
@@ -24,12 +24,16 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
                         "password": "123456",
                         "repeatPassword": "123456"
                     }
-                """)
+                """
+            )
             .when()
             .post("/api/v1/auth/registration")
-            .then().log().ifValidationFails(LogDetail.ALL)
-            .and().assertThat().statusCode(HttpStatus.CREATED.value());
-
+            .then()
+            .log()
+            .ifValidationFails(LogDetail.ALL)
+            .and()
+            .assertThat()
+            .statusCode(HttpStatus.CREATED.value());
         // todo: example of an email stored in localstack
         // {
         //  "messages": [
@@ -60,8 +64,5 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void when_sending_email_with_aws_ses_no_error_is_generated() {
-
-    }
-
+    public void when_sending_email_with_aws_ses_no_error_is_generated() {}
 }

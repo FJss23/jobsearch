@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.email.sns;
 
+import com.fjss23.jobsearch.ApiV1PrefixController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * - TODO: Any one can send a request to these endpoints, better check a way to secure them
  * - AWS sends the confirmation in json string (content-type: text/plain)
  */
-@RestController
-@RequestMapping("/api/v1/email")
+@ApiV1PrefixController("email")
 public class PushNotificationController {
 
     private static final String CONFIRM_SUBSCRIPTION_HEADER = "x-amz-sns-message-type=SubscriptionConfirmation";

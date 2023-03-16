@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.auth;
 
+import com.fjss23.jobsearch.ApiV1PrefixController;
 import com.fjss23.jobsearch.auth.login.LoginRequestDto;
 import com.fjss23.jobsearch.auth.login.LoginService;
 import com.fjss23.jobsearch.auth.login.RefreshTokenInfo;
@@ -28,9 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * Here we are doing a few things manually, mainly /logout and /login routes (instead of using spring security)
  * More info for manual logout: https://www.baeldung.com/spring-security-manual-logout
  */
-// @ApiV1PrefixController("auth")
-@RestController
-@RequestMapping("/api/v1/auth")
+@ApiV1PrefixController("auth")
 public class AuthController {
 
     static final String REFRESH_TOKEN_COOKIE = "_rfsh";

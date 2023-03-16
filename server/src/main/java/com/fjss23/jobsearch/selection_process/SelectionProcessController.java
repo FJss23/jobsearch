@@ -1,16 +1,14 @@
 package com.fjss23.jobsearch.selection_process;
 
+import com.fjss23.jobsearch.ApiV1PrefixController;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("selection-process")
 @PreAuthorize("hasRole('ROLE_CANDIDATE')")
+@ApiV1PrefixController("selection-process")
 public class SelectionProcessController {
 
     @GetMapping

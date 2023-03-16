@@ -39,12 +39,11 @@ public class SecurityConfig {
     private final RedisTemplate<String, String> redisTemplate;
 
     public SecurityConfig(
-        AppUserService appUserService,
-        BCryptPasswordEncoder bCryptPasswordEncoder,
-        AccessTokenEntryPoint accessTokenEntryPoint,
-        JwtHelper jwtHelper,
-        RedisTemplate<String, String> redisTemplate
-    ) {
+            AppUserService appUserService,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            AccessTokenEntryPoint accessTokenEntryPoint,
+            JwtHelper jwtHelper,
+            RedisTemplate<String, String> redisTemplate) {
         this.appUserService = appUserService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.accessTokenEntryPoint = accessTokenEntryPoint;
@@ -55,54 +54,42 @@ public class SecurityConfig {
     /**
      * If this is set to True, client-side JavaScript will not be able to access the CSRF cookie.
      *
-     * Designating the CSRF cookie as HttpOnly doesn’t offer any practical protection because CSRF
+     * Designating the CSRF cookie as HttpOnly doesn't offer any practical protection because CSRF
      * is only to protect against cross-domain attacks. If an attacker can read the cookie via
      * JavaScript, they’re already on the same domain as far as the browser knows, so they can
      * do anything they like anyway. (XSS is a much bigger hole than CSRF.)
      *
-     * Spring provides an out of the box solution to exclude OPTIONS requests from authorization checks.
+     * Spring provides an out-of-the-box solution to exclude OPTIONS requests from authorization checks.
      * The cors() method will add the Spring-provided CorsFilter to the application context,
      * bypassing the authorization checks for OPTIONS requests
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors()
-            .and()
-            .exceptionHandling(exception -> exception
-                .authenticationEntryPoint(this.accessTokenEntryPoint)
-            )
-            .authorizeHttpRequests(requests ->
-                requests
-                    .requestMatchers("/api/v*/auth/login")
-                    .permitAll()
-                    .requestMatchers("/api/v*/auth/registration/**")
-                    .permitAll()
-                    .requestMatchers("/api/v*/jobs")
-                    .permitAll()
-                    .requestMatchers("/api/v*/email/**")
-                    .permitAll()
-                    .requestMatchers("/api/v*/selection-process").hasRole("ROLE_CANDIDATE")
-                    .anyRequest()
-                    .authenticated()
-            )
-            .authenticationProvider(authenticationProvider())
-            .csrf(csrf ->
-                csrf
-                    .csrfTokenRepository(
-                        CookieCsrfTokenRepository.withHttpOnlyFalse()
-                    )
-                    .ignoringRequestMatchers(
-                        "/api/v*/auth/registration/**",
-                        "/api/v*/auth/login",
-                        "/api/v*/auth/logout",
-                        "/api/v*/email/**"
-                    )
-            )
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .addFilterBefore(accessTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.cors()
+                .and()
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(this.accessTokenEntryPoint))
+                .authorizeHttpRequests(requests -> requests.requestMatchers("/api/v*/auth/login")
+                        .permitAll()
+                        .requestMatchers("/api/v*/auth/registration/**")
+                        .permitAll()
+                        .requestMatchers("/api/v*/auth/access-token")
+                        .permitAll()
+                        .requestMatchers("/api/v*/jobs")
+                        .permitAll()
+                        .requestMatchers("/api/v*/email/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .authenticationProvider(authenticationProvider())
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers(
+                                "/api/v*/auth/registration/**",
+                                "/api/v*/auth/login",
+                                "/api/v*/auth/logout",
+                                "/api/v*/auth/access-token",
+                                "/api/v*/email/**"))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(accessTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -115,9 +102,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration config
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 

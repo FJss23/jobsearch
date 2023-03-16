@@ -23,83 +23,46 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(
-        ResponseEntityExceptionHandler.class
-    );
+    private static final Logger logger = LoggerFactory.getLogger(ResponseEntityExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-        MethodArgumentNotValidException ex,
-        HttpHeaders headers,
-        HttpStatusCode status,
-        WebRequest request
-    ) {
-        List<String> globalErrors = ex
-            .getBindingResult()
-            .getGlobalErrors()
-            .stream()
-            .map(objectError -> objectError.getDefaultMessage())
-            .collect(Collectors.toList());
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        List<String> globalErrors = ex.getBindingResult().getGlobalErrors().stream()
+                .map(objectError -> objectError.getDefaultMessage())
+                .collect(Collectors.toList());
 
         Map<String, List<String>> groupedFieldErrors = new HashMap<>();
         var errorFields = new ArrayList<ErrorField>();
 
-        ex
-            .getFieldErrors()
-            .forEach(error -> {
-                if (groupedFieldErrors.containsKey(error.getField())) {
-                    groupedFieldErrors
-                        .get(error.getField())
-                        .add(error.getDefaultMessage());
-                } else {
-                    var defaultMessages = new ArrayList<String>();
-                    defaultMessages.add(error.getDefaultMessage());
-                    groupedFieldErrors.put(error.getField(), defaultMessages);
-                }
-            });
+        ex.getFieldErrors().forEach(error -> {
+            if (groupedFieldErrors.containsKey(error.getField())) {
+                groupedFieldErrors.get(error.getField()).add(error.getDefaultMessage());
+            } else {
+                var defaultMessages = new ArrayList<String>();
+                defaultMessages.add(error.getDefaultMessage());
+                groupedFieldErrors.put(error.getField(), defaultMessages);
+            }
+        });
 
-        groupedFieldErrors.forEach((field, errorMessages) ->
-            errorFields.add(new ErrorField(field, errorMessages))
-        );
+        groupedFieldErrors.forEach((field, errorMessages) -> errorFields.add(new ErrorField(field, errorMessages)));
 
         var path = ((ServletWebRequest) request).getRequest().getRequestURI();
 
         var errorApi = new ErrorApi(globalErrors, groupedFieldErrors);
-        var errorResponse = new ErrorResponse(
-            (HttpStatus) status,
-            path,
-            "Invalid arguments",
-            errorApi
-        );
+        var errorResponse = new ErrorResponse((HttpStatus) status, path, "Invalid arguments", errorApi);
 
-        return handleExceptionInternal(
-            ex,
-            errorResponse,
-            headers,
-            status,
-            request
-        );
+        return handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
         var path = ((ServletWebRequest) request).getRequest().getRequestURI();
 
-        var errorApi = new ErrorApi(
-            Arrays.asList("Error occurred"),
-            new HashMap<>()
-        );
-        var errorResponse = new ErrorResponse(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            path,
-            ex.getLocalizedMessage(),
-            errorApi
-        );
+        var errorApi = new ErrorApi(Arrays.asList("Error occurred"), new HashMap<>());
+        var errorResponse =
+                new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, path, ex.getLocalizedMessage(), errorApi);
 
-        return new ResponseEntity<Object>(
-            errorResponse,
-            new HttpHeaders(),
-            errorResponse.status()
-        );
+        return new ResponseEntity<Object>(errorResponse, new HttpHeaders(), errorResponse.status());
     }
 }

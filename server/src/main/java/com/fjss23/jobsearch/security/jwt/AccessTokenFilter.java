@@ -1,9 +1,13 @@
 package com.fjss23.jobsearch.security.jwt;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,10 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
 
 public class AccessTokenFilter extends OncePerRequestFilter {
 
@@ -33,16 +33,17 @@ public class AccessTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         try {
             Optional<String> accessToken = getAccessTokenFromHeader(request);
             if (accessToken.isPresent() && jwtHelper.verifyAccessToken(accessToken.get())) {
 
-                String token =  redisTemplate.opsForValue().get("token_" + accessToken.get());
+                String token = redisTemplate.opsForValue().get("token_" + accessToken.get());
                 if (StringUtils.hasText(token)) throw new BadCredentialsException("Invalid token");
 
-                String username = jwtHelper.getUsernameFromAccessToken(accessToken.get());
-                String role = jwtHelper.getClaimValueFromAccessToken(accessToken.get(), JwtHelper.ROLE);
+                DecodedJWT jwtToken = jwtHelper.getJwtAccessToken(accessToken.get());
+                String username = jwtToken.getSubject();
+                String role = jwtToken.getClaim(JwtHelper.ROLE).asString();
 
                 var authority = new SimpleGrantedAuthority(role);
                 var authorities = Collections.singletonList(authority);

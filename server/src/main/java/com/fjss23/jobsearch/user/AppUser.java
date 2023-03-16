@@ -1,6 +1,5 @@
 package com.fjss23.jobsearch.user;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Collections;

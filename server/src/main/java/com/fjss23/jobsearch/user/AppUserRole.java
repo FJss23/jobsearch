@@ -1,7 +1,5 @@
 package com.fjss23.jobsearch.user;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 public enum AppUserRole {
     CANDIDATE("ROLE_CANDIDATE"),
     COMPANY("ROLE_COMPANY"),

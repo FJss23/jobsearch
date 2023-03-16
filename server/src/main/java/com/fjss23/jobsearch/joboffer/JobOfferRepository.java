@@ -18,7 +18,7 @@ public class JobOfferRepository {
 
     public List<JobOffer> findAll() {
         String sql =
-            """
+                """
             SELECT
                 joboffer_id as id,
                 title,

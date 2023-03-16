@@ -21,35 +21,23 @@ public class AwsConfig {
 
     @Bean
     public SesClient sesClient() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-            "foo",
-            "bar"
-        );
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
-        return SesClient
-            .builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(
-                StaticCredentialsProvider.create(awsCredentials)
-            )
-            .endpointOverride(URI.create(ENDPOINT_URL))
-            .build();
+        return SesClient.builder()
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .build();
     }
 
     @Bean
     public SnsClient snsClient() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-            "foo",
-            "bar"
-        );
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
-        return SnsClient
-            .builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(
-                StaticCredentialsProvider.create(awsCredentials)
-            )
-            .endpointOverride(URI.create(ENDPOINT_URL))
-            .build();
+        return SnsClient.builder()
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .build();
     }
 }

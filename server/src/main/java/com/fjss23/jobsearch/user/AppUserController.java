@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/v1/users")
+@RequestMapping("/api/v1/users")
 public class AppUserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(
-        AppUserController.class
-    );
+    private static final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     private final AppUserService appUserService;
 
@@ -25,29 +23,21 @@ public class AppUserController {
 
     @GetMapping
     public List<AppUserResponseDto> getAllUsers() {
-        return appUserService
-            .getAllUsers()
-            .stream()
-            .map(user ->
-                new AppUserResponseDto(
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getUserRole().name()
-                )
-            )
-            .collect(Collectors.toList());
+        return appUserService.getAllUsers().stream()
+                .map(user -> new AppUserResponseDto(
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getUserRole().name()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/current")
-    public AppUserResponseDto getCurrent(
-        @AuthenticationPrincipal AppUser appUser
-    ) {
+    public AppUserResponseDto getCurrent(@AuthenticationPrincipal AppUser appUser) {
         return new AppUserResponseDto(
-            appUser.getFirstName(),
-            appUser.getLastName(),
-            appUser.getEmail(),
-            appUser.getUserRole().name()
-        );
+                appUser.getFirstName(),
+                appUser.getLastName(),
+                appUser.getEmail(),
+                appUser.getUserRole().name());
     }
 }

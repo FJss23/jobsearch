@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/v1/jobs")
+@RequestMapping("/api/v1/offers")
 public class JobOfferController {
 
     private final JobOfferService jobOfferService;
 
-    private static final Logger logger = LoggerFactory.getLogger(
-        JobOfferController.class
-    );
+    private static final Logger logger = LoggerFactory.getLogger(JobOfferController.class);
 
     public JobOfferController(JobOfferService jobOfferService) {
         this.jobOfferService = jobOfferService;

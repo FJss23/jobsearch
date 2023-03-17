@@ -8,21 +8,28 @@ export interface AuthenticatedUser {
 }
 
 export interface AuthState {
-  user: AuthenticatedUser | undefined
+  user: AuthenticatedUser | undefined;
+  token: string | undefined;
+  isAuthenticated: boolean;
 }
+
+const initialState: AuthState = {
+  user: undefined,
+  token: undefined,
+  isAuthenticated: false,
+};
 
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: undefined
-  } as AuthState,
+  initialState,
   reducers: {
     login(state, action: PayloadAction<AuthenticatedUser>) {
       state.user = action.payload;
     },
-    logout(state) {
-      state.user = undefined;
-    }
+    logout: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(()
   },
 });
 

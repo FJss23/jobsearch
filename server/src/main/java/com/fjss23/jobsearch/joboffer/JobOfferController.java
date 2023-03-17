@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@ApiV1PrefixController("job-offers")
+@ApiV1PrefixController
 public class JobOfferController {
 
     private final JobOfferService jobOfferService;
@@ -17,7 +17,7 @@ public class JobOfferController {
         this.jobOfferService = jobOfferService;
     }
 
-    @GetMapping
+    @GetMapping("/jobs")
     public List<JobOffer> getAllJobs() {
         var jobs = jobOfferService.findAll();
         logger.info("{}", jobs);

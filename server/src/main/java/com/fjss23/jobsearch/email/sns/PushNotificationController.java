@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * - TODO: Any one can send a request to these endpoints, better check a way to secure them
  * - AWS sends the confirmation in json string (content-type: text/plain)
  */
-@ApiV1PrefixController("email")
+@ApiV1PrefixController
 public class PushNotificationController {
 
     private static final String CONFIRM_SUBSCRIPTION_HEADER = "x-amz-sns-message-type=SubscriptionConfirmation";
@@ -25,28 +25,28 @@ public class PushNotificationController {
         this.pushNotificationService = pushNotificationService;
     }
 
-    @GetMapping("health")
+    @GetMapping("/email/health")
     public void healthCheck() {
         logger.info("Receiving the health request");
     }
 
-    @RequestMapping(path = "sns-bounce", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
+    @RequestMapping(path = "/email/sns-bounce", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
     public void snsBounceNotification(@RequestBody String params) {
         logger.info("Bounce NOTIFICATION");
     }
 
-    @RequestMapping(path = "sns-complaint", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
+    @RequestMapping(path = "/email/sns-complaint", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
     public void snsComplaintNotification(@RequestBody String params) {
         logger.info("Complaint NOTIFICATION");
     }
 
-    @RequestMapping(path = "sns-delivered", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
+    @RequestMapping(path = "/email/sns-delivered", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
     public void snsDeliveredNotification(@RequestBody String params) {
         logger.info("Delivered NOTIFICATION");
     }
 
     @RequestMapping(
-            path = {"sns-bounce", "sns-complaint", "sns-delivered"},
+            path = {"/email/sns-bounce", "/email/sns-complaint", "/email/sns-delivered"},
             method = RequestMethod.POST,
             headers = CONFIRM_SUBSCRIPTION_HEADER)
     public void snsConfirmSubscriptionForSes(@RequestBody String params) {

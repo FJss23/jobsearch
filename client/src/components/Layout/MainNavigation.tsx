@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/hooks";
-import { authActions } from "../../store/auth";
+// import { authActions } from "../../store/auth";
 
 function MainNavigation() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function MainNavigation() {
 
       if (!response.ok) return console.log("Something went wrong", response)
 
-      dispatch(authActions.logout());
+      // dispatch(authActions.logout());
       navigate("/");
     } catch (err) {
       console.log("You can't logout right now")

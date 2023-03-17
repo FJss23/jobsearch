@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * Here we are doing a few things manually, mainly /logout and /login routes (instead of using spring security)
  * More info for manual logout: https://www.baeldung.com/spring-security-manual-logout
  */
-@ApiV1PrefixController("auth")
+@ApiV1PrefixController
 public class AuthController {
 
     static final String REFRESH_TOKEN_COOKIE = "_rfsh";
@@ -49,13 +49,13 @@ public class AuthController {
         this.loginService = loginService;
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/auth/registration")
     @ResponseStatus(HttpStatus.CREATED)
     public String register(@Valid @RequestBody RegistrationRequestDto request) {
         return registrationService.register(request);
     }
 
-    @GetMapping("/registration/confirm")
+    @GetMapping("/auth/registration/confirm")
     public void verifyRegistration(@RequestParam("token") String token) {
         registrationService.confirmToken(token);
     }
@@ -69,7 +69,7 @@ public class AuthController {
      * Lastly, the access token is generated, its claims includes the first name and the role of the user, also,
      * the id of the [2] refresh token is incorporated in the token.
      */
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> login(
             @Valid @RequestBody LoginRequestDto login, HttpServletRequest request, HttpServletResponse response) {
         var upat = new UsernamePasswordAuthenticationToken(login.email(), login.password());
@@ -104,7 +104,7 @@ public class AuthController {
      *
      * 3. Remove the [2] refresh token from the cookie.
      */
-    @PostMapping("/logout")
+    @PostMapping("/auth/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
 
@@ -117,7 +117,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/logout-all")
+    @PostMapping("/auth/logout-all")
     public ResponseEntity<?> logoutAll(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = request.getHeader("Authorization").replace("Bearer ", "");
 
@@ -133,7 +133,7 @@ public class AuthController {
     /*
      * We must check if the refresh token is the database, if not, the token was revoked.
      */
-    @PostMapping("/access-token")
+    @PostMapping("/auth/access-token")
     public ResponseEntity<?> getAccessToken(Principal principal, HttpServletRequest request) {
         Optional refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE.equals(cookie.getName()))

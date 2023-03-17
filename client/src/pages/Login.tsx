@@ -1,7 +1,7 @@
 import { ActionFunctionArgs, json, Link, redirect } from "react-router-dom";
 import LoginForm from "../components/Auth/LoginForm";
-import { authActions, AuthenticatedUser } from "../store/auth";
-import { store } from "../store/store";
+import { User } from "../store/auth";
+// import { store } from "../store/store";
 
 function LoginPage() {
   return (
@@ -36,8 +36,8 @@ export async function action({ request }: ActionFunctionArgs) {
       return json({ message: "Error trying to authenticate" });
     }
     const data = await response.json();
-    const user = data as AuthenticatedUser;
-    store.dispatch(authActions.login(user));
+    const user = data as User;
+    // store.dispatch(authActions.login(user));
   } catch (err) {
     return json({ message: "Error trying to authenticate" });
   }

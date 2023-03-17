@@ -7,11 +7,11 @@ import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@ApiV1PrefixController
 @PreAuthorize("hasRole('ROLE_CANDIDATE')")
-@ApiV1PrefixController("selection-process")
 public class SelectionProcessController {
 
-    @GetMapping
+    @GetMapping("/selection-process")
     public List<SelectionProcessResponseDto> getSelectionProcessesForUser() {
         var processes = Arrays.asList(new SelectionProcessResponseDto("1", "2", false, OffsetDateTime.now()));
         return processes;

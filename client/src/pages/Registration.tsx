@@ -1,3 +1,5 @@
+import { ActionFunctionArgs, json, redirect } from "react-router-dom";
+
 function RegistrationPage() {
   return (
     <form>
@@ -47,3 +49,33 @@ function RegistrationPage() {
 }
 
 export default RegistrationPage;
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const registration = {
+    firstName: formData.get("firstName") as string,
+    lastName: formData.get("lastName") as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    repeatPassword: formData.get("repeatPassword") as string,
+  };
+
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/auth/registration", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(registration),
+    });
+
+    if (!response.ok) {
+      return json({ message: "Error trying to authenticate" });
+    }
+    await response.json();
+  } catch (err) {
+    return json({ message: "Error trying to authenticate" });
+  }
+  return redirect("/login");
+}

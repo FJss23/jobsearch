@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.email;
 
+import java.net.URI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -7,8 +8,6 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.sns.SnsClient;
-
-import java.net.URI;
 
 /**
  * Examples:
@@ -22,35 +21,23 @@ public class AwsConfig {
 
     @Bean
     public SesClient sesClient() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-            "foo",
-            "bar"
-        );
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
-        return SesClient
-            .builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(
-                StaticCredentialsProvider.create(awsCredentials)
-            )
-            .endpointOverride(URI.create(ENDPOINT_URL))
-            .build();
+        return SesClient.builder()
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .build();
     }
 
     @Bean
     public SnsClient snsClient() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-            "foo",
-            "bar"
-        );
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
-        return SnsClient
-            .builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(
-                StaticCredentialsProvider.create(awsCredentials)
-            )
-            .endpointOverride(URI.create(ENDPOINT_URL))
-            .build();
+        return SnsClient.builder()
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .build();
     }
 }

@@ -1,14 +1,13 @@
 package com.fjss23.jobsearch.joboffer.scrapper;
 
+import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 public class JobScrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(JobScrapper .class);
+    private static final Logger logger = LoggerFactory.getLogger(JobScrapper.class);
 
     public void scrap() {
         try {

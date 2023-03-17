@@ -1,10 +1,8 @@
 package com.fjss23.jobsearch.user;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,9 +29,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
-            userRole.name()
-        );
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.getText());
         return Collections.singletonList(authority);
     }
 

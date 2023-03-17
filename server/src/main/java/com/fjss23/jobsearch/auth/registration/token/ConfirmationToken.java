@@ -11,9 +11,15 @@ public class ConfirmationToken {
     private OffsetDateTime expiresAt;
     private OffsetDateTime confirmedAt;
 
-    public ConfirmationToken() { }
+    public ConfirmationToken() {}
 
-    public ConfirmationToken(String id, String token, String appUserEmail, OffsetDateTime createdAt, OffsetDateTime expiresAt, OffsetDateTime confirmedAt) {
+    public ConfirmationToken(
+            String id,
+            String token,
+            String appUserEmail,
+            OffsetDateTime createdAt,
+            OffsetDateTime expiresAt,
+            OffsetDateTime confirmedAt) {
         this.id = id;
         this.token = token;
         this.appUserEmail = appUserEmail;

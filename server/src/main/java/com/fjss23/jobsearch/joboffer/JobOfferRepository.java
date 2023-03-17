@@ -1,10 +1,9 @@
 package com.fjss23.jobsearch.joboffer;
 
+import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class JobOfferRepository {
@@ -18,7 +17,8 @@ public class JobOfferRepository {
     }
 
     public List<JobOffer> findAll() {
-        String sql = """
+        String sql =
+                """
             SELECT
                 joboffer_id as id,
                 title,

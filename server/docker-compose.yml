@@ -1,7 +1,6 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   # api:
   #   image: 'api-jobsearch:latest'
   #   container_name: 'api_jbs'
@@ -9,11 +8,11 @@ services:
   #     - 8080:8080
   #   depends_on:
   #     - postgres
-      # - redis
+  #     - redis
 
   postgres:
-    image: 'postgres:15.1-alpine'
-    container_name: 'postgres_jbs'
+    image: "postgres:15.1-alpine"
+    container_name: "postgres_jbs"
     restart: always
     ports:
       - 5432:5432
@@ -32,11 +31,11 @@ services:
       - 6379:6379
 
   localstack:
-    image: 'localstack/localstack:1.4'
-    container_name: 'localstack_jbs'
+    image: "localstack/localstack:1.4"
+    container_name: "localstack_jbs"
     ports:
-      - 127.0.0.1:4566:4566            # LocalStack Gateway
-      - 127.0.0.1:4510-4559:4510-4559  # external services port range
+      - 127.0.0.1:4566:4566 # LocalStack Gateway
+      - 127.0.0.1:4510-4559:4510-4559 # external services port range
     environment:
       DEBUG: ${DEBUG:-1}
       DOCKER_HOST: unix:///var/run/docker.sock
@@ -45,13 +44,13 @@ services:
       - ${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    # depends_on:
-    #   - api
+      - "host.docker.internal:host-gateway"
+  #   depends_on:
+  #     - api
 
   pgadmin:
-    image: 'dpage/pgadmin4'
-    container_name: 'pgmadin_jbs'
+    image: "dpage/pgadmin4"
+    container_name: "pgmadin_jbs"
     ports:
       - 81:80
     depends_on:

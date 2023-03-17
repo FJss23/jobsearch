@@ -2,7 +2,6 @@ package com.fjss23.jobsearch.user;
 
 import com.fjss23.jobsearch.auth.registration.token.ConfirmationToken;
 import com.fjss23.jobsearch.auth.registration.token.ConfirmationTokenService;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +22,9 @@ public class AppUserService implements UserDetailsService {
     private static final int VALID_TOKEN_TIME_IN_MINUTES = 20;
 
     public AppUserService(
-        AppUserRepository appUserRepository,
-        BCryptPasswordEncoder bCryptPasswordEncoder,
-        ConfirmationTokenService confirmationTokenService
-    ) {
+            AppUserRepository appUserRepository,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            ConfirmationTokenService confirmationTokenService) {
         this.appUserRepository = appUserRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.confirmationTokenService = confirmationTokenService;
@@ -35,37 +33,28 @@ public class AppUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepository
-            .findByEmail(email)
-            .orElseThrow(() ->
-                new UsernameNotFoundException(
-                    "User with email " + email + " not found"
-                )
-            );
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
     }
 
     public String signUpUser(AppUser user) {
-        boolean exists = appUserRepository
-            .findByEmail(user.getUsername())
-            .isPresent();
+        boolean exists = appUserRepository.findByEmail(user.getUsername()).isPresent();
 
         if (exists) {
             // TODO: Check if the same person is trying to register again
             throw new IllegalArgumentException("error.email.taken");
         }
 
-        String encodedPassword = bCryptPasswordEncoder.encode(
-            user.getPassword()
-        );
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         appUserRepository.create(user);
 
         String token = UUID.randomUUID().toString();
         var confirmationToken = new ConfirmationToken(
-            token,
-            user.getEmail(),
-            OffsetDateTime.now(),
-            OffsetDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES)
-        );
+                token,
+                user.getEmail(),
+                OffsetDateTime.now(),
+                OffsetDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES));
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
@@ -84,8 +73,7 @@ public class AppUserService implements UserDetailsService {
         String encodedPassword = bCryptPasswordEncoder.encode(password);
         Optional<AppUser> user = appUserRepository.findByEmail(email);
 
-        if (user.isEmpty())
-            throw new IllegalArgumentException("invalid credentials");
+        if (user.isEmpty()) throw new IllegalArgumentException("invalid credentials");
 
         if (!user.get().getPassword().equals(encodedPassword))
             throw new IllegalArgumentException("invalid credentials");

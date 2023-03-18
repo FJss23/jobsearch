@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.joboffer;
+package com.fjss23.jobsearch.company;
 
 public record CompanyResponseDto(
     Long id,

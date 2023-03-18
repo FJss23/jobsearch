@@ -30,6 +30,7 @@ public class JobOfferRepository {
                 workday_code as workday,
                 description,
                 state,
+                company_id,
                 workplace_system,
                 how_to_apply,
                 scrapped,
@@ -40,6 +41,23 @@ public class JobOfferRepository {
             FROM
                 jobsearch.joboffer;
             """;
+        return jdbcTemplate.query(sql, jobOfferRowMapper);
+    }
+
+    public List<JobOffer> getJobsDescription() {
+        String sql =
+            """
+        SELECT
+            joboffer_id as id,
+            title,
+            location,
+            state,
+            company_id,
+            workplace_system,
+            created_at
+        FROM
+            jobsearch.joboffer;
+        """;
         return jdbcTemplate.query(sql, jobOfferRowMapper);
     }
 }

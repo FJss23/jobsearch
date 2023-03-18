@@ -1,4 +1,4 @@
-package com.fjss23.jobsearch.joboffer.scrapper;
+package com.fjss23.jobsearch.scrapper;
 
 import java.io.IOException;
 import org.jsoup.Jsoup;

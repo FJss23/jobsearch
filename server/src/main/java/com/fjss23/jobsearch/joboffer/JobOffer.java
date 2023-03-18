@@ -13,9 +13,11 @@ public record JobOffer(
         String workday,
         String description,
         String state,
+        String companyId,
         String workplaceSystem,
         String howToApply,
         Boolean scrapped,
+
         OffsetDateTime createdAt,
         String createdBy,
         OffsetDateTime updatedAt,

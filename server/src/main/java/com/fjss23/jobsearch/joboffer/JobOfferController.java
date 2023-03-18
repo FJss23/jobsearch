@@ -19,7 +19,7 @@ public class JobOfferController {
 
     @GetMapping("/jobs")
     public List<JobOffer> getAllJobs() {
-        var jobs = jobOfferService.findAll();
+        List<JobOffer> jobs = jobOfferService.getJobOffersDescription();
         logger.info("{}", jobs);
         return jobs;
     }

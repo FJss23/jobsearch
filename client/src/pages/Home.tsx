@@ -3,6 +3,8 @@ import { JobOffer } from "../components/Jobs/Job";
 import JobList from "../components/Jobs/JobList";
 import SearchBar from "../components/Jobs/SearchBar";
 import PopularTechnologies from "../components/StartingPage/PopularTechnologies";
+import { jobApi } from "../services/jobs";
+import { store } from "../store/store";
 
 function HomePage() {
   const jobs = useLoaderData() as JobOffer[];
@@ -20,18 +22,15 @@ function HomePage() {
 export default HomePage;
 
 export async function loader() {
-  const response = await fetch("http://localhost:8080/api/v1/jobs");
-
-  if (!response.ok)
-    throw json({ message: "Couldn't get the information from the server" });
-
-  let data = []
+  const response = store.dispatch(jobApi.endpoints.getJobs.initiate());
 
   try {
-    data = await response.json();
+    const data = await response.unwrap();
+    console.log(data)
+    return data;
   } catch (error) {
-    throw json({ message: "Couldn't convert the information from the server" });
+    throw json({ message: "Couldn't get the information from the server" });
+  } finally {
+    response.unsubscribe();
   }
-
-  return data
 }

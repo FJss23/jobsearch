@@ -10,22 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @ApiV1PrefixController
 public class AppUserController {
 
+    private final AppUserService appUserService;
+    private final AppUserResponseMapper appUserResponseMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
-    private final AppUserService appUserService;
-
-    public AppUserController(AppUserService appUserService) {
+    public AppUserController(AppUserService appUserService, AppUserResponseMapper appUserResponseMapper) {
         this.appUserService = appUserService;
+        this.appUserResponseMapper = appUserResponseMapper;
     }
 
     @GetMapping("/users")
-    public List<AppUserResponseDto> getAllUsers() {
-        return appUserService.getAllUsers().stream()
-                .map(user -> new AppUserResponseDto(
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getUserRole().name()))
-                .collect(Collectors.toList());
+    public List<AppUserResponse> getAllUsers() {
+        return appUserService.getAllUsers().stream().map(appUserResponseMapper).collect(Collectors.toList());
     }
 }

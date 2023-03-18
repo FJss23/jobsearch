@@ -1,8 +1,10 @@
 package com.fjss23.jobsearch.joboffer;
 
-import java.util.List;
-
+import com.fjss23.jobsearch.company.Company;
 import com.fjss23.jobsearch.company.CompanyService;
+import com.fjss23.jobsearch.tag.Tag;
+import com.fjss23.jobsearch.tag.TagService;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,21 +12,26 @@ public class JobOfferService {
 
     private final JobOfferRepository jobOfferRepository;
     private final CompanyService companyService;
+    private final TagService tagService;
 
-    public JobOfferService(JobOfferRepository jobOfferRepository, CompanyService companyService) {
+    public JobOfferService(
+            JobOfferRepository jobOfferRepository, CompanyService companyService, TagService tagService) {
         this.jobOfferRepository = jobOfferRepository;
         this.companyService = companyService;
+        this.tagService = tagService;
     }
 
     List<JobOffer> findAll() {
-        return jobOfferRepository.findAll();
-    }
+        List<JobOffer> jobs = jobOfferRepository.findAll();
 
-    public List<JobOffer> getJobOffersDescription() {
-        List<JobOffer> jobs =  jobOfferRepository.getJobsDescription();
-
-        for (JobOffer job: jobs) {
-
+        for (JobOffer job : jobs) {
+            Company company =
+                    companyService.getCompanyById(job.getCompany().getId()).get();
+            job.setCompany(company);
+            List<Tag> tags = tagService.getTagsOfJobOffer(job.getId());
+            job.setTags(tags);
         }
+
+        return jobs;
     }
 }

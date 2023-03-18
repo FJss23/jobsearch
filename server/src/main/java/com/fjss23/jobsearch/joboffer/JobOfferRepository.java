@@ -43,21 +43,4 @@ public class JobOfferRepository {
             """;
         return jdbcTemplate.query(sql, jobOfferRowMapper);
     }
-
-    public List<JobOffer> getJobsDescription() {
-        String sql =
-            """
-        SELECT
-            joboffer_id as id,
-            title,
-            location,
-            state,
-            company_id,
-            workplace_system,
-            created_at
-        FROM
-            jobsearch.joboffer;
-        """;
-        return jdbcTemplate.query(sql, jobOfferRowMapper);
-    }
 }

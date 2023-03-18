@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.company;
 
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,7 +11,7 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public Company getCompanyById(Long id) {
+    public Optional<Company> getCompanyById(Long id) {
         return companyRepository.getCompanyById(id);
     }
 }

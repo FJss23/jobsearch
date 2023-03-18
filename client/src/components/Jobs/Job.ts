@@ -1,6 +1,7 @@
 export interface Tag {
   id: string;
-  name: string;
+  defaultName: string;
+  code: string;
 }
 
 export interface JobOffer {
@@ -11,9 +12,10 @@ export interface JobOffer {
   salaryUpTo: number;
   coin: string;
   location: string;
-  workdayType: string;
+  workday: string;
   description: string;
-  workplaceType: string;
+  state: string;
+  workplaceSystem: string;
   howToApply?: string;
   createdAt: Date;
   company: Company;
@@ -33,6 +35,6 @@ export interface Company {
 
 export type JobOfferCard = Pick<
   JobOffer,
-  "id" | "title" | "location" | "workplaceType" | "createdAt" | "company" | "tags"
+  "id" | "title" | "location" | "workplaceSystem" | "createdAt" | "company" | "tags"
 >;
 

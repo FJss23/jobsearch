@@ -1,5 +1,6 @@
 package com.fjss23.jobsearch.user;
 
+import com.fjss23.jobsearch.Auditable;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class AppUser implements UserDetails {
+public class AppUser extends Auditable implements UserDetails {
 
     private Long id;
     private String firstName;
@@ -19,11 +20,6 @@ public class AppUser implements UserDetails {
     private boolean enabled = false;
     private OffsetDateTime loggedAt;
     private Long companyId;
-
-    private OffsetDateTime createdAt;
-    private String createdBy;
-    private OffsetDateTime updatedAt;
-    private String updatedBy;
 
     public AppUser() {}
 
@@ -141,13 +137,5 @@ public class AppUser implements UserDetails {
 
     public boolean setLocked() {
         return locked;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
     }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApplicationsPage, {
-  loader as applicationsLoader,
+  loader as applicationsLoader
 } from "./pages/Applications";
 import ChangePasswordPage from "./pages/ChangePassword";
 import CompanyDetailPage from "./pages/CompanyDetail";
@@ -15,7 +15,7 @@ import JobsPage, { loader as jobsLoader } from "./pages/Jobs";
 import LoginPage, { action as loginAction } from "./pages/Login";
 import NewCvPage from "./pages/NewCv";
 import RegistrationPage, {
-  action as registrationAction,
+  action as registrationAction
 } from "./pages/Registration";
 import RootLayout from "./pages/Root";
 import { store } from "./store/store";

@@ -29,12 +29,12 @@ const JobCard = (props: JobOfferCard) => {
       />
       <div>
         <span>{props.location}</span>
-        <span>{props.workplaceType}</span>
+        <span>{props.workplaceSystem}</span>
       </div>
       <ul>
         {props.tags.map((tag) => (
-          <Link key={tag.name} to={`/${tag.name}`}>
-            <li>{tag.name}</li>
+          <Link key={tag.defaultName} to={`/${tag.defaultName}`}>
+            <li>{tag.defaultName}</li>
           </Link>
         ))}
       </ul>

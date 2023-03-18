@@ -1,11 +1,11 @@
 import { json, useLoaderData } from "react-router-dom";
-import { JobDescription } from "../components/Jobs/Job";
+import { JobOffer } from "../components/Jobs/Job";
 import JobList from "../components/Jobs/JobList";
 import SearchBar from "../components/Jobs/SearchBar";
 import PopularTechnologies from "../components/StartingPage/PopularTechnologies";
 
 function HomePage() {
-  const jobs = useLoaderData() as JobDescription[];
+  const jobs = useLoaderData() as JobOffer[];
 
   return (
     <>

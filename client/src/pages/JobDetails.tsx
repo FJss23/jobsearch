@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { JobDescription, Company, Tag } from "../components/Jobs/Job";
+import { JobOffer, Company, Tag } from "../components/Jobs/Job";
 
 const tags: Tag[] = [
   { id: "1", name: "Java" },
@@ -15,7 +15,7 @@ const company: Company = {
     "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.fineartamerica.com%2Fimages%2Fartworkimages%2Fmediumlarge%2F2%2F1-sunny-day-in-spring-countryside-landscape-gone-with-the-wind.jpg&f=1&nofb=1&ipt=2ca679b984ac68797e7e05d6bbb8039bf149279fa922967f3ddab679729691b9&ipo=images",
 };
 
-const job: JobDescription = {
+const job: JobOffer = {
   id: "1",
   title: "Full Stack web developer",
   industry: "Software Consultancy",

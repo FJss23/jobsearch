@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { JobCardDescription } from "./Job";
+import { JobOfferCard } from "./Job";
 
-const JobCard = (props: JobCardDescription) => {
+const JobCard = (props: JobOfferCard) => {
   const encodedTitle = encodeURIComponent(props.title).replaceAll("/", "-");
   const encodedCompanyName = encodeURIComponent(props.company.name).replaceAll(
     "/",

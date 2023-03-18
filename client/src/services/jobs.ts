@@ -1,7 +1,7 @@
-import { JobCardDescription } from "../components/Jobs/Job";
+import { JobOfferCard } from "../components/Jobs/Job";
 import { api } from "./api";
 
-type JobsResponse = JobCardDescription[];
+type JobsResponse = JobOfferCard[];
 
 export const jobApi = api.injectEndpoints({
   endpoints: (build) => ({

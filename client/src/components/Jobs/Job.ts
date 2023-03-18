@@ -3,12 +3,7 @@ export interface Tag {
   name: string;
 }
 
-export type JobCardDescription = Pick<
-  JobDescription,
-  "id" | "title" | "location" | "workplaceType" | "createdAt" | "company" | "tags"
->;
-
-export interface JobDescription {
+export interface JobOffer {
   id: string;
   title: string;
   industry?: string;
@@ -36,7 +31,8 @@ export interface Company {
   website?: string;
 }
 
-export type JobsProps = {
-  jobs:  JobDescription[]
-}
+export type JobOfferCard = Pick<
+  JobOffer,
+  "id" | "title" | "location" | "workplaceType" | "createdAt" | "company" | "tags"
+>;
 

@@ -26,10 +26,13 @@ const authSlice = createSlice({
       state.token = payload.payload.token;
     },
     logout: () => initialState,
+    tokenReceived: (state, payload: PayloadAction<string>) => {
+      state.token = payload.payload;
+    },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, tokenReceived } = authSlice.actions;
 
 export default authSlice;
 

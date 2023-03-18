@@ -8,7 +8,7 @@ import {
   fetchBaseQuery,
   retry,
 } from "@reduxjs/toolkit/query/react";
-import { User } from "../store/auth";
+import { logout, tokenReceived, User } from "../store/auth";
 import { RootState } from "../store/store";
 
 export interface UserReponse {
@@ -37,23 +37,26 @@ const baseQueryWithReAuth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  let result = await baseQueryWithRetry(args, api, extraOptions)
+  let result = await baseQueryWithRetry(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    const refreshResult = await baseQueryWithRetry("/access-token", api, extraOptions)
+    const refreshResult = await baseQueryWithRetry(
+      "/access-token",
+      api,
+      extraOptions
+    );
     if (refreshResult.data) {
-      api.dispatch(tokenReceived(refreshResult.data));
+      api.dispatch(tokenReceived(refreshResult.data as string));
     } else {
-      api.dispatch(loggedOut());
+      api.dispatch(logout());
     }
   }
 
   return result;
 };
 
-
 export const api = createApi({
-  baseQuery:  baseQueryWithReAuth,
+  baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({
     login: builder.mutation<UserReponse, LoginRequest>({
       query: (credentials) => ({

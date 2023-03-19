@@ -29,6 +29,33 @@ public class JobOffer extends Auditable {
         this.tags = new ArrayList<>();
     }
 
+    public JobOffer(
+            String title,
+            String industry,
+            Double salaryFrom,
+            Double salaryUpTo,
+            String coin,
+            String location,
+            String workday,
+            String description,
+            String workplaceSystem,
+            String howToApply,
+            Company company,
+            List<Tag> tags) {
+        this.title = title;
+        this.industry = industry;
+        this.salaryFrom = salaryFrom;
+        this.salaryUpTo = salaryUpTo;
+        this.coin = coin;
+        this.location = location;
+        this.workday = workday;
+        this.description = description;
+        this.workplaceSystem = workplaceSystem;
+        this.howToApply = howToApply;
+        this.company = company;
+        this.tags = tags;
+    }
+
     public Long getId() {
         return id;
     }

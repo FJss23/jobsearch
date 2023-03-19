@@ -9,6 +9,10 @@ public class Tag extends Auditable {
 
     public Tag() {}
 
+    public Tag(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

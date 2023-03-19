@@ -4,7 +4,7 @@ import com.fjss23.jobsearch.ApiV1PrefixController;
 import com.fjss23.jobsearch.auth.login.LoginRequestDto;
 import com.fjss23.jobsearch.auth.login.LoginService;
 import com.fjss23.jobsearch.auth.login.RefreshTokenInfo;
-import com.fjss23.jobsearch.auth.registration.RegistrationRequestDto;
+import com.fjss23.jobsearch.auth.registration.RegistrationRequest;
 import com.fjss23.jobsearch.auth.registration.RegistrationService;
 import com.fjss23.jobsearch.user.AppUser;
 import jakarta.servlet.http.Cookie;
@@ -51,8 +51,8 @@ public class AuthController {
 
     @PostMapping("/auth/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public String register(@Valid @RequestBody RegistrationRequestDto request) {
-        return registrationService.register(request);
+    public String register(@Valid @RequestBody RegistrationRequest registrationRequest) {
+        return registrationService.register(registrationRequest);
     }
 
     @GetMapping("/auth/registration/confirm")

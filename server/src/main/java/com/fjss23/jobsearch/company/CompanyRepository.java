@@ -35,10 +35,43 @@ public class CompanyRepository {
             created_by,
             updated_at,
             updated_by
-        FROM jobsearch.company
-        WHERE company_id = :id;
+        FROM
+            jobsearch.company
+        WHERE
+            company_id = :id;
         """;
         params.addValue("id", id);
+        try {
+            Company company = jdbcTemplate.queryForObject(sql, params, companyRowMapper);
+            return Optional.of(company);
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Company> getCompanyFromUser(String email) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql =
+                """
+        SELECT
+            company_id as id,
+            name,
+            description,
+            logo_url,
+            twitter,
+            facebook,
+            instagram,
+            website,
+            created_at,
+            created_by,
+            updated_at,
+            updated_by
+        FROM
+            jobsearch.company
+        INNER JOIN jobsearch.appuser ON
+            appuser.email = :email;
+        """;
+        params.addValue("email", email);
         try {
             Company company = jdbcTemplate.queryForObject(sql, params, companyRowMapper);
             return Optional.of(company);

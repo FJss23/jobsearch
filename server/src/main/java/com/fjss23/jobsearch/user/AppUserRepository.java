@@ -35,8 +35,10 @@ public class AppUserRepository {
                 enabled,
                 logged_at,
                 company_id
-            FROM jobsearch.appuser
-            WHERE email = :email;
+            FROM
+                jobsearch.appuser
+            WHERE
+                email = :email;
             """;
         params.addValue("email", email);
         try {
@@ -71,7 +73,8 @@ public class AppUserRepository {
     public void create(AppUser appUser) {
         String sql =
                 """
-            INSERT INTO jobsearch.appuser(
+            INSERT
+            INTO jobsearch.appuser(
                 first_name,
                 last_name,
                 email,
@@ -97,9 +100,12 @@ public class AppUserRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
-            UPDATE jobsearch.appuser
-            SET enabled = true
-            WHERE email = :email;
+            UPDATE
+                jobsearch.appuser
+            SET
+                enabled = true
+            WHERE
+                email = :email;
             """;
         params.addValue("email", email);
         return jdbcTemplate.update(sql, params);

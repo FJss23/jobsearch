@@ -31,13 +31,36 @@ public class TagRepository {
             tag.updated_by
         FROM
             jobsearch.tag
-        INNER JOIN jobsearch.joboffer_tag ON
-            tag.tag_id = joboffer_tag.tag_id
-        INNER JOIN jobsearch.joboffer ON
-            joboffer_tag.joboffer_id = joboffer.joboffer_id
-        WHERE joboffer.joboffer_id = :id;
+        INNER JOIN
+            jobsearch.joboffer_tag ON
+                tag.tag_id = joboffer_tag.tag_id
+        INNER JOIN
+            jobsearch.joboffer ON
+                joboffer_tag.joboffer_id = joboffer.joboffer_id
+        WHERE
+            joboffer.joboffer_id = :id;
         """;
         params.addValue("id", jobOfferId);
         return jdbcTemplate.query(sql, params, tagRowMapper);
+    }
+
+    public void deleteTagsOfJobOffer(Long jobOfferId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql =
+                """
+        DELETE
+        FROM
+            jobsearch.joboffer_tag
+        WHERE
+            joboffer_id IN (
+                SELECT
+                    tag_id
+                FROM
+                    jobsearch.joboffer_tag
+                WHERE
+                    joboffer_id = :id);
+        """;
+        params.addValue("id", jobOfferId);
+        jdbcTemplate.update(sql, params);
     }
 }

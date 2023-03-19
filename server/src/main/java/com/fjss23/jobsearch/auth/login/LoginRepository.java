@@ -18,10 +18,11 @@ public class LoginRepository {
         this.refreshAuthRowMapper = new BeanPropertyRowMapper<>(RefreshAuth.class);
     }
 
-    public long create(RefreshAuth refreshAuth) {
+    public Long create(RefreshAuth refreshAuth) {
         String sql =
                 """
-            INSERT INTO jobsearch.refresh_token_info(
+            INSERT
+            INTO jobsearch.refresh_token_info(
                 location,
                 device,
                 appuser_email)
@@ -29,7 +30,8 @@ public class LoginRepository {
                 :location,
                 :device,
                 :appUserEmail)
-            RETURNING refresh_token_info_id;
+            RETURNING
+                refresh_token_info_id;
             """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(refreshAuth), Long.class);
     }
@@ -38,8 +40,11 @@ public class LoginRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
-            DELETE FROM jobsearch.refresh_token_info
-            WHERE refresh_token_info_id = :id
+            DELETE
+            FROM
+                jobsearch.refresh_token_info
+            WHERE
+                refresh_token_info_id = :id
             """;
         params.addValue("id", id);
         jdbcTemplate.update(sql, params);
@@ -49,8 +54,11 @@ public class LoginRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
-            DELETE FROM jobsearch.refresh_token_info
-            WHERE appuser_email = :email
+            DELETE
+            FROM
+                jobsearch.refresh_token_info
+            WHERE
+                appuser_email = :email
             """;
         params.addValue("email", email);
         jdbcTemplate.update(sql, params);
@@ -65,8 +73,10 @@ public class LoginRepository {
                 location,
                 device,
                 appuser_email as appUserEmail
-            FROM jobsearch.refresh_token_info
-            WHERE refresh_token_info_id = :id;
+            FROM
+                jobsearch.refresh_token_info
+            WHERE
+                refresh_token_info_id = :id;
             """;
         params.addValue("id", refreshId);
         var refreshAuth = jdbcTemplate.queryForObject(sql, params, refreshAuthRowMapper);

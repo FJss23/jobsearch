@@ -15,4 +15,12 @@ public class TagService {
     public List<Tag> getTagsOfJobOffer(Long jobOfferId) {
         return tagRepository.getTagsOfJobOffer(jobOfferId);
     }
+
+    public void deleteTagsOfJobOffer(Long jobOfferId) {
+        tagRepository.deleteTagsOfJobOffer(jobOfferId);
+    }
+
+    public void createTagsOfJobOffer(Long tagId, Long jobOfferId) {
+        throw new UnsupportedOperationException("no implemented yet");
+    }
 }

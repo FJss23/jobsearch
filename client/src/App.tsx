@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ApplicationsPage, {
-  loader as applicationsLoader
+  loader as applicationsLoader,
 } from "./pages/Applications";
 import ChangePasswordPage from "./pages/ChangePassword";
 import CompanyDetailPage from "./pages/CompanyDetail";
@@ -10,12 +10,12 @@ import ErrorPage from "./pages/Error";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import HomePage, { loader as homeJobsLoader } from "./pages/Home";
 import JobApplicationsPage from "./pages/JobApplications";
-import JobDetailsPage from "./pages/JobDetails";
+import JobDetailsPage, { loader as jobDetaiLoader } from "./pages/JobDetails";
 import JobsPage, { loader as jobsLoader } from "./pages/Jobs";
 import LoginPage, { action as loginAction } from "./pages/Login";
 import NewCvPage from "./pages/NewCv";
 import RegistrationPage, {
-  action as registrationAction
+  action as registrationAction,
 } from "./pages/Registration";
 import RootLayout from "./pages/Root";
 import { store } from "./store/store";
@@ -36,7 +36,11 @@ const router = createBrowserRouter([
       { path: "/forgot-password", element: <ForgotPasswordPage /> },
       { path: "/change-password", element: <ChangePasswordPage /> },
       { path: "/jobs", element: <JobsPage />, loader: jobsLoader },
-      { path: "/jobs/:jobId", element: <JobDetailsPage /> },
+      {
+        path: "/jobs/:jobId",
+        element: <JobDetailsPage />,
+        loader: jobDetaiLoader,
+      },
       { path: "/company/:companyId", element: <CompanyDetailPage /> },
       { path: "/cv/new", element: <NewCvPage /> },
       {

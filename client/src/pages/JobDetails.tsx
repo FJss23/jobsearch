@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
+import { jobApi } from "../services/jobs";
+import { store } from "../store/store";
 
     // <>
     //   <h1>{job.title}</h1>
@@ -31,3 +33,17 @@ const JobDetailsPage = () => {
 };
 
 export default JobDetailsPage;
+
+export async function loader() {
+  const response = store.dispatch(jobApi.endpoints.getJob.initiate(1));
+  console.log(response)
+
+  try {
+    const data = await response.unwrap();
+    return data;
+  } catch (error) {
+    throw json({ message: "Couldn't get the information from the server" });
+  } finally {
+    response.unsubscribe();
+  }
+}

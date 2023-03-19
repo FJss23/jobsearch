@@ -8,9 +8,9 @@ export interface JobOffer {
   id: string;
   title: string;
   industry?: string;
-  salaryFrom: number;
-  salaryUpTo: number;
-  coin: string;
+  salaryFrom?: number;
+  salaryUpTo?: number;
+  coin?: string;
   location: string;
   workday: string;
   description: string;

@@ -2,24 +2,18 @@ import { Link } from "react-router-dom";
 import { JobOfferCard } from "./Job";
 
 const JobCard = (props: JobOfferCard) => {
-  const encodedTitle = encodeURIComponent(props.title).replaceAll("/", "-");
-  const encodedCompanyName = encodeURIComponent(props.company.name).replaceAll(
-    "/",
-    "-"
-  );
-
   return (
     <article>
       <header>
         <Link
-          to={`/jobs/${encodedCompanyName}/${props.company.id}/${encodedTitle}/${props.id}`}
+          to={`/jobs/${props.id}`}
         >
           <h2>{props.title}</h2>
         </Link>
-        <Link to={`/company/${encodedCompanyName}/${props.company.id}`}>
+        <Link to={`/company/${props.company.id}`}>
           <p>{props.company.name}</p>
         </Link>
-        <span>{props.createdAt.getTime()}</span>
+        <span>{props.createdAt.toString()}</span>
       </header>
       <img
         src={props.company.logoUrl}

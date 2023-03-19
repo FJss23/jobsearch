@@ -26,7 +26,7 @@ public class RegistrationService {
         this.confirmationTokenService = confirmationTokenService;
     }
 
-    public String register(RegistrationRequestDto request) {
+    public String register(RegistrationRequest request) {
         var appUser = new AppUser();
         appUser.setFirstName(request.firstName());
         appUser.setLastName(request.lastName());

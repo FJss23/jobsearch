@@ -37,6 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
     const data = await response.json();
     const user = data as User;
+    console.log(user)
     // store.dispatch(authActions.login(user));
   } catch (err) {
     return json({ message: "Error trying to authenticate" });

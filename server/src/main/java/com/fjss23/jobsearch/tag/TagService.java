@@ -21,6 +21,6 @@ public class TagService {
     }
 
     public void createTagsOfJobOffer(Long tagId, Long jobOfferId) {
-        throw new UnsupportedOperationException("no implemented yet");
+        tagRepository.createTagsOfJobOffer(tagId, jobOfferId);
     }
 }

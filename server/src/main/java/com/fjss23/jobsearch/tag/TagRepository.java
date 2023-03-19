@@ -63,4 +63,21 @@ public class TagRepository {
         params.addValue("id", jobOfferId);
         jdbcTemplate.update(sql, params);
     }
+
+    public void createTagsOfJobOffer(Long tagId, Long jobOfferId) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql =
+                """
+        INSERT
+        INTO jobsearch.joboffer_tag(
+            tag_id,
+            joboffer_id)
+        VALUES(
+            :tagId,
+            :jobOfferId);
+        """;
+        params.addValue("tagId", tagId);
+        params.addValue("jobOfferId", jobOfferId);
+        jdbcTemplate.update(sql, params);
+    }
 }

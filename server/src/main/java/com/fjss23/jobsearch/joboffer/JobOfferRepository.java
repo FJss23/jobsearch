@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -99,6 +100,38 @@ public class JobOfferRepository {
     }
 
     public JobOffer save(JobOffer jobOffer) {
-        throw new UnsupportedOperationException("no implemented yet");
+        String sql =
+                """
+        INSERT
+        INTO jobsearch.joboffer(
+            title,
+            industry,
+            salary_from,
+            salary_up_to,
+            salary_coin,
+            location,
+            workday_code,
+            description,
+            state,
+            company_id,
+            workplace_system,
+            how_to_apply,
+            scrapped)
+        VALUES(
+            :title,
+            :industry,
+            :salaryFrom,
+            :salaryUpTo,
+            :coin,
+            :location,
+            :workday,
+            :description,
+            :state,
+            :workplaceSystem,
+            :howToApply,
+            :scrapped)
+        RETURNING *;
+        """;
+        return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(jobOffer), jobOfferRowMapper);
     }
 }

@@ -2,6 +2,9 @@ package com.fjss23.jobsearch.joboffer;
 
 import com.fjss23.jobsearch.Auditable;
 import com.fjss23.jobsearch.company.Company;
+import com.fjss23.jobsearch.joboffer.types.JobOfferState;
+import com.fjss23.jobsearch.joboffer.types.JobOfferWorkDay;
+import com.fjss23.jobsearch.joboffer.types.JobOfferWorkplaceSystem;
 import com.fjss23.jobsearch.tag.Tag;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +17,10 @@ public class JobOffer extends Auditable {
     private Double salaryUpTo;
     private String coin;
     private String location;
-    private String workday;
+    private JobOfferWorkDay workday;
     private String description;
-    private String state;
-    private String workplaceSystem;
+    private JobOfferState state;
+    private JobOfferWorkplaceSystem workplaceSystem;
     private String howToApply;
     private Boolean scrapped;
 
@@ -36,9 +39,9 @@ public class JobOffer extends Auditable {
             Double salaryUpTo,
             String coin,
             String location,
-            String workday,
+            JobOfferWorkDay workday,
             String description,
-            String workplaceSystem,
+            JobOfferWorkplaceSystem workplaceSystem,
             String howToApply,
             Company company,
             List<Tag> tags) {
@@ -112,11 +115,11 @@ public class JobOffer extends Auditable {
         this.location = location;
     }
 
-    public String getWorkday() {
+    public JobOfferWorkDay getWorkday() {
         return workday;
     }
 
-    public void setWorkday(String workday) {
+    public void setWorkday(JobOfferWorkDay workday) {
         this.workday = workday;
     }
 
@@ -128,19 +131,19 @@ public class JobOffer extends Auditable {
         this.description = description;
     }
 
-    public String getState() {
+    public JobOfferState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(JobOfferState state) {
         this.state = state;
     }
 
-    public String getWorkplaceSystem() {
+    public JobOfferWorkplaceSystem getWorkplaceSystem() {
         return workplaceSystem;
     }
 
-    public void setWorkplaceSystem(String workplaceSystem) {
+    public void setWorkplaceSystem(JobOfferWorkplaceSystem workplaceSystem) {
         this.workplaceSystem = workplaceSystem;
     }
 

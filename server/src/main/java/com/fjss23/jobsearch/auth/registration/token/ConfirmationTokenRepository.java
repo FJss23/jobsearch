@@ -14,19 +14,17 @@ public class ConfirmationTokenRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private BeanPropertyRowMapper<ConfirmationToken> confirmationTokenRowMapper;
 
-    public ConfirmationTokenRepository(
-        NamedParameterJdbcTemplate jdbcTemplate
-    ) {
+    public ConfirmationTokenRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.confirmationTokenRowMapper =
-            new BeanPropertyRowMapper<>(ConfirmationToken.class);
+        this.confirmationTokenRowMapper = new BeanPropertyRowMapper<>(ConfirmationToken.class);
     }
 
     public void save(ConfirmationToken token) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
-            """
-            INSERT INTO jobsearch.confirmation_token(
+                """
+            INSERT
+            INTO jobsearch.confirmation_token(
                 token,
                 expires_at,
                 appuser_email)
@@ -41,10 +39,13 @@ public class ConfirmationTokenRepository {
     public int updateConfirmedAt(String token, OffsetDateTime date) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
-            """
-            UPDATE jobsearch.confirmation_token
-            SET confirmed_at = :confirmedAt
-            WHERE token = :token;
+                """
+            UPDATE
+                jobsearch.confirmation_token
+            SET
+                confirmed_at = :confirmedAt
+            WHERE
+                token = :token;
             """;
         params.addValue("confirmedAt", date);
         params.addValue("token", token);
@@ -54,7 +55,7 @@ public class ConfirmationTokenRepository {
     public Optional<ConfirmationToken> findByToken(String token) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
-            """
+                """
             SELECT
                 confirmation_token_id as id,
                 token,
@@ -62,15 +63,13 @@ public class ConfirmationTokenRepository {
                 confirmed_at,
                 appuser_email as appUserEmail,
                 created_at
-            FROM jobsearch.confirmation_token
-            WHERE token = :token;
+            FROM
+                jobsearch.confirmation_token
+            WHERE
+                token = :token;
             """;
         params.addValue("token", token);
-        var confirmationTokens = jdbcTemplate.queryForObject(
-            sql,
-            params,
-            confirmationTokenRowMapper
-        );
+        var confirmationTokens = jdbcTemplate.queryForObject(sql, params, confirmationTokenRowMapper);
         return Optional.of(confirmationTokens);
     }
 }

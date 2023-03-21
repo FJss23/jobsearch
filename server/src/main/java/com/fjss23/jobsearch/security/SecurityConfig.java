@@ -108,7 +108,7 @@ public class SecurityConfig {
 
     @Bean
     public AccessTokenFilter accessTokenFilter() {
-        return new AccessTokenFilter(this.jwtHelper, this.redisTemplate);
+        return new AccessTokenFilter();
     }
 
     @Bean

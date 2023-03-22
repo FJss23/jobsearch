@@ -46,7 +46,7 @@ DELIVERED_ARN=$(aws sns create-topic \
     --query 'TopicArn')
 
 # Step 2: Create a subscription of the topic
-BASE_URL="http://host.docker.internal:7777/api/v1/email"
+BASE_URL="http://host.docker.internal:8080/api/v1/email"
 
 aws sns subscribe \
     --topic-arn $BOUNCE_ARN \

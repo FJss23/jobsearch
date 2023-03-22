@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.sns.SnsClient;
 
@@ -35,6 +36,17 @@ public class AwsConfig {
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
         return SnsClient.builder()
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(ENDPOINT_URL))
+                .build();
+    }
+
+    @Bean
+    public S3Client s3Client() {
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
+
+        return S3Client.builder()
                 .region(DEFAULT_REGION)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .endpointOverride(URI.create(ENDPOINT_URL))

@@ -32,6 +32,7 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
                 .and()
                 .assertThat()
                 .statusCode(HttpStatus.CREATED.value());
+<<<<<<< HEAD
         // todo: example of an email stored in localstack
         // {
         //  "messages": [
@@ -54,12 +55,21 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
         //    }
         //  ]
         // }
+=======
+
+>>>>>>> 02b7fa0... wip testing with localstack
         /*given(requestLocalStackSpec)
         .when()
         .get("/_aws/ses")
         .then()
         .statusCode(HttpStatus.OK.value())
+<<<<<<< HEAD
         .body("messages.findAll { it.Destination.ToAddresses == " + "test2@test.com" + "}.Subject", equalTo("Registration process jobsearch.com"));*/
+=======
+        .body("messages.findAll { it.Destination.ToAddresses == " + "test2@test.com" + "}.Subject", equalTo("Registration process jobsearch.com"));
+
+         */
+>>>>>>> 02b7fa0... wip testing with localstack
     }
 
     @Test

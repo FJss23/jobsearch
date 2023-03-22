@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,15 +22,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AccessTokenFilter extends OncePerRequestFilter {
 
-    private final JwtHelper jwtHelper;
-    private final RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private JwtHelper jwtHelper;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(AccessTokenFilter.class);
-
-    public AccessTokenFilter(JwtHelper jwtHelper, RedisTemplate<String, String> redisTemplate) {
-        this.jwtHelper = jwtHelper;
-        this.redisTemplate = redisTemplate;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

@@ -172,7 +172,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
                         <goals>
                             <goal>check</goal>
                         </goals>
-                        <phase>compile</phase>
+                        <!-- <phase>compile</phase> -->
                     </execution>
                 </executions>
                 <configuration>

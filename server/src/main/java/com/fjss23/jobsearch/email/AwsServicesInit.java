@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 
-@Component
+//@Component
 public class AwsServicesInit {
     private final SnsClient snsClient;
     private final SesClient sesClient;

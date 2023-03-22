@@ -2,6 +2,7 @@ package com.fjss23.jobsearch;
 
 import io.restassured.filter.log.LogDetail;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;

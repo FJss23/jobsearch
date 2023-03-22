@@ -35,6 +35,8 @@ import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public abstract class AbstractIntegrationTest {
@@ -55,7 +57,7 @@ public abstract class AbstractIntegrationTest {
     static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.4"))
             .withLogConsumer(new Slf4jLogConsumer(logger))
             .withServices(
-                    LocalStackContainer.Service.S3, LocalStackContainer.Service.SES, LocalStackContainer.Service.SNS);
+                    S3, SES, SNS);
 
     @Container
     static GenericContainer<?> redis =
@@ -69,6 +71,9 @@ public abstract class AbstractIntegrationTest {
 
         registry.add("spring.redis.host", redis::getHost);
         registry.add("spring.redis.port", redis::getExposedPorts);
+
+        String address = "http://" +  localStack.getHost() + ":" + localStack.getMappedPort(4566);
+        registry.add("aws.endpoint", () -> address);
     }
 
     public void setupAwsServices() {
@@ -95,7 +100,7 @@ public abstract class AbstractIntegrationTest {
 
     SesClient sesClient() {
         return SesClient.builder()
-                .endpointOverride(localStack.getEndpointOverride(LocalStackContainer.Service.SES))
+                .endpointOverride(localStack.getEndpointOverride(SES))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(localStack.getAccessKey(), localStack.getSecretKey())))
                 .region(Region.of(localStack.getRegion()))
@@ -104,7 +109,7 @@ public abstract class AbstractIntegrationTest {
 
     SnsClient snsClient() {
         return SnsClient.builder()
-                .endpointOverride(localStack.getEndpointOverride(LocalStackContainer.Service.SNS))
+                .endpointOverride(localStack.getEndpointOverride(SNS))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(localStack.getAccessKey(), localStack.getSecretKey())))
                 .region(Region.of(localStack.getRegion()))
@@ -113,7 +118,7 @@ public abstract class AbstractIntegrationTest {
 
     S3Client s3Client() {
         return S3Client.builder()
-                .endpointOverride(localStack.getEndpointOverride(LocalStackContainer.Service.S3))
+                .endpointOverride(localStack.getEndpointOverride(S3))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(localStack.getAccessKey(), localStack.getSecretKey())))
                 .region(Region.of(localStack.getRegion()))

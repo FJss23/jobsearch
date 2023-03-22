@@ -1,6 +1,8 @@
 package com.fjss23.jobsearch.email;
 
 import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -17,7 +19,8 @@ import software.amazon.awssdk.services.sns.SnsClient;
 @Configuration
 public class AwsConfig {
 
-    private static final String ENDPOINT_URL = "http://localhost:4566";
+    @Value("${aws.endpoint}")
+    private String endpointUrl;
     private static final Region DEFAULT_REGION = Region.EU_WEST_3;
 
     @Bean
@@ -27,7 +30,7 @@ public class AwsConfig {
         return SesClient.builder()
                 .region(DEFAULT_REGION)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .endpointOverride(URI.create(ENDPOINT_URL))
+                .endpointOverride(URI.create(endpointUrl))
                 .build();
     }
 
@@ -38,7 +41,7 @@ public class AwsConfig {
         return SnsClient.builder()
                 .region(DEFAULT_REGION)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .endpointOverride(URI.create(ENDPOINT_URL))
+                .endpointOverride(URI.create(endpointUrl))
                 .build();
     }
 
@@ -49,7 +52,7 @@ public class AwsConfig {
         return S3Client.builder()
                 .region(DEFAULT_REGION)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .endpointOverride(URI.create(ENDPOINT_URL))
+                .endpointOverride(URI.create(endpointUrl))
                 .build();
     }
 }

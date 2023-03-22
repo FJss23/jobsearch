@@ -2,6 +2,7 @@ package com.fjss23.jobsearch.joboffer;
 
 import com.fjss23.jobsearch.company.Company;
 import com.fjss23.jobsearch.company.CompanyService;
+import com.fjss23.jobsearch.joboffer.types.JobOfferState;
 import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.TagService;
 import java.util.List;
@@ -60,6 +61,7 @@ public class JobOfferService {
         for (Tag tag : jobOffer.getTags()) {
             tagService.createTagsOfJobOffer(tag.getId(), jobOffer.getId());
         }
+        jobOffer.setState(JobOfferState.CREATED);
         return jobOfferRepository.save(jobOffer);
     }
 }

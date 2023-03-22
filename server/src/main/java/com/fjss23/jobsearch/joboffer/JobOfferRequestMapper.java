@@ -1,6 +1,8 @@
 package com.fjss23.jobsearch.joboffer;
 
 import com.fjss23.jobsearch.company.Company;
+import com.fjss23.jobsearch.joboffer.types.JobOfferWorkDay;
+import com.fjss23.jobsearch.joboffer.types.JobOfferWorkplaceSystem;
 import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.TagRequestMapper;
 import java.util.List;
@@ -28,9 +30,9 @@ public class JobOfferRequestMapper implements Function<JobOfferRequest, JobOffer
                 jobOfferRequest.salaryUpTo(),
                 jobOfferRequest.coin(),
                 jobOfferRequest.location(),
-                jobOfferRequest.workday(),
+                JobOfferWorkDay.valueOf(jobOfferRequest.workday()),
                 jobOfferRequest.description(),
-                jobOfferRequest.workplaceSystem(),
+                JobOfferWorkplaceSystem.valueOf(jobOfferRequest.workplaceSystem()),
                 jobOfferRequest.howToApply(),
                 company,
                 tags);

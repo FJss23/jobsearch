@@ -42,63 +42,43 @@ echo -e "\n=========== SNS ===========\n"
 EMAIL_MANAGEMENT_ARN=$(awslocal sns create-topic \
     --name email_ses_management \
     --output text \
-    --region eu-west-3 \
-    --profile localstack \
     --query 'TopicArn')
 
 awslocal sns add-permission \
     --topic-arn $EMAIL_MANAGEMENT_ARN \
     --label public_permission_ses_management \
     --aws-account-id 000000000000 \
-    --action-name Publish \
-    --region eu-west-3 \
-    --profile localstack
+    --action-name Publish
 
 awslocal sns subscribe \
     --topic-arn $EMAIL_MANAGEMENT_ARN \
     --protocol http \
-    --notification-endpoint "http://host.docker.internal:8080/api/v1/email/sns-bounce" \
-    --region eu-west-3 \
-    --profile localstack
+    --notification-endpoint "http://host.docker.internal:8080/api/v1/email/sns-bounce"
 
-awslocal sns list-topics \
-    --region eu-west-3 \
-    --profile localstack
+awslocal sns list-topics
 
 # ----------------------- SES -----------------------
 echo -e "\n=========== SES ===========\n"
 
 awslocal ses verify-email-identity \
-    --email-address "noreply@jobsearch.com" \
-    --region eu-west-3 \
-    --profile localstack
+    --email-address "noreply@jobsearch.com"
 
 awslocal ses create-configuration-set \
-    --configuration-set "{\"Name\":\"ses_config_set\"}" \
-    --region eu-west-3 \
-    --profile localstack
+    --configuration-set "{\"Name\":\"ses_config_set\"}"
 
 awslocal ses create-configuration-set-event-destination \
     --configuration-set-name ses_config_set \
-    --event-destination "{\"Name\":\"some_name2\",\"Enabled\":true,\"MatchingEventTypes\":[\"send\",\"bounce\",\"delivery\",\"open\",\"click\"],\"SNSDestination\":{\"TopicARN\":\"$EMAIL_MANAGEMENT_ARN\"}}" \
-    --region eu-west-3 \
-    --profile localstack
+    --event-destination "{\"Name\":\"some_name2\",\"Enabled\":true,\"MatchingEventTypes\":[\"send\",\"bounce\",\"delivery\",\"open\",\"click\"],\"SNSDestination\":{\"TopicARN\":\"$EMAIL_MANAGEMENT_ARN\"}}"
 
 awslocal ses send-email \
     --from "noreply@jobsearch.com" \
     --to "test@test.com" \
     --subject "Hello World" \
-    --text "Hello World! This is your first message!" \
-    --region eu-west-3 \
-    --profile localstack
+    --text "Hello World! This is your first message!"
 
 # ----------------------- S3 -----------------------
 echo -e "\n=========== S3 ===========\n"
 
-awslocal s3 mb s3://jobsearch-bucket \
-    --region eu-west-3 \
-    --profile localstack
+awslocal s3 mb s3://jobsearch-bucket
 
-awslocal s3 ls \
-    --region eu-west-3 \
-    --profile localstack
+awslocal s3 ls

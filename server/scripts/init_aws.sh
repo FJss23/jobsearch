@@ -2,6 +2,7 @@
 
 # Remeber to make the file executable... chmod +x ./init_aws.sh
 # Check https://docs.docker.com/desktop/networking/ for host.docker.internal
+# IMPORTANT: The localstack container is using aws cli v1
 
 # ----------------------- CONFIG -----------------------
 echo -e "\n====== Configuration ======\n"
@@ -94,33 +95,63 @@ aws ses verify-email-identity \
 aws ses set-identity-notification-topic \
     --identity $BASE_EMAIL \
     --notification-type Bounce \
-    --sns-topic bounce_email_ses \
+    --sns-topic $BOUNCE_ARN \
     --endpoint-url http://localhost:4566 \
     --profile localstack
+
+# aws ses set-identity-headers-in-notifications-enabled \
+#     --identity $BASE_EMAIL \
+#     --notification-type Bounce \
+#     --enabled \
+#     --endpoint-url http://localhost:4566 \
+#     --profile localstack
 
 aws ses set-identity-notification-topic \
     --identity $BASE_EMAIL \
     --notification-type Complaint \
-    --sns-topic complaint_email_ses \
+    --sns-topic $COMPLAINT_ARN \
     --endpoint-url http://localhost:4566 \
     --profile localstack
+
+# aws ses set-identity-headers-in-notifications-enabled \
+#     --identity $BASE_EMAIL \
+#     --notification-type Complaint \
+#     --enabled \
+#     --endpoint-url http://localhost:4566 \
+#     --profile localstack
 
 aws ses set-identity-notification-topic \
     --identity $BASE_EMAIL \
     --notification-type Delivery \
-    --sns-topic delivered_email_ses \
+    --sns-topic $DELIVERED_ARN \
     --endpoint-url http://localhost:4566 \
     --profile localstack
+
+# aws ses set-identity-headers-in-notifications-enabled \
+#     --identity $BASE_EMAIL \
+#     --notification-type Delivery \
+#     --enabled \
+#     --endpoint-url http://localhost:4566 \
+#     --profile localstack
 
 # Step 3: Check if the email was correctly verified & more
 aws ses list-identities \
     --endpoint-url http://localhost:4566 \
     --profile localstack
 
-# aws ses send-email \
-#     --from-email-address $BASE_EMAIL \
-#     --destination ToAddresses=test@test.com
-#     --content
+# TODO:
+# - Try using create-configuration-set-event-destination
+# - Try aws cli version 2 inside the container (maybe with awslocal)
+# - Check /_aws/sns and see if there is something after sending an email
+# - Also check https://github.com/localstack/localstack/issues/7323
+
+aws ses send-email \
+    --from $BASE_EMAIL \
+    --to "test@test.com" \
+    --subject "Just a subject" \
+    --text "This is just an email" \
+    --endpoint-url http://localhost:4566 \
+    --profile localstack
 
 # ----------------------- S3 -----------------------
 echo -e "\n=========== S3 ===========\n"

@@ -47,7 +47,7 @@ public class AppUserService implements UserDetailsService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        appUserRepository.create(user);
+        appUserRepository.save(user);
 
         String token = UUID.randomUUID().toString();
         var confirmationToken = new ConfirmationToken(

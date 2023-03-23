@@ -112,10 +112,15 @@ aws ses set-identity-notification-topic \
     --endpoint-url http://localhost:4566 \
     --profile localstack
 
-# Step 3: Check if the email was correctly verified
+# Step 3: Check if the email was correctly verified & more
 aws ses list-identities \
     --endpoint-url http://localhost:4566 \
     --profile localstack
+
+# aws ses send-email \
+#     --from-email-address $BASE_EMAIL \
+#     --destination ToAddresses=test@test.com
+#     --content
 
 # ----------------------- S3 -----------------------
 echo -e "\n=========== S3 ===========\n"
@@ -137,3 +142,4 @@ aws sns publish \
     --region eu-west-3 \
     --endpoint-url http://localhost:4566 \
     --profile localstack
+

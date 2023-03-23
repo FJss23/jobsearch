@@ -9,23 +9,27 @@ import org.springframework.stereotype.Repository;
 public class EmailRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final BeanPropertyRowMapper<EmailSent> emailSentRowMapper;
+    private final BeanPropertyRowMapper<EmailNotification> emailSentRowMapper;
 
     public EmailRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.emailSentRowMapper = new BeanPropertyRowMapper<>(EmailSent.class);
+        this.emailSentRowMapper = new BeanPropertyRowMapper<>(EmailNotification.class);
     }
 
-    void save(EmailSent emailSent) {
+    void save(EmailNotification emailSent) {
         String sql =
             """
         INSERT
         INTO jobsearch.email_sent(
-            email,
-            status)
+            source,
+            destination,
+            event_type,
+            message_id)
         VALUES(
-            :email,
-            cast(:status.name as status));
+            :source,
+            :destination,
+            :eventType
+            :messageId);
         """;
         jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(emailSent));
     }

@@ -58,15 +58,7 @@ public class EmailService {
         }
     }
 
-    public void saveBounceNotification() {
-
-    }
-
-    public void saveComplaintNotification() {
-
-    }
-
-    public void saveDeliveredNotification() {
-
+    public void saveNotification(EmailNotification emailNotification) {
+        emailRepository.save(emailNotification);
     }
 }

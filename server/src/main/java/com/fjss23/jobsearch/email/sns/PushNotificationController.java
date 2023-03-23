@@ -1,6 +1,7 @@
 package com.fjss23.jobsearch.email.sns;
 
 import com.fjss23.jobsearch.ApiV1PrefixController;
+import com.fjss23.jobsearch.email.ses.EmailNotification;
 import com.fjss23.jobsearch.email.ses.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,33 +29,49 @@ public class PushNotificationController {
         this.emailService = emailService;
     }
 
-    @RequestMapping(path = "/email/sns-bounce", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
+    /* Notification example
+    {
+      "Type": "Notification",
+      "MessageId": "bbf97490-5681-4bfd-8df8-9b7780969b5a",
+      "TopicArn": "arn:aws:sns:us-east-1:000000000000:email_ses_management",
+      "Message": {
+        "eventType": "Delivery",
+        "mail": {
+          "timestamp": "2023-03-23T19:01:47.881597+00:00",
+          "source": "noreply@jobsearch.com",
+          "sourceArn": "arn:aws:ses:us-east-1:000000000000:identity/noreply@jobsearch.com",
+          "sendingAccountId": "000000000000",
+          "destination": ["test@test.com"],
+          "messageId": "hjoddhsoppebuovj-snouukoa-enpn-ouvk-mldk-zgjcqjryxoot-tjqjcw",
+          "tags": {}
+        },
+        "delivery": {
+          "recipients": ["test@test.com"],
+          "timestamp": "2023-03-23T19:01:47.881597+00:00"
+        }
+      },
+      "Timestamp": "2023-03-23T19:01:47.895Z",
+      "SignatureVersion": "1",
+      "Signature": "EXAMPLEpH+..",
+      "SigningCertURL": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-0000000000000000000000.pem",
+      "UnsubscribeURL": "http://localhost:4566/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:000000000000:email_ses_management:f952570b-d99a-4eef-bd5f-6ff9cb9218e3",
+      "Subject": "Amazon SES Email Event Notification"
+    }
+     */
+    @RequestMapping(path = "/email/notification-management", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
     public void snsBounceNotification(@RequestBody String params) {
         logger.info("params {}", params);
-        logger.info("Bounce NOTIFICATION");
-        //emailService.saveBounceNotification();
-    }
-
-    @RequestMapping(path = "/email/sns-complaint", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
-    public void snsComplaintNotification(@RequestBody String params) {
-        logger.info("params {}", params);
-        logger.info("Complaint NOTIFICATION");
-        //emailService.saveBounceNotification();
-    }
-
-    @RequestMapping(path = "/email/sns-delivered", method = RequestMethod.POST, headers = NOTIFICATION_HEADER)
-    public void snsDeliveredNotification(@RequestBody String params) {
-        logger.info("params {}", params);
-        logger.info("Delivered NOTIFICATION");
-        //emailService.saveBounceNotification();
+        //EmailNotification get
+        //var notification = new EmailNotification();
+        //emailService.saveNotification(notification);
     }
 
     @RequestMapping(
-            path = {"/email/sns-bounce", "/email/sns-complaint", "/email/sns-delivered"},
+            path = "/email/notification-management",
             method = RequestMethod.POST,
             headers = CONFIRM_SUBSCRIPTION_HEADER)
     public void snsConfirmSubscriptionForSes(@RequestBody String params) {
-        SubscriptionConfirmation subInfo = pushNotificationService.getReqInfo(params);
+        SubscriptionConfirmation subInfo = pushNotificationService.getSubscriptionInfoFromRequest(params);
         pushNotificationService.confirmSub(subInfo.Token(), subInfo.TopicArn());
     }
 }

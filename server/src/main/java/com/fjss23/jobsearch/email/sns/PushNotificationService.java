@@ -37,7 +37,7 @@ public class PushNotificationService {
         }
     }
 
-    SubscriptionConfirmation getReqInfo(String params) {
+    SubscriptionConfirmation getSubscriptionInfoFromRequest(String params) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             SubscriptionConfirmation subInfo = objectMapper.readValue(params, SubscriptionConfirmation.class);
@@ -46,4 +46,5 @@ public class PushNotificationService {
             throw new RuntimeException(e);
         }
     }
+
 }

@@ -53,7 +53,7 @@ awslocal sns add-permission \
 awslocal sns subscribe \
     --topic-arn $EMAIL_MANAGEMENT_ARN \
     --protocol http \
-    --notification-endpoint "http://host.docker.internal:8080/api/v1/email/sns-bounce"
+    --notification-endpoint "http://host.docker.internal:8080/api/v1/email/notification-management"
 
 awslocal sns list-topics
 

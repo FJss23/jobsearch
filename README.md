@@ -109,3 +109,7 @@ Building the project will also verify the formatter.
 - Session / Cookie
 - Plain JWT
 - Oauth / JWT or Oauth with Keycloack (an auth embedded provider)
+
+- NOTE: Verifying an email requires to have access to that email, and get a link
+that aws will send. If we verify a domain, we need dkim 
+(https://docs.aws.amazon.com/cli/latest/reference/sesv2/create-email-identity.html)

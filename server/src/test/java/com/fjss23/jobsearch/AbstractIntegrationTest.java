@@ -1,10 +1,10 @@
 package com.fjss23.jobsearch;
 
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
+
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,6 @@ import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Testcontainers
 public abstract class AbstractIntegrationTest {
@@ -41,6 +39,7 @@ public abstract class AbstractIntegrationTest {
 
     @Autowired
     private SesClient sesClient;
+
     @Autowired
     private SnsClient snsClient;
 
@@ -60,8 +59,7 @@ public abstract class AbstractIntegrationTest {
             .withAccessToHost(true);
 
     @Container
-    static GenericContainer<?> redis =
-            new GenericContainer<>(DockerImageName.parse("redis:7.0.8-alpine"));
+    static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:7.0.8-alpine"));
 
     @DynamicPropertySource
     static void redisProperties(DynamicPropertyRegistry registry) {
@@ -74,7 +72,7 @@ public abstract class AbstractIntegrationTest {
         registry.add("spring.redis.host", redis::getHost);
         registry.add("spring.redis.port", redis::getExposedPorts);
 
-        String address = "http://" +  localStack.getHost() + ":" + localStack.getMappedPort(4566);
+        String address = "http://" + localStack.getHost() + ":" + localStack.getMappedPort(4566);
         registry.add("aws.endpoint", () -> address);
     }
 

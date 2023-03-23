@@ -1,11 +1,10 @@
 package com.fjss23.jobsearch;
 
+import static io.restassured.RestAssured.given;
+
 import io.restassured.filter.log.LogDetail;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import static io.restassured.RestAssured.given;
 
 public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 

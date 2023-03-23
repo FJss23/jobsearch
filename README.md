@@ -93,7 +93,16 @@ the "jwt refresh token".
 The jwt token is a short lived token and is stored in the browser "session storage".
 The jwt refresh token has a long lived duration and is stored in a httpOnly cookie.
 
+## Formatter
+- Check if there is any error `mvn spotless:check`
+- Format the code `mvn spotless:apply`
 
+If you want to compile the project, it need to be checked without errors
+Building the project will also verify the formatter.
+
+## Test
+- Run the test with `mvn clean test`.
+- Run an specific test with `mvn clean test -Dtest=<name>Test
 
 ## Security options
 - Basic HTTP authentication

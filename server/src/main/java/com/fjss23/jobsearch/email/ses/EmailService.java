@@ -10,12 +10,14 @@ import software.amazon.awssdk.services.ses.model.*;
 public class EmailService {
 
     private final SesClient sesClient;
-    private static final String EMAIL_NO_REPLY = "noreply@jobsearch.com";
+    private final EmailRepository emailRepository;
 
+    private static final String EMAIL_NO_REPLY = "noreply@jobsearch.com";
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-    public EmailService(SesClient sesClient) {
+    public EmailService(SesClient sesClient, EmailRepository emailRepository) {
         this.sesClient = sesClient;
+        this.emailRepository = emailRepository;
     }
 
     public void sendToken(String firstName, String to, String confirmationLink) {
@@ -54,5 +56,17 @@ public class EmailService {
         } catch (Exception e) {
             logger.error("Couldn't send the email \n {}", e);
         }
+    }
+
+    public void saveBounceNotification() {
+
+    }
+
+    public void saveComplaintNotification() {
+
+    }
+
+    public void saveDeliveredNotification() {
+
     }
 }

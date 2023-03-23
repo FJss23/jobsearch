@@ -70,7 +70,7 @@ public class AppUserRepository {
         return jdbcTemplate.query(sql, appUserRowMapper);
     }
 
-    public void create(AppUser appUser) {
+    public void save(AppUser appUser) {
         String sql =
                 """
             INSERT

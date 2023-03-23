@@ -7,6 +7,8 @@ import com.fjss23.jobsearch.user.AppUser;
 import com.fjss23.jobsearch.user.AppUserRole;
 import com.fjss23.jobsearch.user.AppUserService;
 import java.time.OffsetDateTime;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,9 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailService emailService;
     private final ConfirmationTokenService confirmationTokenService;
+
+    @Value("${project.domain}")
+    private String projectDomain;
 
     public RegistrationService(
             AppUserService appUserService,
@@ -36,7 +41,7 @@ public class RegistrationService {
         appUser.setCreatedBy(request.email());
 
         var token = appUserService.signUpUser(appUser);
-        var confirmationLink = "http://localhost:8080/api/v1/auth/registration/confirm?token=" + token;
+        var confirmationLink = projectDomain + "/api/v1/auth/registration/confirm?token=" + token;
 
         emailService.sendToken(appUser.getFirstName(), appUser.getEmail(), confirmationLink);
         return token;

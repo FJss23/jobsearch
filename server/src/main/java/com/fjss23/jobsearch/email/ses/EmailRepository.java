@@ -1,6 +1,5 @@
 package com.fjss23.jobsearch.email.ses;
 
-import com.fjss23.jobsearch.user.AppUser;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

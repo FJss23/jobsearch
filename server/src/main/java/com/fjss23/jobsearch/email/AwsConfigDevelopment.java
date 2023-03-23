@@ -18,7 +18,7 @@ import software.amazon.awssdk.services.sns.SnsClient;
  * - https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.html
  */
 @Configuration
-@Profile("dev") /* Using localstack we need to override the endpoint */
+@Profile("dev|test") /* Using localstack we need to override the endpoint */
 public class AwsConfigDevelopment {
 
     @Value("${aws.endpoint}")    /* Left this as a property value so testcontainers can use it later */
@@ -55,17 +55,6 @@ public class AwsConfigDevelopment {
                 .region(DEFAULT_REGION)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .endpointOverride(URI.create(endpointUrl))
-                .build();
-    }
-
-    @Bean
-    public S3Client s3Client() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
-
-        return S3Client.builder()
-                .region(DEFAULT_REGION)
-                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .endpointOverride(URI.create(ENDPOINT_URL))
                 .build();
     }
 }

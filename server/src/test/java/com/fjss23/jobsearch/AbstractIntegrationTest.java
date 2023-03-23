@@ -1,7 +1,5 @@
 package com.fjss23.jobsearch;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
-
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -11,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -31,6 +27,8 @@ import software.amazon.awssdk.services.ses.model.VerifyEmailIdentityRequest;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
+
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Testcontainers
@@ -57,7 +55,8 @@ public abstract class AbstractIntegrationTest {
     @Container
     static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.4"))
             .withLogConsumer(new Slf4jLogConsumer(logger))
-            .withServices(S3, SES, SNS);
+            .withServices(S3, SES, SNS)
+            .withAccessToHost(true);
 
     @Container
     static GenericContainer<?> redis =
@@ -91,12 +90,12 @@ public abstract class AbstractIntegrationTest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
         requestSpec = new RequestSpecBuilder()
-                .setPort(7777)
+                .setPort(localServerPort)
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
         requestLocalStackSpec = new RequestSpecBuilder()
-                .setPort(4566)
+                .setPort(localStack.getMappedPort(4566))
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }

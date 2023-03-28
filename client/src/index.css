@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+  /* (10% * 100%) / 16px = 62.5% (10px per rem) */
+  font-size: 62.5%;
+}
+
+body {
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.7;
+  box-sizing: border-box;
+  background-color: #f1efe8;
+
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: 3;
+  grid-template-areas:
+    "hd"
+    "mn"
+    "ft";
+}
+
+main {
+  grid-area: mn;
+}
+
+header {
+  grid-area: hd;
+}
+
+footer {
+  grid-area: ft;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+fieldset {
+  border: 0;
+}

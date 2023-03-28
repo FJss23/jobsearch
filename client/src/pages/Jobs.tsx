@@ -1,18 +1,21 @@
 import { json, useLoaderData } from "react-router-dom";
 import { JobOffer } from "../components/Jobs/Job";
 import JobList from "../components/Jobs/JobList";
-import SearchBar from "../components/Jobs/SearchBar";
+import Filters from "../components/Jobs/Filters";
 import { jobApi } from "../services/jobs";
 import { store } from "../store/store";
+import styles from "./Jobs.module.css";
 
 const JobsPage = () => {
   const jobs = useLoaderData() as JobOffer[];
 
   return (
     <>
-      <h1>Jobs page</h1>
-      <SearchBar />
-      <JobList jobs={jobs} />
+      <h1>All Jobs Available</h1>
+      <div className={styles.jobsLayout}>
+        <Filters />
+        <JobList jobs={jobs}  />
+      </div>
     </>
   );
 };
@@ -21,7 +24,7 @@ export default JobsPage;
 
 export async function loader() {
   const response = store.dispatch(jobApi.endpoints.getJobs.initiate());
-  console.log(response)
+  console.log(response);
 
   try {
     const data = await response.unwrap();

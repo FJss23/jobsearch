@@ -1,0 +1,30 @@
+.mainHeader {
+  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  margin: 0 auto;
+  max-width: 75%;
+}
+
+.navbar {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}
+
+.navbar > li {
+  margin-left: 3rem;
+}
+
+.login {
+  border: solid 2px;
+  padding: 0.6rem 2rem;
+  border-radius: 8px;
+  background-color: #58287F;
+}
+
+.login > a {
+  color: white;
+}

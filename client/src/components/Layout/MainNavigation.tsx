@@ -1,10 +1,8 @@
-import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/hooks";
-// import { authActions } from "../../store/auth";
+import styles from "./MainNavigation.module.css";
 
 function MainNavigation() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isAuth = useAppSelector((state) => state.auth.user);
@@ -16,30 +14,29 @@ function MainNavigation() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({}),
       });
 
-      if (!response.ok) return console.log("Something went wrong", response)
+      if (!response.ok) return console.log("Something went wrong", response);
 
-      // dispatch(authActions.logout());
       navigate("/");
     } catch (err) {
-      console.log("You can't logout right now")
+      console.log("You can't logout right now");
     }
   };
 
   return (
-    <header>
+    <header className={styles.mainHeader}>
+      <div>
+        <NavLink to="/">JobSearch</NavLink>
+      </div>
       <nav>
-        <ul>
-          <li>
-            <NavLink to="/">JobSearch</NavLink>
-          </li>
+        <ul className={styles.navbar}>
           <li>
             <NavLink to="/jobs">Jobs</NavLink>
           </li>
           {!isAuth && (
-            <li>
+            <li className={styles.login}>
               <NavLink to="/login">Login</NavLink>
             </li>
           )}
@@ -48,7 +45,11 @@ function MainNavigation() {
               <NavLink to="/applications">Applications</NavLink>
             </li>
           )}
-          {isAuth && <li><button onClick={logoutHandler}>Logout</button></li>}
+          {isAuth && (
+            <li>
+              <button onClick={logoutHandler}>Logout</button>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

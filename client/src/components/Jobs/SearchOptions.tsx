@@ -1,15 +1,6 @@
-const SearchBar = () => {
+function SearchOptions() {
   return (
-    <form>
-      <div>
-        <label htmlFor="search">Search you next Job</label>
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Position, Company name, Tags or Keywords"
-        />
-      </div>
+    <>
       <div>
         <label htmlFor="salary">Salary</label>
         <input type="range" name="salary" id="salary" min={0} max={100} />
@@ -44,9 +35,8 @@ const SearchBar = () => {
           <input type="checkbox" name="perHour" id="perHour" />
         </div>
       </fieldset>
-      <button type="submit">Search</button>
-    </form>
+    </>
   );
-};
+}
 
-export default SearchBar;
+export default SearchOptions;

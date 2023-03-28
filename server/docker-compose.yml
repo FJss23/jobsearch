@@ -13,7 +13,7 @@ services:
   postgres:
     image: "postgres:15.1-alpine"
     container_name: "postgres_jbs"
-    restart: always
+    # restart: always
     ports:
       - 5432:5432
     volumes:
@@ -26,7 +26,7 @@ services:
   redis:
     container_name: 'redis_jbs'
     image: 'redis:7.0.8-alpine'
-    restart: always
+    # restart: always
     ports:
       - 6379:6379
 

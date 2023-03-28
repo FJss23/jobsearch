@@ -8,3 +8,4 @@
 - [] Remove refresh tokens from the database every X amount of time.
 - [] Remove emails sent from the database every X amount of time.
 - [] Follow the spring tutorial for the registration process.
+- [] Aws ses. Maybe verify a domain instead of a specific email.

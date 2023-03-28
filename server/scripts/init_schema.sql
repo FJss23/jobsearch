@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS jobsearch.joboffer(
     workplace_system workplace_system_type NOT NULL,
     how_to_apply text,
     scrapped boolean,
+    scrapped_from_url text,
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
     created_by text,

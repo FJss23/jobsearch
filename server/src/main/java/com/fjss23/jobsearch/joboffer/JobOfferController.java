@@ -3,6 +3,7 @@ package com.fjss23.jobsearch.joboffer;
 import com.fjss23.jobsearch.ApiV1PrefixController;
 import com.fjss23.jobsearch.company.Company;
 import com.fjss23.jobsearch.company.CompanyService;
+import com.fjss23.jobsearch.scrapper.JobScrapper;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class JobOfferController {
 
     @GetMapping("/jobs")
     public List<JobOfferResponse> getAllJobs() {
+        JobScrapper.scrap();
         return jobOfferService.findAll().stream().map(jobOfferResponseMapper).collect(Collectors.toList());
     }
 

@@ -1,10 +1,9 @@
 package com.fjss23.jobsearch.auth;
 
 import com.fjss23.jobsearch.ApiV1PrefixController;
-import com.fjss23.jobsearch.auth.login.LoginRequestDto;
+import com.fjss23.jobsearch.auth.login.payload.LoginRequest;
 import com.fjss23.jobsearch.auth.login.LoginService;
-import com.fjss23.jobsearch.auth.login.RefreshTokenInfo;
-import com.fjss23.jobsearch.auth.registration.RegistrationRequest;
+import com.fjss23.jobsearch.auth.registration.payload.RegistrationRequest;
 import com.fjss23.jobsearch.auth.registration.RegistrationService;
 import com.fjss23.jobsearch.user.AppUser;
 import jakarta.servlet.http.Cookie;
@@ -71,7 +70,7 @@ public class AuthController {
      */
     @PostMapping("/auth/login")
     public ResponseEntity<String> login(
-            @Valid @RequestBody LoginRequestDto login, HttpServletRequest request, HttpServletResponse response) {
+        @Valid @RequestBody LoginRequest login, HttpServletRequest request, HttpServletResponse response) {
         var upat = new UsernamePasswordAuthenticationToken(login.email(), login.password());
         Authentication authentication = authenticationManager.authenticate(upat);
 
@@ -82,10 +81,10 @@ public class AuthController {
         var location = request.getLocale().getCountry();
         var device = request.getHeader("User-Agent");
 
-        RefreshTokenInfo refreshTokenInfo = loginService.generateRefreshToken(appUser, location, device);
-        String accessToken = loginService.generateAccessToken(appUser, refreshTokenInfo.id());
+        LoginService.GenerateRefreshToken info = loginService.generateRefreshToken(appUser, location, device);
+        String accessToken = loginService.generateAccessToken(appUser, info.id());
 
-        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE, refreshTokenInfo.token());
+        Cookie cookie = new Cookie(REFRESH_TOKEN_COOKIE, info.token());
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
 

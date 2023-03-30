@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class SelectionProcessController {
 
     @GetMapping("/selection-process")
-    public List<SelectionProcessResponseDto> getSelectionProcessesForUser() {
-        var processes = Arrays.asList(new SelectionProcessResponseDto("1", "2", false, OffsetDateTime.now()));
+    public List<SelectionProcessResponse> getSelectionProcessesForUser() {
+        var processes = Arrays.asList(new SelectionProcessResponse("1", "2", false, OffsetDateTime.now()));
         return processes;
     }
 }

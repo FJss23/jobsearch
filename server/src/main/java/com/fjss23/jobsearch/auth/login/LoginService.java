@@ -3,6 +3,7 @@ package com.fjss23.jobsearch.auth.login;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fjss23.jobsearch.security.jwt.JwtHelper;
 import com.fjss23.jobsearch.user.AppUser;
+
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,6 +16,8 @@ public class LoginService {
     private final LoginRepository loginRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
+    public record GenerateRefreshToken(String token, Long id) { }
+
     public LoginService(
             JwtHelper jwtHelper, LoginRepository loginRepository, RedisTemplate<String, String> redisTemplate) {
         this.jwtHelper = jwtHelper;
@@ -22,13 +25,13 @@ public class LoginService {
         this.redisTemplate = redisTemplate;
     }
 
-    public RefreshTokenInfo generateRefreshToken(AppUser appUser, String location, String device) {
-        RefreshAuth refreshAuth = new RefreshAuth(location, device, appUser.getEmail());
-        Long id = loginRepository.create(refreshAuth);
+    public GenerateRefreshToken generateRefreshToken(AppUser appUser, String location, String device) {
+        RefreshTokenInfo refreshTokenInfo = new RefreshTokenInfo(location, device, appUser.getEmail());
+        Long id = loginRepository.create(refreshTokenInfo);
 
         String token = jwtHelper.generateRefreshToken(
                 appUser.getUsername(), appUser.getUserRole().name(), appUser.getFirstName(), id);
-        return new RefreshTokenInfo(token, id);
+        return new GenerateRefreshToken(token, id);
     }
 
     public String generateAccessToken(AppUser appUser, Long refreshId) {
@@ -57,7 +60,7 @@ public class LoginService {
         DecodedJWT jwtToken = jwtHelper.getJwtRefreshToken(refreshToken);
 
         Long refreshId = jwtToken.getClaim(JwtHelper.REFRESH_ID).asLong();
-        Optional<RefreshAuth> refreshAuth = loginRepository.findById(refreshId);
+        Optional<RefreshTokenInfo> refreshAuth = loginRepository.findById(refreshId);
 
         if (refreshAuth.isEmpty()) {
             throw new BadCredentialsException("The refresh token is not valid");

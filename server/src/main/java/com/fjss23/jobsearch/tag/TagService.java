@@ -12,15 +12,15 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public List<Tag> getTagsOfJobOffer(Long jobOfferId) {
-        return tagRepository.getTagsOfJobOffer(jobOfferId);
+    public List<Tag> getTagsOfJob(Long jobId) {
+        return tagRepository.getTagsOfJob(jobId);
     }
 
-    public void deleteTagsOfJobOffer(Long jobOfferId) {
-        tagRepository.deleteTagsOfJobOffer(jobOfferId);
+    public void deleteTagsOfJob(Long jobId) {
+        tagRepository.deleteTagsOfJob(jobId);
     }
 
-    public void createTagsOfJobOffer(Long tagId, Long jobOfferId) {
-        tagRepository.createTagsOfJobOffer(tagId, jobOfferId);
+    public void createTagsOfJob(Long tagId, Long jobId) {
+        tagRepository.createTagsOfJob(tagId, jobId);
     }
 }

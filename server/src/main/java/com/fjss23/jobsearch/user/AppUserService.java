@@ -1,7 +1,7 @@
 package com.fjss23.jobsearch.user;
 
-import com.fjss23.jobsearch.auth.registration.token.ConfirmationToken;
-import com.fjss23.jobsearch.auth.registration.token.ConfirmationTokenService;
+import com.fjss23.jobsearch.auth.registration.ConfirmationToken;
+import com.fjss23.jobsearch.auth.registration.ConfirmationTokenService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;

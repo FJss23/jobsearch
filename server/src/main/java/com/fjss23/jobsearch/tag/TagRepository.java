@@ -17,7 +17,7 @@ public class TagRepository {
         this.tagRowMapper = new BeanPropertyRowMapper<>(Tag.class);
     }
 
-    public List<Tag> getTagsOfJobOffer(Long jobOfferId) {
+    public List<Tag> getTagsOfJob(Long jobId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
@@ -32,52 +32,52 @@ public class TagRepository {
         FROM
             jobsearch.tag
         INNER JOIN
-            jobsearch.joboffer_tag ON
-                tag.tag_id = joboffer_tag.tag_id
+            jobsearch.job_tag ON
+                tag.tag_id = job_tag.tag_id
         INNER JOIN
-            jobsearch.joboffer ON
-                joboffer_tag.joboffer_id = joboffer.joboffer_id
+            jobsearch.job ON
+                job_tag.job_id = job.job_id
         WHERE
-            joboffer.joboffer_id = :id;
+            job.job_id = :id;
         """;
-        params.addValue("id", jobOfferId);
+        params.addValue("id", jobId);
         return jdbcTemplate.query(sql, params, tagRowMapper);
     }
 
-    public void deleteTagsOfJobOffer(Long jobOfferId) {
+    public void deleteTagsOfJob(Long jobId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
         DELETE
         FROM
-            jobsearch.joboffer_tag
+            jobsearch.job_tag
         WHERE
-            joboffer_id IN (
+            job_id IN (
                 SELECT
                     tag_id
                 FROM
-                    jobsearch.joboffer_tag
+                    jobsearch.job_tag
                 WHERE
-                    joboffer_id = :id);
+                    job_id = :id);
         """;
-        params.addValue("id", jobOfferId);
+        params.addValue("id", jobId);
         jdbcTemplate.update(sql, params);
     }
 
-    public void createTagsOfJobOffer(Long tagId, Long jobOfferId) {
+    public void createTagsOfJob(Long tagId, Long jobId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
         INSERT
-        INTO jobsearch.joboffer_tag(
+        INTO jobsearch.job_tag(
             tag_id,
-            joboffer_id)
+            job_id)
         VALUES(
             :tagId,
-            :jobOfferId);
+            :jobId);
         """;
         params.addValue("tagId", tagId);
-        params.addValue("jobOfferId", jobOfferId);
+        params.addValue("jobId", jobId);
         jdbcTemplate.update(sql, params);
     }
 }

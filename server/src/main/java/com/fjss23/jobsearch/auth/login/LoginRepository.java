@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 public class LoginRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final BeanPropertyRowMapper<RefreshAuth> refreshAuthRowMapper;
+    private final BeanPropertyRowMapper<RefreshTokenInfo> refreshAuthRowMapper;
 
     public LoginRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.refreshAuthRowMapper = new BeanPropertyRowMapper<>(RefreshAuth.class);
+        this.refreshAuthRowMapper = new BeanPropertyRowMapper<>(RefreshTokenInfo.class);
     }
 
-    public Long create(RefreshAuth refreshAuth) {
+    public Long create(RefreshTokenInfo refreshTokenInfo) {
         String sql =
                 """
             INSERT
@@ -33,7 +33,7 @@ public class LoginRepository {
             RETURNING
                 refresh_token_info_id;
             """;
-        return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(refreshAuth), Long.class);
+        return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(refreshTokenInfo), Long.class);
     }
 
     public void deleteById(Long id) {
@@ -64,7 +64,7 @@ public class LoginRepository {
         jdbcTemplate.update(sql, params);
     }
 
-    public Optional<RefreshAuth> findById(Long refreshId) {
+    public Optional<RefreshTokenInfo> findById(Long refreshId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """

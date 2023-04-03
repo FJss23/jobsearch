@@ -23,4 +23,8 @@ public class TagService {
     public void createTagsOfJob(Long tagId, Long jobId) {
         tagRepository.createTagsOfJob(tagId, jobId);
     }
+
+    public List<Tag> findAll() {
+        return tagRepository.findAll();
+    }
 }

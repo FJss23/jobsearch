@@ -113,3 +113,6 @@ Building the project will also verify the formatter.
 - NOTE: Verifying an email requires to have access to that email, and get a link
 that aws will send. If we verify a domain, we need dkim 
 (https://docs.aws.amazon.com/cli/latest/reference/sesv2/create-email-identity.html)
+
+## Commands
+- docker run -it --rm --network server_jbls_net postgres:15.1-alpine psql -h postgres_jbs -d jobsearch_db -U jobsearch_admin

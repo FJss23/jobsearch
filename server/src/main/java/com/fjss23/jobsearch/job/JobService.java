@@ -1,9 +1,8 @@
 package com.fjss23.jobsearch.job;
 
-import com.fjss23.jobsearch.company.Company;
-import com.fjss23.jobsearch.company.CompanyService;
 import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.TagService;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class JobService {
 
     private final JobRepository jobRepository;
-    private final CompanyService companyService;
     private final TagService tagService;
 
-    public JobService(
-        JobRepository jobRepository, CompanyService companyService, TagService tagService) {
+    public JobService(JobRepository jobRepository, TagService tagService) {
         this.jobRepository = jobRepository;
-        this.companyService = companyService;
         this.tagService = tagService;
     }
 
@@ -26,25 +22,18 @@ public class JobService {
         List<Job> jobs = jobRepository.findAll();
 
         for (Job job : jobs) {
-            Company company = companyService.getCompanyById(job.getCompany().getId());
-            job.setCompany(company);
-
             List<Tag> tags = tagService.getTagsOfJob(job.getId());
-            job.setTags(tags);
+            job.setTags(new HashSet<>(tags));
         }
 
         return jobs;
     }
 
     public Job findById(Long id) {
-        Job job =
-                jobRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job offer not found"));
-
-        Company company = companyService.getCompanyById(job.getId());
-        job.setCompany(company);
+        Job job = jobRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job offer not found"));
 
         List<Tag> tags = tagService.getTagsOfJob(id);
-        job.setTags(tags);
+        job.setTags(new HashSet<>(tags));
 
         return job;
     }
@@ -56,11 +45,31 @@ public class JobService {
     }
 
     @Transactional
-    public Job createJob(Job job) {
-        for (Tag tag : job.getTags()) {
-            tagService.createTagsOfJob(tag.getId(), job.getId());
-        }
+    public Job save(Job job) {
         job.setState(JobState.CREATED);
-        return jobRepository.save(job);
+        var createdJob = jobRepository.save(job);
+        for (Tag tag : job.getTags()) {
+            tagService.createTagsOfJob(tag.getId(), createdJob.getId());
+        }
+        createdJob.setTags(job.getTags());
+        return createdJob;
+    }
+
+    @Transactional
+    public int[] saveAll(List<Job> jobs) {
+        jobs.forEach(job -> job.setState(JobState.CREATED));
+        var createdJobs = jobRepository.saveAll(jobs);
+        /*for (Job job: jobs) {
+            for (Tag tag : job.getTags()) {
+                tagService.createTagsOfJob(tag.getId(), createdJob.getId());
+            }
+            createdJob.setTags(job.getTags());
+        }*/
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // return createdJobs;
     }
 }

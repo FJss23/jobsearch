@@ -80,4 +80,20 @@ public class TagRepository {
         params.addValue("jobId", jobId);
         jdbcTemplate.update(sql, params);
     }
+
+    public List<Tag> findAll() {
+        String sql =
+                """
+            SELECT
+                tag.tag_id as id,
+                tag.name,
+                tag.created_at,
+                tag.created_by,
+                tag.updated_at,
+                tag.updated_by
+            FROM
+                jobsearch.tag;
+            """;
+        return jdbcTemplate.query(sql, tagRowMapper);
+    }
 }

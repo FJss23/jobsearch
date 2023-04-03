@@ -1,15 +1,16 @@
-package com.fjss23.jobsearch.tag;
+package com.fjss23.jobsearch.location;
 
 import com.fjss23.jobsearch.Auditable;
 
-public class Tag extends Auditable {
+public class Location extends Auditable {
     private Long id;
     private String name;
 
-    public Tag() {}
+    public Location() {}
 
-    public Tag(Long id) {
+    public Location(Long id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public Long getId() {

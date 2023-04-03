@@ -1,58 +1,69 @@
 package com.fjss23.jobsearch.job;
 
 import com.fjss23.jobsearch.Auditable;
-import com.fjss23.jobsearch.company.Company;
 import com.fjss23.jobsearch.tag.Tag;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class Job extends Auditable {
     private Long id;
     private String title;
-    private String industry;
+    private String role;
     private Double salaryFrom;
     private Double salaryUpTo;
-    private String coin;
+    private String salaryCurrency;
     private String location;
-    private JobWorkday workday;
+    private String workday;
     private String description;
     private JobState state;
-    private JobWorkModel workModel;
-    private String howToApply;
-    private Boolean scrapped;
+    private String workModel;
+    private String companyName;
+    private String scrappedFromUrl;
 
-    private Company company;
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
-    public Job() {
-        this.company = new Company();
-        this.tags = new ArrayList<>();
-    }
+    public Job() {}
 
     public Job(
             String title,
-            String industry,
+            String role,
             Double salaryFrom,
             Double salaryUpTo,
-            String coin,
+            String salaryCurrency,
             String location,
-            JobWorkday workday,
+            String workday,
             String description,
-            JobWorkModel workModel,
-            String howToApply,
-            Company company,
-            List<Tag> tags) {
+            String workModel,
+            String companyName,
+            Set<Tag> tags) {
         this.title = title;
-        this.industry = industry;
+        this.role = role;
         this.salaryFrom = salaryFrom;
         this.salaryUpTo = salaryUpTo;
-        this.coin = coin;
+        this.salaryCurrency = salaryCurrency;
         this.location = location;
         this.workday = workday;
         this.description = description;
         this.workModel = workModel;
-        this.howToApply = howToApply;
-        this.company = company;
+        this.companyName = companyName;
+        this.tags = tags;
+    }
+
+    public Job(
+            String title,
+            String location,
+            String workday,
+            String description,
+            String workModel,
+            String companyName,
+            String scrappedFromUrl,
+            Set<Tag> tags) {
+        this.title = title;
+        this.location = location;
+        this.workday = workday;
+        this.description = description;
+        this.workModel = workModel;
+        this.companyName = companyName;
+        this.scrappedFromUrl = scrappedFromUrl;
         this.tags = tags;
     }
 
@@ -72,12 +83,12 @@ public class Job extends Auditable {
         this.title = title;
     }
 
-    public String getIndustry() {
-        return industry;
+    public String getRole() {
+        return role;
     }
 
-    public void setIndustry(String industry) {
-        this.industry = industry;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Double getSalaryFrom() {
@@ -96,12 +107,12 @@ public class Job extends Auditable {
         this.salaryUpTo = salaryUpTo;
     }
 
-    public String getCoin() {
-        return coin;
+    public String getSalaryCurrency() {
+        return salaryCurrency;
     }
 
-    public void setCoin(String coin) {
-        this.coin = coin;
+    public void setSalaryCurrency(String salaryCurrency) {
+        this.salaryCurrency = salaryCurrency;
     }
 
     public String getLocation() {
@@ -110,14 +121,6 @@ public class Job extends Auditable {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public JobWorkday getWorkday() {
-        return workday;
-    }
-
-    public void setWorkday(JobWorkday workday) {
-        this.workday = workday;
     }
 
     public String getDescription() {
@@ -136,47 +139,43 @@ public class Job extends Auditable {
         this.state = state;
     }
 
-    public JobWorkModel getWorkModel() {
-        return workModel;
-    }
-
-    public void setWorkModel(JobWorkModel workModel) {
-        this.workModel = workModel;
-    }
-
-    public String getHowToApply() {
-        return howToApply;
-    }
-
-    public void setHowToApply(String howToApply) {
-        this.howToApply = howToApply;
-    }
-
-    public Boolean getScrapped() {
-        return scrapped;
-    }
-
-    public void setScrapped(Boolean scrapped) {
-        this.scrapped = scrapped;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    public void setCompanyId(Long id) {
-        this.getCompany().setId(id);
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getScrappedFromUrl() {
+        return scrappedFromUrl;
+    }
+
+    public void setScrappedFromUrl(String scrappedFromUrl) {
+        this.scrappedFromUrl = scrappedFromUrl;
+    }
+
+    public String getWorkday() {
+        return workday;
+    }
+
+    public void setWorkday(String workday) {
+        this.workday = workday;
+    }
+
+    public String getWorkModel() {
+        return workModel;
+    }
+
+    public void setWorkModel(String workModel) {
+        this.workModel = workModel;
     }
 }

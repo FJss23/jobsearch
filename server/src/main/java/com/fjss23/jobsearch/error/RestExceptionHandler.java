@@ -17,8 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * More information and examples:
- * - https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
+ * TODO: Don't show sensitive information in production
  */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {

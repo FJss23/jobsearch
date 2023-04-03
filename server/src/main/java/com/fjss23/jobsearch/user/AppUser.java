@@ -19,7 +19,6 @@ public class AppUser extends Auditable implements UserDetails {
     private boolean locked = false;
     private boolean enabled = false;
     private OffsetDateTime loggedAt;
-    private Long companyId;
 
     public AppUser() {}
 
@@ -121,14 +120,6 @@ public class AppUser extends Auditable implements UserDetails {
 
     public void setLoggedAt(OffsetDateTime loggedAt) {
         this.loggedAt = loggedAt;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     public boolean getLocked() {

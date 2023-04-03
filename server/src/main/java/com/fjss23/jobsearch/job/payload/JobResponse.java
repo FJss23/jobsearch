@@ -1,6 +1,5 @@
 package com.fjss23.jobsearch.job.payload;
 
-import com.fjss23.jobsearch.company.payload.CompanyResponse;
 import com.fjss23.jobsearch.tag.payload.TagResponse;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -8,16 +7,14 @@ import java.util.List;
 public record JobResponse(
         Long id,
         String title,
-        String industry,
+        String role,
         Double salaryFrom,
         Double salaryUpTo,
-        String coin,
+        String salaryCurrency,
         String location,
-        String workday,
+        String wkDay,
         String description,
         String state,
-        String workplaceSystem,
-        String howToApply,
+        String wkModel,
         OffsetDateTime createdAt,
-        CompanyResponse company,
         List<TagResponse> tags) {}

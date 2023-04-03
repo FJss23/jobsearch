@@ -2,8 +2,6 @@ package com.fjss23.jobsearch.user;
 
 public enum AppUserRole {
     CANDIDATE("ROLE_CANDIDATE"),
-    COMPANY("ROLE_COMPANY"),
-    COMPANY_ADMIN("ROLE_COMPANY_ADMIN"),
     APP_ADMIN("ROLE_APP_ADMIN");
 
     AppUserRole() {}

@@ -26,18 +26,17 @@ public class JobRepository {
             SELECT
                 job_id as id,
                 title,
-                industry,
+                role,
                 salary_from,
                 salary_up_to,
-                salary_coin as coin,
+                salary_currency,
                 location,
-                workday_code as workday,
+                workday,
                 description,
                 state,
-                company_id,
-                workplace_system,
-                how_to_apply,
-                scrapped,
+                work_model,
+                company_name,
+                scrapped_from_url,
                 created_at,
                 created_by,
                 updated_at,
@@ -55,18 +54,17 @@ public class JobRepository {
         SELECT
             job_id as id,
             title,
-            industry,
+            role,
             salary_from,
             salary_up_to,
-            salary_coin as coin,
+            salary_currency,
             location,
-            workday_code as workday,
+            workday,
             description,
             state,
-            company_id,
-            workplace_system,
-            how_to_apply,
-            scrapped,
+            work_model,
+            company_name,
+            scrapped_from_url,
             created_at,
             created_by,
             updated_at,
@@ -102,36 +100,89 @@ public class JobRepository {
     public Job save(Job job) {
         String sql =
                 """
-        INSERT
-        INTO jobsearch.job(
+         INSERT
+         INTO jobsearch.job(
             title,
-            industry,
+            role,
             salary_from,
             salary_up_to,
             salary_currency,
             location,
-            workday_code,
+            workday,
             description,
             state,
-            company_id,
-            workplace_system,
-            how_to_apply,
-            scrapped)
-        VALUES(
-            :title,
-            :industry,
-            :salaryFrom,
-            :salaryUpTo,
-            :coin,
-            :location,
-            :workday,
-            :description,
-            :state,
-            :workplaceSystem,
-            :howToApply,
-            :scrapped)
-        RETURNING *;
+            work_model,
+            company_name,
+            scrapped_from_url,
+            created_at,
+            created_by,
+            updated_at,
+            updated_by)
+         VALUES(
+             :title,
+             :role,
+             :salaryFrom,
+             :salaryUpTo,
+             :salaryCurrency,
+             :location,
+             :workday,
+             :description,
+             cast(:state.name as state),
+             :workModel,
+             :companyName,
+             :scrappedFromUrl,
+             :createdAt,
+             :createdBy,
+             :updatedAt,
+             :updatedBy)
+         RETURNING *;
         """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(job), jobRowMapper);
+    }
+
+    public int[] saveAll(List<Job> jobs) {
+        BeanPropertySqlParameterSource[] paramSourceJobs = jobs.stream()
+                .map(BeanPropertySqlParameterSource::new)
+                .toArray(BeanPropertySqlParameterSource[]::new);
+        String sql =
+                """
+         INSERT
+         INTO jobsearch.job(
+            title,
+            role,
+            salary_from,
+            salary_up_to,
+            salary_currency,
+            location,
+            workday,
+            description,
+            state,
+            work_model,
+            company_name,
+            scrapped_from_url,
+            created_at,
+            created_by,
+            updated_at,
+            updated_by)
+         VALUES(
+             :title,
+             :role,
+             :salaryFrom,
+             :salaryUpTo,
+             :salaryCurrency,
+             :location,
+             :workday,
+             :description,
+             cast(:state.name as state),
+             :workModel,
+             :companyName,
+             :scrappedFromUrl,
+             :createdAt,
+             :createdBy,
+             :updatedAt,
+             :updatedBy)
+         RETURNING job_id;
+        """;
+        return jdbcTemplate.batchUpdate(sql, paramSourceJobs);
     }
 }

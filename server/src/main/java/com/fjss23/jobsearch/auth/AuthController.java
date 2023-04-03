@@ -1,10 +1,10 @@
 package com.fjss23.jobsearch.auth;
 
 import com.fjss23.jobsearch.ApiV1PrefixController;
-import com.fjss23.jobsearch.auth.login.payload.LoginRequest;
 import com.fjss23.jobsearch.auth.login.LoginService;
-import com.fjss23.jobsearch.auth.registration.payload.RegistrationRequest;
+import com.fjss23.jobsearch.auth.login.payload.LoginRequest;
 import com.fjss23.jobsearch.auth.registration.RegistrationService;
+import com.fjss23.jobsearch.auth.registration.payload.RegistrationRequest;
 import com.fjss23.jobsearch.user.AppUser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,12 +65,12 @@ public class AuthController {
      * First, we generate the [2] refresh token, the location, device and email of the authenticated user,
      * are stored in the database, an auto-generated id is created, this id is inserted into the claims of the
      * [2] token.
-     * Lastly, the access token is generated, its claims includes the first name and the role of the user, also,
+     * Lastly, the access token is generated, its claims includes the first name and the location of the user, also,
      * the id of the [2] refresh token is incorporated in the token.
      */
     @PostMapping("/auth/login")
     public ResponseEntity<String> login(
-        @Valid @RequestBody LoginRequest login, HttpServletRequest request, HttpServletResponse response) {
+            @Valid @RequestBody LoginRequest login, HttpServletRequest request, HttpServletResponse response) {
         var upat = new UsernamePasswordAuthenticationToken(login.email(), login.password());
         Authentication authentication = authenticationManager.authenticate(upat);
 

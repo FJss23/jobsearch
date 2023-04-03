@@ -34,7 +34,6 @@ public class AppUserRepository {
                 locked,
                 enabled,
                 logged_at,
-                company_id
             FROM
                 jobsearch.appuser
             WHERE
@@ -62,7 +61,6 @@ public class AppUserRepository {
                 locked,
                 enabled,
                 logged_at,
-                company_id,
                 created_by
             FROM
                 jobsearch.appuser;

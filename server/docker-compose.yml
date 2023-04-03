@@ -22,6 +22,8 @@ services:
       - ./scripts/init_user.sql:/docker-entrypoint-initdb.d/init_user.sql
     env_file:
       - .env
+    networks:
+      - jbls_net
 
   redis:
     container_name: 'redis_jbs'
@@ -65,3 +67,6 @@ services:
 volumes:
   postgres_jbs_vol:
   pgadmin_vol:
+
+networks:
+  jbls_net:

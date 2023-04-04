@@ -122,11 +122,11 @@ public class JobScrappingService {
                     String headLine = comment.ownText();
                     String company = headLine.split("\\|")[0].trim();
 
-                    var wkDays = getWorkDayEnums(headLine).stream()
+                    var workday = getWorkDayEnums(headLine).stream()
                             .map(jobWorkday -> jobWorkday.name() + ",")
                             .collect(Collectors.joining());
 
-                    var wkModels = getWorkModelEnums(headLine).stream()
+                    var workModel = getWorkModelEnums(headLine).stream()
                             .map(jobWorkModel -> jobWorkModel.name() + ",")
                             .collect(Collectors.joining());
 
@@ -153,9 +153,9 @@ public class JobScrappingService {
                     var job = new Job(
                             headLine,
                             processedLocation.toString().trim(),
-                            wkDays,
+                            workday,
                             description,
-                            wkModels,
+                            workModel,
                             company,
                             uri,
                             jobsTags);
@@ -164,7 +164,7 @@ public class JobScrappingService {
                 }
             }
 
-            jobService.save(jobsInEuropeAndUk.get(0));
+            jobService.saveAll(jobsInEuropeAndUk);
         } catch (IOException e) {
             logger.error("Can't get the information - Exception {}", e.getMessage());
         }

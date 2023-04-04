@@ -58,13 +58,13 @@ public class JobService {
     @Transactional
     public int[] saveAll(List<Job> jobs) {
         jobs.forEach(job -> job.setState(JobState.CREATED));
-        var createdJobs = jobRepository.saveAll(jobs);
-        /*for (Job job: jobs) {
+        int[] createdJobsIds = jobRepository.saveAll(jobs);
+        for (Job job: jobs) {
             for (Tag tag : job.getTags()) {
                 tagService.createTagsOfJob(tag.getId(), createdJob.getId());
             }
             createdJob.setTags(job.getTags());
-        }*/
+        }
         try {
             throw new Exception();
         } catch (Exception e) {

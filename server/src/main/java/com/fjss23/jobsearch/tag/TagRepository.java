@@ -23,8 +23,7 @@ public class TagRepository {
                 """
         SELECT
             tag.tag_id as id,
-            tag.default_name,
-            tag.tag_code as code,
+            tag.name,
             tag.created_at,
             tag.created_by,
             tag.updated_at,

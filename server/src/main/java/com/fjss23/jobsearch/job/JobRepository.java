@@ -127,7 +127,7 @@ public class JobRepository {
              :location,
              :workday,
              :description,
-             cast(:state.name as state),
+             cast(:state.name as job_state),
              :workModel,
              :companyName,
              :scrappedFromUrl,
@@ -135,12 +135,15 @@ public class JobRepository {
              :createdBy,
              :updatedAt,
              :updatedBy)
-         RETURNING *;
+         RETURNING job_id as id;
         """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(job), jobRowMapper);
     }
 
     public int[] saveAll(List<Job> jobs) {
+        // TODO: try passing a map with the batchUpdate, instead of a BeanPropertySqlParameterSource.
+        //       The idea is to also insert the tags in the same sql statement using
+        //       `INSERT INTO teams VALUES (...) RETURNING id INTO last_id;`
         BeanPropertySqlParameterSource[] paramSourceJobs = jobs.stream()
                 .map(BeanPropertySqlParameterSource::new)
                 .toArray(BeanPropertySqlParameterSource[]::new);
@@ -173,7 +176,7 @@ public class JobRepository {
              :location,
              :workday,
              :description,
-             cast(:state.name as state),
+             cast(:state.name as job_state),
              :workModel,
              :companyName,
              :scrappedFromUrl,

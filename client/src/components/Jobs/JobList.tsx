@@ -1,6 +1,6 @@
-// import { JobCardDescription, Tag, Company } from "./Job";
 import { JobOffer } from "./Job";
 import JobCard from "./JobCard";
+import styles from "./JobList.module.css";
 
 export type JobsProps = {
   jobs: JobOffer[];
@@ -20,7 +20,7 @@ const JobList = ({ jobs, title }: JobsProps) => {
     <section>
       <h2>{title}</h2>
       <div>
-        <ul>
+        <ul className={styles.jobList}>
           {jobs.map((job: JobOffer) => (
             <li key={job.id}>
               <JobCard {...job} />

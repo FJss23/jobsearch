@@ -54,22 +54,4 @@ public class JobService {
         createdJob.setTags(job.getTags());
         return createdJob;
     }
-
-    @Transactional
-    public int[] saveAll(List<Job> jobs) {
-        jobs.forEach(job -> job.setState(JobState.CREATED));
-        int[] createdJobsIds = jobRepository.saveAll(jobs);
-        for (Job job: jobs) {
-            for (Tag tag : job.getTags()) {
-                tagService.createTagsOfJob(tag.getId(), createdJob.getId());
-            }
-            createdJob.setTags(job.getTags());
-        }
-        try {
-            throw new Exception();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // return createdJobs;
-    }
 }

@@ -12,9 +12,10 @@ public record JobResponse(
         Double salaryUpTo,
         String salaryCurrency,
         String location,
-        String wkDay,
+        String workday,
         String description,
+        String companyName,
         String state,
-        String wkModel,
+        String workModel,
         OffsetDateTime createdAt,
         List<TagResponse> tags) {}

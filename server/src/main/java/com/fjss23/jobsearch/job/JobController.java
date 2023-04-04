@@ -7,19 +7,19 @@ import com.fjss23.jobsearch.job.payload.JobResponse;
 import com.fjss23.jobsearch.job.payload.JobResponseMapper;
 import com.fjss23.jobsearch.job.scrapping.JobScrappingService;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @ApiV1PrefixController
 public class JobController {
 
     private final JobService jobService;
-    private final JobScrappingService jobScrappingService;
     private final JobResponseMapper jobResponseMapper;
     private final JobRequestMapper jobRequestMapper;
 
@@ -31,14 +31,12 @@ public class JobController {
             JobResponseMapper jobResponseMapper,
             JobRequestMapper jobRequestMapper) {
         this.jobService = jobService;
-        this.jobScrappingService = jobScrappingService;
         this.jobResponseMapper = jobResponseMapper;
         this.jobRequestMapper = jobRequestMapper;
     }
 
     @GetMapping("/jobs")
     public List<JobResponse> getAllJobs() {
-        jobScrappingService.scrappingFromHackerNews();
         return jobService.findAll().stream().map(jobResponseMapper).collect(Collectors.toList());
     }
 

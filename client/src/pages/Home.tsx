@@ -16,8 +16,8 @@ function HomePage() {
   return (
     <>
       <section>
-        <h1>Work remotely from Europe.</h1>
-        <p>Work from anywhere in Europe. Start now!</p>
+        <h1>Jobs in EU & UK</h1>
+        <p>Work from anywhere in Europe & UK. Start now!</p>
         <form onSubmit={submitHandler} className={styles.searchForm}>
           <label htmlFor="search" hidden>
             Job position, company name, tags or keywords

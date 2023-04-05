@@ -15,7 +15,7 @@ const JobCard = (props: JobOfferCard) => {
         <span>{`${props.createdAt}`}</span>
       </header>
       <img
-        src={"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.P6YMYbb6ML_ae3oWWaR45AHaFj%26pid%3DApi&f=1&ipt=909500b0178af76a24e54f25553d52eb9f6b4375284c4db73e4d7c6edde7f83f&ipo=images"}
+        src={`${props.companyLogoUrl}`}
         alt={`Logo of the company ${props.companyName}`}
         width="100px"
         height="100px"

@@ -17,12 +17,13 @@ export interface JobOffer {
   workModel: string;
   createdAt: Date;
   companyName: string;
+  companyLogoUrl: string
   tags: Tag[];
 }
 
 
 export type JobOfferCard = Pick<
   JobOffer,
-  "id" | "title" | "location" | "workModel" | "createdAt" | "companyName" | "tags"
+  "id" | "title" | "location" | "workModel" | "createdAt" | "companyName" | "tags" | "companyLogoUrl"
 >;
 

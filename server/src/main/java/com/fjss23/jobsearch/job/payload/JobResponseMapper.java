@@ -33,6 +33,7 @@ public class JobResponseMapper implements Function<Job, JobResponse> {
                 job.getWorkday(),
                 job.getDescription(),
                 job.getCompanyName(),
+                job.getCompanyLogoUrl(),
                 job.getState().name(),
                 job.getWorkModel(),
                 job.getCreatedAt(),

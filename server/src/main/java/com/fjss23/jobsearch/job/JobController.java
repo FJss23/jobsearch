@@ -37,8 +37,9 @@ public class JobController {
     }
 
     @GetMapping("/jobs")
-    public List<JobResponse> getAllJobs() {
-        return jobService.findAll().stream().map(jobResponseMapper).collect(Collectors.toList());
+    public List<JobResponse> getJobs(@RequestParam("from") Long from, @RequestParam("size") int size) {
+        List<Job> jobsPaginated = jobService.findPaginated(from, size);
+        return jobsPaginated.stream().map(jobResponseMapper).collect(Collectors.toList());
     }
 
     @GetMapping("/jobs/{id}")

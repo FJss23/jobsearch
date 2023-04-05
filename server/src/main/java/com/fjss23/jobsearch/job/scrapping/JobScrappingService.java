@@ -34,16 +34,14 @@ public class JobScrappingService {
     private final TagService tagService;
     private final LocationRepository locationRepository;
 
-    private static final Pattern pWorkdayPartTime = Pattern.compile("PART[\\s|_|\\-]TIME|[Pp]art[\\s|_|\\-][Tt]ime");
-    private static final Pattern pWorkdayPerHours = Pattern.compile("PER[\\s|_|\\-]HOUR|[Pp]er[\\s|_|\\-][Hh]our");
-    private static final Pattern pWorkdayFullTime = Pattern.compile("FULL[\\s|_|\\-]TIME|[Ff]ull[\\s|_|\\-][Tt]ime");
+    private final Pattern pWorkdayPartTime = Pattern.compile("PART[\\s|_|\\-]TIME|[Pp]art[\\s|_|\\-][Tt]ime");
+    private final Pattern pWorkdayPerHours = Pattern.compile("PER[\\s|_|\\-]HOUR|[Pp]er[\\s|_|\\-][Hh]our");
+    private final Pattern pWorkdayFullTime = Pattern.compile("FULL[\\s|_|\\-]TIME|[Ff]ull[\\s|_|\\-][Tt]ime");
 
-    private static final Pattern pWorkModelRemote = Pattern.compile("REMOTE|[Rr]emote");
-    private static final Pattern pWorkModelHybrid = Pattern.compile("HYBRID|[Hh]ybrid");
-    private static final Pattern pWorkModelOnSite =
+    private final Pattern pWorkModelRemote = Pattern.compile("REMOTE|[Rr]emote");
+    private final Pattern pWorkModelHybrid = Pattern.compile("HYBRID|[Hh]ybrid");
+    private final Pattern pWorkModelOnSite =
             Pattern.compile("ON[\\s|_|\\-]SITE|ONSITE|[Oo]n[\\s|_|\\-][Ss]ite|[Oo]n[Ss]ite");
-
-    private final String BASE_URL = "https://news.ycombinator.com";
 
     private static final Logger logger = LoggerFactory.getLogger(JobScrappingService.class);
 
@@ -62,9 +60,19 @@ public class JobScrappingService {
     //      https://spring.io/blog/2020/11/10/new-in-spring-5-3-improved-cron-expressions)
     @Scheduled(cron = "0 0 20 3 * ?", zone = "Europe/Madrid")
     public void scrappingFromHackerNews() {
-        var jobsInEuropeAndUk = new ArrayList<Job>();
+        final var jobsInEuropeAndUk = new ArrayList<Job>();
+        final String BASE_URL = "https://news.ycombinator.com";
+
+        List<Location> allLocations = locationRepository.findAll();
+        StringBuilder regLocations = getRegexLocations(allLocations);
+        Pattern pEuropeOrUk = Pattern.compile(regLocations.toString());
+
+        List<Tag> allTags = tagService.findAll();
+        StringBuilder regWithAllTags = getRegexTags(allTags);
+        Pattern pTags = Pattern.compile(regWithAllTags.toString());
+
         try {
-            Elements possibleJobs = new Elements();
+            final Elements possibleJobs = new Elements();
             // TODO: Search by the name Ask HN: Who is hiring? (<month> <year>) and get the content
             Document doc = Jsoup.connect(BASE_URL + "/item?id=34983767").get();
             Elements tdsIndent0 = doc.select("tr.athing > td > table > tbody > tr > td[indent=\"0\"]");
@@ -85,16 +93,6 @@ public class JobScrappingService {
                 possibleJobs.addAll(tdsIndent0);
             }
 
-            List<Location> listOfLocations = locationRepository.findAll();
-            StringBuilder regLocations = getRegexLocations(listOfLocations);
-
-            Pattern pEuOrUk = Pattern.compile(regLocations.toString());
-
-            List<Tag> allTags = tagService.findAll();
-            StringBuilder regWithAllTags = getRegexTags(allTags);
-
-            Pattern pTags = Pattern.compile(regWithAllTags.toString());
-
             for (Element td : possibleJobs) {
                 Element trContent = td.parent();
                 Element comment = trContent
@@ -107,7 +105,7 @@ public class JobScrappingService {
                     continue;
                 }
 
-                Matcher matchEuOrUk = pEuOrUk.matcher(comment.text());
+                Matcher matchEuOrUk = pEuropeOrUk.matcher(comment.text());
                 List<String> jobLocation = new ArrayList<>();
 
                 while (matchEuOrUk.find()) {
@@ -116,63 +114,13 @@ public class JobScrappingService {
 
                 if (!jobLocation.isEmpty()) {
                     // It is an EU country (or UK)
-                    String uri = comment.baseUri();
-
-                    // Processing the locations of the job
-                    Set<String> uniqueLocations = new HashSet<>();
-                    for (String location : jobLocation) {
-                        String locationWithoutNoise = location.replaceAll("\\W", "");
-                        uniqueLocations.add(locationWithoutNoise);
-                    }
-
-                    StringBuilder processedLocation = new StringBuilder();
-                    uniqueLocations.forEach(
-                            location -> processedLocation.append(location).append(" "));
-
-                    String locations = processedLocation.toString().trim();
-
-                    // Processing the title
-                    String title = comment.ownText();
-
-                    // Processing the name of the company
-                    String company = title.split("\\|")[0].trim();
-
-                    // Processing the workday. e.g: "FULL_TIME PART_TIME"
-                    String workday = getWorkDayEnums(title).stream()
-                            .map(jobWorkday -> jobWorkday.name() + " ")
-                            .collect(Collectors.joining())
-                            .trim();
-
-                    // Processing the work model. e.g: "REMOTE HYBRID"
-                    String workModel = getWorkModelEnums(title).stream()
-                            .map(jobWorkModel -> jobWorkModel.name() + " ")
-                            .collect(Collectors.joining())
-                            .trim();
-
-                    // Processing the description
-                    Elements content = comment.children();
-                    String description = content.text();
-
-                    // Processing the tags
-                    StringBuilder tagsFound = new StringBuilder();
-                    Matcher matchTags = pTags.matcher(description.toLowerCase());
-
-                    while (matchTags.find()) {
-                        tagsFound.append(matchTags.group()).append(",");
-                    }
-
-                    String[] splitTags =
-                            tagsFound.toString().replaceAll("\\W", "").split(",");
-
-                    List<String> processedTags = Arrays.stream(splitTags)
-                            .map(String::trim)
-                            .filter(tag -> !"".equals(tag))
-                            .toList();
-
-                    Set<Tag> jobTags = getTagsObjects(processedTags, allTags);
-
-                    var job = new Job(title, locations, workday, description, workModel, company, uri, jobTags);
-
+                    Job job = processJob(
+                            comment.baseUri(),
+                            comment.ownText(),
+                            comment.children().text(),
+                            jobLocation,
+                            pTags,
+                            allTags);
                     jobsInEuropeAndUk.add(job);
                 }
             }
@@ -183,9 +131,9 @@ public class JobScrappingService {
             for (Job job : jobsInEuropeAndUk) {
                 try {
                     jobService.save(job);
-                } catch(Exception e) {
-                    logger.error("Error trying to save the job {} - Exception {}", job.getDescription(), e.getMessage());
-                    continue;
+                } catch (Exception e) {
+                    logger.error(
+                            "Error trying to save the job {} - Exception {}", job.getDescription(), e.getMessage());
                 }
             }
         } catch (IOException e) {
@@ -193,24 +141,74 @@ public class JobScrappingService {
         }
     }
 
-    private Set<Tag> getTagsObjects(List<String> processedTags, List<Tag> allTags) {
+    private Job processJob(
+            String uri, String title, String description, List<String> jobLocation, Pattern pTags, List<Tag> allTags) {
+        String locations = processLocation(jobLocation);
+
+        String company = title.split("\\|")[0].trim();
+
+        String workday = getWorkDayEnums(title).stream()
+                .map(jobWorkday -> jobWorkday.name() + " ")
+                .collect(Collectors.joining())
+                .trim();
+
+        String workModel = getWorkModelEnums(title).stream()
+                .map(jobWorkModel -> jobWorkModel.name() + " ")
+                .collect(Collectors.joining())
+                .trim();
+
+        Set<Tag> jobTags = processTags(description, pTags, allTags);
+
+        String companyLogoUrl = "https://ui-avatars.com/api/?name=" + company;
+
+        return new Job(title, locations, workday, description, workModel, company, uri, companyLogoUrl, jobTags);
+    }
+
+    private Set<Tag> processTags(String description, Pattern pTags, List<Tag> allTags) {
+        StringBuilder tagsFound = new StringBuilder();
+        Matcher matchTags = pTags.matcher(description.toLowerCase());
+
+        while (matchTags.find()) {
+            tagsFound.append(matchTags.group()).append(",");
+        }
+
+        String[] splitTags = tagsFound.toString().replaceAll("\\W", " ").split(" ");
+
+        List<String> processedTags = Arrays.stream(splitTags)
+                .map(String::trim)
+                .filter(tag -> !"".equals(tag))
+                .toList();
+
         return allTags.stream()
                 .filter(tag -> processedTags.contains(tag.getName().toLowerCase()))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
+    private static String processLocation(List<String> jobLocation) {
+        Set<String> uniqueLocations = new HashSet<>();
+        for (String location : jobLocation) {
+            String locationWithoutNoise = location.replaceAll("\\W", "");
+            uniqueLocations.add(locationWithoutNoise);
+        }
+
+        StringBuilder processedLocation = new StringBuilder();
+        uniqueLocations.forEach(location -> processedLocation.append(location).append(" "));
+
+        return processedLocation.toString().trim();
+    }
+
     // TODO: Current behaviour -> [Cc]zech Republic. Desired behaviour -> [Cc]zech [Rr]epublic
-    private StringBuilder getRegexLocations(List<Location> listOfLocations) {
+    private StringBuilder getRegexLocations(List<Location> allLocations) {
         StringBuilder regLocations = new StringBuilder();
         regLocations.append("\\W(");
-        for (int i = 0; i < listOfLocations.size(); i++) {
-            var name = listOfLocations.get(i).getName();
+        for (int i = 0; i < allLocations.size(); i++) {
+            var name = allLocations.get(i).getName();
             var nameFirstLetter = name.substring(0, 1);
             var nameWithoutFirstLetter = name.substring(1);
             var modifiedName =
                     "[" + nameFirstLetter.toUpperCase() + nameFirstLetter.toLowerCase() + "]" + nameWithoutFirstLetter;
             regLocations.append(modifiedName);
-            if (i < listOfLocations.size() - 1) {
+            if (i < allLocations.size() - 1) {
                 regLocations.append("|");
             } else {
                 regLocations.append(")\\W");
@@ -221,15 +219,15 @@ public class JobScrappingService {
 
     private Set<JobWorkModel> getWorkModelEnums(String headLine) {
         Set<JobWorkModel> workplaceSystems = new HashSet<>();
-        Matcher remote = pWorkModelRemote.matcher(headLine);
+        Matcher remote = this.pWorkModelRemote.matcher(headLine);
         if (remote.find()) {
             workplaceSystems.add(JobWorkModel.REMOTE);
         }
-        Matcher hybrid = pWorkModelHybrid.matcher(headLine);
+        Matcher hybrid = this.pWorkModelHybrid.matcher(headLine);
         if (hybrid.find()) {
             workplaceSystems.add(JobWorkModel.HYBRID);
         }
-        Matcher onSite = pWorkModelOnSite.matcher(headLine);
+        Matcher onSite = this.pWorkModelOnSite.matcher(headLine);
         if (onSite.find()) {
             workplaceSystems.add(JobWorkModel.ON_SITE);
         }
@@ -240,15 +238,15 @@ public class JobScrappingService {
 
     private Set<JobWorkday> getWorkDayEnums(String headLine) {
         Set<JobWorkday> workdays = new HashSet<>();
-        Matcher partTime = pWorkdayPartTime.matcher(headLine);
+        Matcher partTime = this.pWorkdayPartTime.matcher(headLine);
         if (partTime.find()) {
             workdays.add(JobWorkday.PART_TIME);
         }
-        Matcher perHours = pWorkdayPerHours.matcher(headLine);
+        Matcher perHours = this.pWorkdayPerHours.matcher(headLine);
         if (perHours.find()) {
             workdays.add(JobWorkday.PER_HOURS);
         }
-        Matcher fullTime = pWorkdayFullTime.matcher(headLine);
+        Matcher fullTime = this.pWorkdayFullTime.matcher(headLine);
         if (fullTime.find()) {
             workdays.add(JobWorkday.FULL_TIME);
         }
@@ -257,11 +255,11 @@ public class JobScrappingService {
         return workdays;
     }
 
-    private StringBuilder getRegexTags(List<Tag> tags) {
+    private StringBuilder getRegexTags(List<Tag> allTags) {
         StringBuilder regTags = new StringBuilder();
         regTags.append("\\W(");
-        for (int i = 0; i < tags.size(); i++) {
-            var name = tags.get(i).getName().toLowerCase();
+        for (int i = 0; i < allTags.size(); i++) {
+            var name = allTags.get(i).getName().toLowerCase();
             if (name.contains(".")) {
                 // e.g: .NET
                 name = name.replaceAll("\\.", "\\.");
@@ -271,7 +269,7 @@ public class JobScrappingService {
                 name = name.replaceAll("\\+", "\\+");
             }
             regTags.append(name);
-            if (i < tags.size() - 1) {
+            if (i < allTags.size() - 1) {
                 regTags.append("|");
             } else {
                 regTags.append(")\\W");

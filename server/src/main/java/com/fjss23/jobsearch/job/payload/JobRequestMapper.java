@@ -37,6 +37,7 @@ public class JobRequestMapper implements Function<JobRequest, Job> {
                 jobRequest.description(),
                 jobRequest.workModel(),
                 jobRequest.companyName(),
+                jobRequest.companyLogoUrl(),
                 new HashSet<>(tags));
     }
 }

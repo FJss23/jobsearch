@@ -30,7 +30,7 @@ public class LoginRepository {
                 :location,
                 :device,
                 :appUserEmail)
-
+            RETURNING
                 refresh_token_info_id;
             """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(refreshTokenInfo), Long.class);

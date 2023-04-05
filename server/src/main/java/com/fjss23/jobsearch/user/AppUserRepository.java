@@ -33,7 +33,7 @@ public class AppUserRepository {
                 role as userRole,
                 locked,
                 enabled,
-                logged_at,
+                logged_at
             FROM
                 jobsearch.appuser
             WHERE

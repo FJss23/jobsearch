@@ -39,46 +39,48 @@ export AWS_PROFILE=localstack
 # ----------------------- SNS -----------------------
 echo -e "\n=========== SNS ===========\n"
 
-EMAIL_MANAGEMENT_ARN=$(awslocal sns create-topic \
+EMAIL_MANAGEMENT_ARN=$(aws sns create-topic \
     --name email_ses_management \
     --output text \
+    --endpoint-url http://localhost:4566 \
     --query 'TopicArn')
 
-awslocal sns add-permission \
+aws sns add-permission \
     --topic-arn $EMAIL_MANAGEMENT_ARN \
     --label public_permission_ses_management \
     --aws-account-id 000000000000 \
+    --endpoint-url http://localhost:4566 \
     --action-name Publish
 
-awslocal sns subscribe \
+aws sns subscribe \
     --topic-arn $EMAIL_MANAGEMENT_ARN \
     --protocol http \
+    --endpoint-url http://localhost:4566 \
     --notification-endpoint "http://host.docker.internal:8080/api/v1/email/notification-management"
 
-awslocal sns list-topics
+aws sns list-topics \
+    --endpoint-url http://localhost:4566
 
 # ----------------------- SES -----------------------
 echo -e "\n=========== SES ===========\n"
 
-awslocal ses verify-email-identity \
-    --email-address "noreply@jobsearch.com"
+aws ses verify-email-identity \
+    --email-address noreply@jobsearch.com \
+    --endpoint-url http://localhost:4566
 
-awslocal ses create-configuration-set \
-    --configuration-set "{\"Name\":\"ses_config_set\"}"
 
-awslocal ses create-configuration-set-event-destination \
+aws ses create-configuration-set \
+    --configuration-set "{\"Name\":\"ses_config_set\"}" \
+    --endpoint-url http://localhost:4566
+
+aws ses create-configuration-set-event-destination \
     --configuration-set-name ses_config_set \
-    --event-destination "{\"Name\":\"some_name2\",\"Enabled\":true,\"MatchingEventTypes\":[\"send\",\"bounce\",\"delivery\",\"open\",\"click\"],\"SNSDestination\":{\"TopicARN\":\"$EMAIL_MANAGEMENT_ARN\"}}"
+    --event-destination "{\"Name\":\"some_name2\",\"Enabled\":true,\"MatchingEventTypes\":[\"send\",\"bounce\",\"delivery\",\"open\",\"click\"],\"SNSDestination\":{\"TopicARN\":\"$EMAIL_MANAGEMENT_ARN\"}}" \
+    --endpoint-url http://localhost:4566
 
-awslocal ses send-email \
-    --from "noreply@jobsearch.com" \
-    --to "test@test.com" \
+aws ses send-email \
+    --from noreply@jobsearch.com \
+    --to test@test.com \
     --subject "Hello World" \
-    --text "Hello World! This is your first message!"
-
-# ----------------------- S3 -----------------------
-echo -e "\n=========== S3 ===========\n"
-
-awslocal s3 mb s3://jobsearch-bucket
-
-awslocal s3 ls
+    --text "Hello World! This is your first message!" \
+    --endpoint-url http://localhost:4566

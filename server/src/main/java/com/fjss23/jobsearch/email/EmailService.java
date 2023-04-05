@@ -34,15 +34,10 @@ public class EmailService {
     private void send(String from, String to, String subject, String message) {
         try {
             logger.info("Attempting to send an email through Amazon SES " + "using the AWS SDK for Java...");
-
             Destination destination = Destination.builder().toAddresses(to).build();
-
             Content content = Content.builder().data(message).build();
-
             Content sub = Content.builder().data(subject).build();
-
             Body body = Body.builder().html(content).build();
-
             Message msg = Message.builder().subject(sub).body(body).build();
 
             SendEmailRequest emailRequest = SendEmailRequest.builder()

@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS jobsearch.job(
     state job_state NOT NULL,
     work_model text NOT NULL CHECK (work_model <> ''),
     company_name text,
+    company_logo_url text,
     scrapped_from_url text,
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP,

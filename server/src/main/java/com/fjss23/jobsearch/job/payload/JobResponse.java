@@ -15,6 +15,7 @@ public record JobResponse(
         String workday,
         String description,
         String companyName,
+        String companyLogoUrl,
         String state,
         String workModel,
         OffsetDateTime createdAt,

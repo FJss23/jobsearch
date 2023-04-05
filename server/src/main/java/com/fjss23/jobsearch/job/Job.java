@@ -18,6 +18,7 @@ public class Job extends Auditable {
     private String workModel;
     private String companyName;
     private String scrappedFromUrl;
+    private String companyLogoUrl;
 
     private Set<Tag> tags;
 
@@ -34,6 +35,7 @@ public class Job extends Auditable {
             String description,
             String workModel,
             String companyName,
+            String companyLogoUrl,
             Set<Tag> tags) {
         this.title = title;
         this.role = role;
@@ -45,6 +47,7 @@ public class Job extends Auditable {
         this.description = description;
         this.workModel = workModel;
         this.companyName = companyName;
+        this.companyLogoUrl = companyLogoUrl;
         this.tags = tags;
     }
 
@@ -56,6 +59,7 @@ public class Job extends Auditable {
             String workModel,
             String companyName,
             String scrappedFromUrl,
+            String companyLogoUrl,
             Set<Tag> tags) {
         this.title = title;
         this.location = location;
@@ -64,6 +68,7 @@ public class Job extends Auditable {
         this.workModel = workModel;
         this.companyName = companyName;
         this.scrappedFromUrl = scrappedFromUrl;
+        this.companyLogoUrl = companyLogoUrl;
         this.tags = tags;
     }
 
@@ -177,5 +182,13 @@ public class Job extends Auditable {
 
     public void setWorkModel(String workModel) {
         this.workModel = workModel;
+    }
+
+    public String getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
+    public void setCompanyLogoUrl(String companyLogoUrl) {
+        this.companyLogoUrl = companyLogoUrl;
     }
 }

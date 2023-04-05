@@ -6,15 +6,18 @@ import com.fjss23.jobsearch.job.payload.JobRequestMapper;
 import com.fjss23.jobsearch.job.payload.JobResponse;
 import com.fjss23.jobsearch.job.payload.JobResponseMapper;
 import com.fjss23.jobsearch.job.scrapping.JobScrappingService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @ApiV1PrefixController
 public class JobController {
@@ -26,18 +29,18 @@ public class JobController {
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);
 
     public JobController(
-            JobService jobService,
-            JobScrappingService jobScrappingService,
-            JobResponseMapper jobResponseMapper,
-            JobRequestMapper jobRequestMapper) {
+        JobService jobService,
+        JobResponseMapper jobResponseMapper,
+        JobRequestMapper jobRequestMapper) {
         this.jobService = jobService;
         this.jobResponseMapper = jobResponseMapper;
         this.jobRequestMapper = jobRequestMapper;
     }
 
     @GetMapping("/jobs")
-    public List<JobResponse> getAllJobs() {
-        return jobService.findAll().stream().map(jobResponseMapper).collect(Collectors.toList());
+    public List<JobResponse> getJobs(@RequestParam("from") Long from, @RequestParam("size") int size) {
+        List<Job> jobsPaginated = jobService.findPaginated(from, size);
+        return jobsPaginated.stream().map(jobResponseMapper).collect(Collectors.toList());
     }
 
     @GetMapping("/jobs/{id}")

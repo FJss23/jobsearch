@@ -1,49 +1,56 @@
-import { json, Link } from "react-router-dom";
-import { jobApi } from "../services/jobs";
-import { store } from "../store/store";
-
-    // <>
-    //   <h1>{job.title}</h1>
-    //   <Link to={`/company/${job.company.name}/${job.company.id}`}>
-    //     <h2>{job.company.name}</h2>
-    //   </Link>
-    //   <section>
-    //     <ul>
-    //       <li>Salary: {job.salaryFrom} - {job.salaryUpTo} {job.coin}</li>
-    //       <li>Industry: {job.industry}</li>
-    //       <li>Location: {job.location}</li>
-    //       <li>Workday Type: {job.workdayType}</li>
-    //       <li>Workplace Type: {job.workplaceType}</li>
-    //     </ul>
-    //   </section>
-    //   <section>
-    //     <p>{job.description}</p>
-    //   </section>
-    //   <section>
-    //     <p>How to apply:</p>
-    //     <p>{job.howToApply}</p>
-    //   </section>
-    //   <a href="_" type="button">Apply</a>
-    // </>
+import {
+  json,
+  LoaderFunctionArgs,
+  useLoaderData,
+} from "react-router-dom";
+import { Job } from "../types/Job";
 
 const JobDetailsPage = () => {
+  const job = useLoaderData() as Job;
+
   return (
-  <>details page</>
+    <>
+      <section>
+        <h1>{job.title}</h1>
+        <h2>{job.companyName}</h2>
+        <ul>
+          <li>{job.location}</li>
+          <li>{job.workday}</li>
+          <li>{job.workModel}</li>
+        </ul>
+        <div>{job.role}</div>
+        <img
+          src={`${job.companyLogoUrl}`}
+          alt={`Logo of the company ${job.companyName}`}
+          width="90px"
+          height="90px"
+        />
+        <div>{`${job.salaryFrom} - ${job.salaryUpTo} ${job.salaryCurrency}`}</div>
+        <ul>
+          {job.tags.map((tag) => (
+            <li key={tag.id}>{tag.name}</li>
+          ))}
+        </ul>
+        <p>{job.description}</p>
+      </section>
+    </>
   );
 };
 
 export default JobDetailsPage;
 
-export async function loader() {
-  const response = store.dispatch(jobApi.endpoints.getJob.initiate(1));
-  console.log(response)
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { jobId } = params;
+
+  if (!jobId) throw json({ message: "The id is required" });
+
+  const response = await fetch(`http://localhost:8080/api/v1/jobs/${jobId}`);
+  console.log(response);
 
   try {
-    const data = await response.unwrap();
+    const data = await response.json();
     return data;
   } catch (error) {
     throw json({ message: "Couldn't get the information from the server" });
-  } finally {
-    response.unsubscribe();
   }
 }

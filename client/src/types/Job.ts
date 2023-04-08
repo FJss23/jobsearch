@@ -3,7 +3,7 @@ export interface Tag {
   name: string;
 }
 
-export interface JobOffer {
+export interface Job {
   id: string;
   title: string;
   role?: string;
@@ -21,9 +21,10 @@ export interface JobOffer {
   tags: Tag[];
 }
 
-
-export type JobOfferCard = Pick<
-  JobOffer,
-  "id" | "title" | "location" | "workModel" | "createdAt" | "companyName" | "tags" | "companyLogoUrl"
->;
+export interface Page<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  first: boolean;
+}
 

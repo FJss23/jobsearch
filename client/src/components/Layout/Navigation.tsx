@@ -1,11 +1,11 @@
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../hooks/hooks";
-import styles from "./MainNavigation.module.css";
+import { AuthContext } from "../../store/authContext";
+import styles from "./Navigation.module.css";
 
-function MainNavigation() {
+function Navigation() {
   const navigate = useNavigate();
-
-  const isAuth = useAppSelector((state) => state.auth.user);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const logoutHandler = async () => {
     try {
@@ -26,34 +26,24 @@ function MainNavigation() {
   };
 
   return (
-    <header className={styles.mainHeader}>
-      <div>
-        <NavLink to="/">JobSearch</NavLink>
-      </div>
       <nav>
         <ul className={styles.navbar}>
           <li>
-            <NavLink to="/jobs">Jobs</NavLink>
+            <NavLink to="/login">Statistics</NavLink>
           </li>
-          {!isAuth && (
+          {!isLoggedIn && (
             <li className={styles.login}>
               <NavLink to="/login">Login</NavLink>
             </li>
           )}
-          {isAuth && (
-            <li>
-              <NavLink to="/applications">Applications</NavLink>
-            </li>
-          )}
-          {isAuth && (
+          {isLoggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>
             </li>
           )}
         </ul>
       </nav>
-    </header>
-  );
+  )
 }
 
-export default MainNavigation;
+export default Navigation;

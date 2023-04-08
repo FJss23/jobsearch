@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Layout/Footer";
-import MainNavigation from "../components/Layout/MainNavigation";
+import MainHeader from "../components/Layout/MainHeader";
 import styles from "./Root.module.css";
 
 function RootLayout() {
   return (
     <>
-      <MainNavigation />
+      <MainHeader />
       <main className={styles.content}>
         <Outlet />
       </main>

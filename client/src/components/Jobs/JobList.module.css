@@ -1,3 +1,21 @@
+.listTitle {
+  margin-top: 2rem;
+}
+
 .jobList li {
   list-style-type: none;
+}
+
+.pages {
+  display: flex;
+  justify-content: center;
+}
+
+.pages li {
+  list-style-type: none;
+  margin-left: 0.5rem;
+}
+
+.pages li a {
+  text-decoration: none;
 }

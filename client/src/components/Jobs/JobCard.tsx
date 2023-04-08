@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { JobOfferCard } from "./Job";
+import { Job } from "../../types/Job";
 import styles from "./JobCard.module.css";
 
-const JobCard = (props: JobOfferCard) => {
+const JobCard = (props: Job) => {
   return (
     <article className={styles.cardContainer}>
       <header>
@@ -17,18 +17,18 @@ const JobCard = (props: JobOfferCard) => {
       <img
         src={`${props.companyLogoUrl}`}
         alt={`Logo of the company ${props.companyName}`}
-        width="100px"
-        height="100px"
+        width="90px"
+        height="90px"
       />
       <div>
         <span>{props.location}</span>
         <span>{props.workModel}</span>
       </div>
-      <ul>
+      <ul className={styles.tags}>
         {props.tags.map((tag) => (
-          <Link key={tag.id} to={`/${tag.name}`}>
-            <li>{tag.name}</li>
-          </Link>
+          <li key={tag.id}>
+            <Link to="">{tag.name}</Link>
+          </li>
         ))}
       </ul>
     </article>

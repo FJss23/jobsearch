@@ -1,7 +1,8 @@
 .cardContainer {
   border: solid 1px;
   padding: 1rem;
-  margin: 1rem;
+  margin: 1rem 0rem;
+  border-radius: 10px;
 }
 
 .cardTitle {
@@ -10,3 +11,19 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
+.tags {
+  display: flex;
+}
+
+.tags li {
+  margin-left: 0.5rem;
+  border: solid 1px blue;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+.tags li a {
+  text-decoration: none;
+}
+

@@ -1,13 +1,13 @@
+import { useState } from "react";
 import { json, useLoaderData } from "react-router-dom";
-import { JobOffer } from "../components/Jobs/Job";
 import JobList from "../components/Jobs/JobList";
-import PopularTechnologies from "../components/StartingPage/PopularTechnologies";
-import { jobApi } from "../services/jobs";
-import { store } from "../store/store";
+import { Job, Page } from "../types/Job";
 import styles from "./Home.module.css";
 
 function HomePage() {
-  const jobs = useLoaderData() as JobOffer[];
+  const pageJobs = useLoaderData() as Page<Job>;
+  const [jobs, setJobs] = useState<Job[]>(pageJobs.content);
+  const [pageData, setPageData] = useState({ totalPages: pageJobs.totalPages });
 
   const submitHandler = (e: React.FormEvent) => {
     console.log("submitting...");
@@ -17,7 +17,7 @@ function HomePage() {
     <>
       <section>
         <h1>Jobs in EU & UK</h1>
-        <p>Work from anywhere in Europe & UK. Start now!</p>
+        <p>These jobs are from Hacker News and Reddit</p>
         <form onSubmit={submitHandler} className={styles.searchForm}>
           <label htmlFor="search" hidden>
             Job position, company name, tags or keywords
@@ -34,8 +34,12 @@ function HomePage() {
           </button>
         </form>
       </section>
-      <JobList jobs={jobs} title={"Latests Jobs"} />
-      <PopularTechnologies />
+      <JobList
+        jobs={jobs}
+        title="Latests Jobs"
+        onPrevPage={""}
+        onNextPage={""}
+      />
     </>
   );
 }
@@ -43,15 +47,13 @@ function HomePage() {
 export default HomePage;
 
 export async function loader() {
-  const response = store.dispatch(jobApi.endpoints.getJobs.initiate());
+  const response = await fetch("http://localhost:8080/api/v1/jobs?size=20");
 
   try {
-    const data = await response.unwrap();
-    console.log(data);
+    const data = await response.json();
+    console.log("loader function from home.tsx - ", data);
     return data;
   } catch (error) {
     throw json({ message: "Couldn't get the information from the server" });
-  } finally {
-    response.unsubscribe();
   }
 }

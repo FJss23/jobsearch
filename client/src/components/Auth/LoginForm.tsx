@@ -1,6 +1,9 @@
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   return (
     <>
       <Form method="post" action="/login">
@@ -12,10 +15,12 @@ const LoginForm = () => {
           <label htmlFor="password">Password</label>
           <input type="password" name="password" id="password" />
         </div>
-        <button type="submit">Sing in</button>
+        <button disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Loading..." : "Sing in"}
+        </button>
       </Form>
     </>
   );
-}
+};
 
 export default LoginForm;

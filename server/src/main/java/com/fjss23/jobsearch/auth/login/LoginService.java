@@ -56,7 +56,7 @@ public class LoginService {
         redisTemplate.opsForValue().set("token_" + accessToken, accessToken, 5L, TimeUnit.MINUTES);
     }
 
-    public String getNewAccessToken(String refreshToken, AppUser appUser) {
+    public String getNewAccessToken(String refreshToken) {
         DecodedJWT jwtToken = jwtHelper.getJwtRefreshToken(refreshToken);
 
         Long refreshId = jwtToken.getClaim(JwtHelper.REFRESH_ID).asLong();
@@ -67,10 +67,10 @@ public class LoginService {
         }
 
         String role = jwtToken.getClaim(JwtHelper.ROLE).asString();
+        String username = jwtToken.getSubject();
         String firstName = jwtToken.getClaim(JwtHelper.FIRST_NAME).asString();
 
-        return jwtHelper.generateAccessToken(
-                appUser.getUsername(), role, firstName, refreshAuth.get().getId());
+        return jwtHelper.generateAccessToken(username, role, firstName, refreshAuth.get().getId());
     }
 
     public boolean checkRefreshTokenValidity(String token) {

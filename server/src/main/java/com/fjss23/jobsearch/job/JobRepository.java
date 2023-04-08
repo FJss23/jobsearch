@@ -52,30 +52,30 @@ public class JobRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
-        SELECT
-            job_id as id,
-            title,
-            role,
-            salary_from,
-            salary_up_to,
-            salary_currency,
-            location,
-            workday,
-            description,
-            state,
-            work_model,
-            company_name,
-            scrapped_from_url,
-            company_logo_url,
-            created_at,
-            created_by,
-            updated_at,
-            updated_by
-        FROM
-            jobsearch.job;
-        WHERE
-            job_id = :id;
-        """;
+            SELECT
+                job_id as id,
+                title,
+                role,
+                salary_from,
+                salary_up_to,
+                salary_currency,
+                location,
+                workday,
+                description,
+                state,
+                work_model,
+                company_name,
+                scrapped_from_url,
+                company_logo_url,
+                created_at,
+                created_by,
+                updated_at,
+                updated_by
+            FROM
+                jobsearch.job
+            WHERE
+                job_id = :id;
+            """;
         params.addValue("id", id);
         try {
             var job = jdbcTemplate.queryForObject(sql, params, jobRowMapper);
@@ -89,12 +89,12 @@ public class JobRepository {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """
-        DELETE
-        FROM
-            jobsearch.job
-        WHERE
-            job_id = :id;
-        """;
+            DELETE
+            FROM
+                jobsearch.job
+            WHERE
+                job_id = :id;
+            """;
         params.addValue("id", id);
         return jdbcTemplate.queryForObject(sql, params, Long.class);
     }
@@ -102,45 +102,121 @@ public class JobRepository {
     public Job save(Job job) {
         String sql =
                 """
-         INSERT
-         INTO jobsearch.job(
-            title,
-            role,
-            salary_from,
-            salary_up_to,
-            salary_currency,
-            location,
-            workday,
-            description,
-            state,
-            work_model,
-            company_name,
-            scrapped_from_url,
-            company_logo_url,
-            created_at,
-            created_by,
-            updated_at,
-            updated_by)
-         VALUES(
-             :title,
-             :role,
-             :salaryFrom,
-             :salaryUpTo,
-             :salaryCurrency,
-             :location,
-             :workday,
-             :description,
-             cast(:state.name as job_state),
-             :workModel,
-             :companyName,
-             :scrappedFromUrl,
-             :companyLogoUrl,
-             :createdAt,
-             :createdBy,
-             :updatedAt,
-             :updatedBy)
-         RETURNING job_id as id;
-        """;
+             INSERT
+             INTO jobsearch.job(
+                title,
+                role,
+                salary_from,
+                salary_up_to,
+                salary_currency,
+                location,
+                workday,
+                description,
+                state,
+                work_model,
+                company_name,
+                scrapped_from_url,
+                company_logo_url,
+                created_by,
+                updated_by)
+             VALUES(
+                 :title,
+                 :role,
+                 :salaryFrom,
+                 :salaryUpTo,
+                 :salaryCurrency,
+                 :location,
+                 :workday,
+                 :description,
+                 cast(:state.name as job_state),
+                 :workModel,
+                 :companyName,
+                 :scrappedFromUrl,
+                 :companyLogoUrl,
+                 :createdBy,
+                 :updatedBy)
+             RETURNING job_id as id;
+            """;
         return jdbcTemplate.queryForObject(sql, new BeanPropertySqlParameterSource(job), jobRowMapper);
+    }
+
+    public List<Job> findPaginated(Long from, int size) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql =
+                """
+            SELECT
+                job_id as id,
+                title,
+                role,
+                salary_from,
+                salary_up_to,
+                salary_currency,
+                location,
+                workday,
+                description,
+                state,
+                work_model,
+                company_name,
+                scrapped_from_url,
+                company_logo_url,
+                created_at,
+                created_by,
+                updated_at,
+                updated_by
+            FROM
+                jobsearch.job
+            WHERE
+                job_id < :from
+            ORDER BY
+                job_id DESC
+            FETCH FIRST :size ROWS ONLY;
+        """;
+        params.addValue("from", from);
+        params.addValue("size", size);
+        return jdbcTemplate.query(sql, params, jobRowMapper);
+    }
+
+    public Integer getTotalJobs() {
+        String sql =
+                """
+            SELECT
+                COUNT(*)
+            FROM
+                jobsearch.job;
+            """;
+        return jdbcTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+    }
+
+    public List<Job> findFirstPage(int size) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql =
+                """
+            SELECT
+                job_id as id,
+                title,
+                role,
+                salary_from,
+                salary_up_to,
+                salary_currency,
+                location,
+                workday,
+                description,
+                state,
+                work_model,
+                company_name,
+                scrapped_from_url,
+                company_logo_url,
+                created_at,
+                created_by,
+                updated_at,
+                updated_by
+            FROM
+                jobsearch.job
+            ORDER BY
+                job_id DESC
+            FETCH FIRST :size ROWS ONLY;
+            """;
+        params.addValue("size", size);
+        return jdbcTemplate.query(sql, params, jobRowMapper);
     }
 }

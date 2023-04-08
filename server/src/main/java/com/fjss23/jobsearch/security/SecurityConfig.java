@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -27,6 +30,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Value("${spring.websecurity.debug:false}")
@@ -68,15 +72,13 @@ public class SecurityConfig {
         http.cors()
                 .and()
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(this.accessTokenEntryPoint))
-                .authorizeHttpRequests(requests -> requests.requestMatchers("/api/v*/auth/login")
+                .authorizeHttpRequests(requests -> requests.requestMatchers(
+                                "/api/v*/auth/login",
+                                "/api/v*/auth/registration/**",
+                                "/api/v*/auth/access-token",
+                                "/api/v*/email/**")
                         .permitAll()
-                        .requestMatchers("/api/v*/auth/registration/**")
-                        .permitAll()
-                        .requestMatchers("/api/v*/auth/access-token")
-                        .permitAll()
-                        .requestMatchers("/api/v*/jobs")
-                        .permitAll()
-                        .requestMatchers("/api/v*/email/**")
+                        .requestMatchers(HttpMethod.GET, "/api/v*/jobs", "/api/v*/jobs/{id}")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

@@ -3,6 +3,7 @@ package com.fjss23.jobsearch.auth;
 import com.fjss23.jobsearch.ApiV1PrefixController;
 import com.fjss23.jobsearch.auth.login.LoginService;
 import com.fjss23.jobsearch.auth.login.payload.LoginRequest;
+import com.fjss23.jobsearch.auth.login.payload.LoginResponse;
 import com.fjss23.jobsearch.auth.registration.RegistrationService;
 import com.fjss23.jobsearch.auth.registration.payload.RegistrationRequest;
 import com.fjss23.jobsearch.user.AppUser;
@@ -69,7 +70,7 @@ public class AuthController {
      * the id of the [2] refresh token is incorporated in the token.
      */
     @PostMapping("/auth/login")
-    public ResponseEntity<String> login(
+    public LoginResponse login(
             @Valid @RequestBody LoginRequest login, HttpServletRequest request, HttpServletResponse response) {
         var upat = new UsernamePasswordAuthenticationToken(login.email(), login.password());
         Authentication authentication = authenticationManager.authenticate(upat);
@@ -88,7 +89,7 @@ public class AuthController {
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
 
-        return ResponseEntity.ok(accessToken);
+        return new LoginResponse(accessToken);
     }
 
     /*
@@ -133,7 +134,7 @@ public class AuthController {
      * We must check if the refresh token is the database, if not, the token was revoked.
      */
     @PostMapping("/auth/access-token")
-    public ResponseEntity<?> getAccessToken(Principal principal, HttpServletRequest request) {
+    public ResponseEntity<?> getAccessToken(HttpServletRequest request) {
         Optional refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE.equals(cookie.getName()))
                 .findFirst();
@@ -147,7 +148,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("The refresh token is not valid");
         }
 
-        String newAccessToken = loginService.getNewAccessToken(token, (AppUser) principal);
+        String newAccessToken = loginService.getNewAccessToken(token);
         return ResponseEntity.ok(newAccessToken);
     }
 

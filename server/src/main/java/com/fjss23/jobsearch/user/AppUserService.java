@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +20,8 @@ public class AppUserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    private static final int VALID_TOKEN_TIME_IN_MINUTES = 20;
+    @Value("${registration.token.time.minutes}")
+    private int validityTokenTime;
 
     public AppUserService(
             AppUserRepository appUserRepository,
@@ -54,7 +56,7 @@ public class AppUserService implements UserDetailsService {
                 token,
                 user.getEmail(),
                 OffsetDateTime.now(),
-                OffsetDateTime.now().plusMinutes(VALID_TOKEN_TIME_IN_MINUTES));
+                OffsetDateTime.now().plusMinutes(validityTokenTime));
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 

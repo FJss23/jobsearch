@@ -237,7 +237,8 @@ CREATE FUNCTION insert_after_delete_job() RETURNS TRIGGER AS $$
             state,
             work_model,
             company_name,
-            scrapped_from_url)
+            scrapped_from_url,
+            company_logo_url)
         VALUES(
             NEW.title,
             NEW.role,
@@ -250,7 +251,8 @@ CREATE FUNCTION insert_after_delete_job() RETURNS TRIGGER AS $$
             NEW.state,
             NEW.work_model,
             NEW.company_name,
-            NEW.scrapped_from_url);
+            NEW.scrapped_from_url,
+            NEW.company_logo_url);
 
         RETURN NEW;
     END;

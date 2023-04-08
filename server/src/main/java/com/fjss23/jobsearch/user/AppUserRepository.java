@@ -20,7 +20,7 @@ public class AppUserRepository {
         this.appUserRowMapper = new BeanPropertyRowMapper<>(AppUser.class);
     }
 
-    Optional<AppUser> findByEmail(String email) {
+    public Optional<AppUser> findByEmail(String email) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         String sql =
                 """

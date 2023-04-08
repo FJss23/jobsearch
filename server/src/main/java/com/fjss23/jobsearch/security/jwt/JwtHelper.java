@@ -101,7 +101,7 @@ public class JwtHelper {
         return decodeAccessToken(accessToken).get();
     }
 
-    public DecodedJWT getJwtRefreshToken(String accessToken) {
-        return decodeAccessToken(accessToken).get();
+    public DecodedJWT   getJwtRefreshToken(String accessToken) {
+        return decodeRefreshToken(accessToken).get();
     }
 }

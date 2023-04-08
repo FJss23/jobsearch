@@ -4,7 +4,6 @@ import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.TagService;
 import java.util.HashSet;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +56,22 @@ public class JobService {
     }
 
     public List<Job> findPaginated(Long from, int size) {
-        return null;
+        List<Job> jobs;
+        if (null == from) {
+            jobs = jobRepository.findFirstPage(size);
+        } else {
+            jobs = jobRepository.findPaginated(from, size);
+        }
+
+        for (Job job : jobs) {
+            List<Tag> tags = tagService.getTagsOfJob(job.getId());
+            job.setTags(new HashSet<>(tags));
+        }
+
+        return jobs;
+    }
+
+    public int getTotalJobs() {
+        return jobRepository.getTotalJobs();
     }
 }

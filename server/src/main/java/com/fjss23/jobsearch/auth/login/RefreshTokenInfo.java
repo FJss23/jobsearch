@@ -6,6 +6,8 @@ public class RefreshTokenInfo {
     private String device;
     private String appUserEmail;
 
+    public RefreshTokenInfo() { }
+
     public RefreshTokenInfo(String location, String device, String appUserEmail) {
         this.location = location;
         this.device = device;

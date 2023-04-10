@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Job } from "../../types/Job";
 import JobCard from "./JobCard";
@@ -10,12 +11,9 @@ export type JobsProps = {
   onNextPage: string;
 };
 
-const JobList = ({
-  jobs,
-  title,
-  onPrevPage,
-  onNextPage,
-}: JobsProps) => {
+const JobList = ({ jobs, title, onPrevPage, onNextPage }: JobsProps) => {
+  const [selectedJobId, setSelectedJobId] = useState<string | undefined>(jobs[0].id);
+
   if (jobs.length === 0)
     return (
       <section>
@@ -40,6 +38,7 @@ const JobList = ({
           ))}
         </ul>
       </div>
+      <div>Currently selected job {selectedJobId}</div>
     </section>
   );
 };

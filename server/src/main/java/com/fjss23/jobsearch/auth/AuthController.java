@@ -134,22 +134,22 @@ public class AuthController {
      * We must check if the refresh token is the database, if not, the token was revoked.
      */
     @PostMapping("/auth/access-token")
-    public ResponseEntity<?> getAccessToken(HttpServletRequest request) {
+    public LoginResponse getAccessToken(HttpServletRequest request) {
         Optional refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE.equals(cookie.getName()))
                 .findFirst();
 
         if (refreshToken.isEmpty()) {
-            return ResponseEntity.badRequest().body("No refresh token provided");
+            throw new IllegalArgumentException("No refresh token provided");
         }
 
         String token = ((Cookie) refreshToken.get()).getValue();
         if (!loginService.checkRefreshTokenValidity(token)) {
-            return ResponseEntity.badRequest().body("The refresh token is not valid");
+            throw new IllegalArgumentException("The refresh token is not valid");
         }
 
         String newAccessToken = loginService.getNewAccessToken(token);
-        return ResponseEntity.ok(newAccessToken);
+        return new LoginResponse(newAccessToken);
     }
 
     @PostMapping("/forgot-password")

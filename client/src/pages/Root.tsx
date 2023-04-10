@@ -6,11 +6,11 @@ import styles from "./Root.module.css";
 function RootLayout() {
   return (
     <>
-      <MainHeader />
-      <main className={styles.content}>
-        <Outlet />
-      </main>
-      <Footer />
+        <MainHeader />
+        <main className={styles.content}>
+          <Outlet />
+        </main>
+        <Footer />
     </>
   );
 }

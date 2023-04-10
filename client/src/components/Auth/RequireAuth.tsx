@@ -1,15 +1,28 @@
-import { useContext } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../../store/authContext";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAppDisptach, useAppSelector } from "../../hooks/hooks";
+import { logout } from "../../store/auth";
 
-const RequireAuth = ({ children }: { children: JSX.Element }) => {
-  const authCtx = useContext(AuthContext);
+const RequireAuth = ({ role }: { role: string }) => {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useAppDisptach();
+  const user = useAppSelector((state) => state.auth.user);
   const location = useLocation();
 
-  if (!authCtx.isLoggedIn)
-    return <Navigate to="login" state={{ from: location }} replace />;
+  if (role !== user?.role) {
+    dispatch(logout());
+    throw new Error("An error occurred");
+  }
 
-  return children;
+  if (!isLoggedIn) {
+    dispatch(logout());
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 };
 
 export default RequireAuth;

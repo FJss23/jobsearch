@@ -4,11 +4,11 @@ import Navigation from "./Navigation";
 
 function MainNavigation() {
   return (
-    <header className={styles.mainHeader}>
+    <header className={styles.container}>
       <div>
         <NavLink to="/">JobSearch</NavLink>
+        <Navigation />
       </div>
-      <Navigation />
     </header>
   );
 }

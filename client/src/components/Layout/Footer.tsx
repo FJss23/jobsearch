@@ -1,6 +1,8 @@
+import styles from "./Footer.module.css";
+
 function Footer() {
   return (
-    <footer className="flex justify-center items-center h-56">
+    <footer className={styles.container}>
       <p>JobSearch - {new Date().getFullYear()}</p>
     </footer>
   );

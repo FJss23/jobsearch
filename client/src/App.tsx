@@ -12,6 +12,7 @@ import RegistrationPage, {
   action as registrationAction,
 } from "./pages/Registration";
 import RootLayout from "./pages/Root";
+import StatisticsPage from "./pages/Statistics";
 import Welcome from "./pages/Welcome";
 import { store } from "./store/store";
 import { ADMIN, CANDIDATE } from "./types/Roles";
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         path: "/jobs/:jobId",
         element: <JobDetailsPage />,
         loader: jobDetaiLoader,
+      },
+      {
+        path: "/statistics",
+        element: <StatisticsPage />,
       },
       {
         path: "/registration",

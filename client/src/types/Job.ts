@@ -1,7 +1,4 @@
-export interface Tag {
-  id: string;
-  name: string;
-}
+import { Tag } from "./Tag";
 
 export interface Job {
   id: string;

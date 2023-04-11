@@ -12,9 +12,9 @@
   border: solid 0px;
   padding: 0.6rem 2rem;
   border-radius: 8px;
-  background-color: #58287F;
+  background-color: #C38FFF;
 }
 
 .login > a {
-  color: white;
+  color: black;
 }

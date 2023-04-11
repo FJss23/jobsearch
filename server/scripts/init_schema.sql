@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS jobsearch.job(
     company_name text,
     company_logo_url text,
     scrapped_from_url text,
+    ts tsvector GENERATED ALWAYS AS (setweight(to_tsvector('english', title), 'A') || setweight(to_tsvector('english', description), 'B')) STORED,
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
     created_by text,

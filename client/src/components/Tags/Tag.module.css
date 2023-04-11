@@ -1,0 +1,8 @@
+.tag {
+  text-decoration: none;
+  background-color: #03DAC6;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  padding: 0.4rem 0.6rem;
+  color: black;
+}

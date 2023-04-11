@@ -32,7 +32,7 @@ function Navigation() {
       <nav>
         <ul className={styles.navbar}>
           <li>
-            <NavLink to="/login">Statistics</NavLink>
+            <NavLink to="/statistics">Statistics</NavLink>
           </li>
           {!isAuth && (
             <li className={styles.login}>

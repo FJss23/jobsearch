@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { json, useLoaderData } from "react-router-dom";
+import JobDetailView from "../components/Jobs/JobDetailView";
 import JobList from "../components/Jobs/JobList";
+import { useAppSelector } from "../hooks/hooks";
 import { Job, Page } from "../types/Job";
 import styles from "./Home.module.css";
 
 function HomePage() {
   const pageJobs = useLoaderData() as Page<Job>;
   const [jobs, setJobs] = useState<Job[]>(pageJobs.content);
+  const [selectedJob, setSelectedJob] = useState<Job | undefined>(
+    pageJobs.content[0]
+  );
   const [pageData, setPageData] = useState({ totalPages: pageJobs.totalPages });
+  const selectedJobId = useAppSelector((state) => state.job.selectedJobId);
+
+  useEffect(() => {
+    setSelectedJob(jobs.find((job) => job.id === selectedJobId));
+  }, [jobs, setSelectedJob, selectedJobId]);
 
   const submitHandler = (e: React.FormEvent) => {
     console.log("submitting...");
@@ -34,12 +44,10 @@ function HomePage() {
           </button>
         </form>
       </section>
-      <JobList
-        jobs={jobs}
-        title="Latests Jobs"
-        onPrevPage={""}
-        onNextPage={""}
-      />
+      <div className={styles.jobsContainer}>
+        <JobList jobs={jobs} onPrevPage={""} onNextPage={""} />
+        <JobDetailView job={selectedJob} />
+      </div>
     </>
   );
 }

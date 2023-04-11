@@ -3,8 +3,8 @@ import { User } from "../types/User";
 import { RootState } from "./store";
 
 export interface AuthState {
-  user: User | undefined;
-  token: string | undefined;
+  user?: User;
+  token?: string;
   isLoggedIn: boolean;
 }
 

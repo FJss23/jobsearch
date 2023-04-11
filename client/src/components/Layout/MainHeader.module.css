@@ -1,4 +1,8 @@
-.container > div{
+.container {
+  background-color: #19191B;
+}
+
+.container > div {
   font-size: 1.7rem;
   display: flex;
   align-items: center;

@@ -5,7 +5,7 @@
 
 .searchButton {
   padding: 0.8rem 1rem;
-  background-color: #89C4E1;
+  background-color: #89c4e1;
   border: solid 2px;
   border-radius: 8px;
   margin-left: 0.5rem;
@@ -17,4 +17,19 @@
   padding: 0rem 1rem;
   width: 35%;
   height: 3.5rem;
+}
+
+.jobsContainer {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  grid-template-rows: 1fr;
+  column-gap: 2rem;
+}
+
+.jobsContainer section:first-child {
+  grid-column: 1 / 2;
+}
+
+.jobsContainer section:last-child {
+  grid-column: 2 / 3;
 }

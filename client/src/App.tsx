@@ -5,7 +5,7 @@ import ChangePasswordPage from "./pages/ChangePassword";
 import Configuration from "./pages/Configuration";
 import ErrorPage from "./pages/Error";
 import ForgotPasswordPage from "./pages/ForgotPassword";
-import HomePage, { loader as homeJobsLoader } from "./pages/Home";
+import HomePage, { loader as homeLoader } from "./pages/Home";
 import JobDetailsPage, { loader as jobDetaiLoader } from "./pages/JobDetails";
 import LoginPage, { action as loginAction } from "./pages/Login";
 import RegistrationPage, {
@@ -23,7 +23,11 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <HomePage />, loader: homeJobsLoader },
+      {
+        index: true,
+        element: <HomePage />,
+        loader: homeLoader,
+      },
       {
         path: "/jobs/:jobId",
         element: <JobDetailsPage />,

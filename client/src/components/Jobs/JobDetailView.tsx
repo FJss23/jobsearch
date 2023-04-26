@@ -4,7 +4,7 @@ import TagList from "../Tags/TagList";
 
 function JobDetailView({ job }: { job?: Job }) {
   if (!job) {
-    return <section>Selected a job</section>;
+    return <section>No job selected</section>;
   }
   return (
     <section>

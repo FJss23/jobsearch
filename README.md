@@ -75,8 +75,6 @@ maintaince db:  jobsearch_db
 user:           ...
 password:       ...
 ```
-## TODO
-- [ ] Should I use Docker Swarm instead of docker-compose?
 
 ## Debug
 ```bash

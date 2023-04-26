@@ -21,7 +21,7 @@ async function refreshTokenReq() {
   }
 }
 
-export async function fetcher(
+export async function authFetch(
   url: string,
   options: RequestInit | undefined,
   retry = true

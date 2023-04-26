@@ -55,7 +55,7 @@ public abstract class AbstractIntegrationTest {
     @Container
     static LocalStackContainer localStack = new LocalStackContainer(DockerImageName.parse("localstack/localstack:1.4"))
             .withLogConsumer(new Slf4jLogConsumer(logger))
-            .withServices(S3, SES, SNS)
+            .withServices(SES, SNS)
             .withAccessToHost(true);
 
     @Container
@@ -80,7 +80,6 @@ public abstract class AbstractIntegrationTest {
     public void setupAwsServices() {
         setupSns();
         setupSes();
-        setupS3();
     }
 
     @BeforeEach
@@ -193,10 +192,4 @@ public abstract class AbstractIntegrationTest {
         sesClient.setIdentityNotificationTopic(delivered);
     }
 
-    public void setupS3() {
-        /*var createBucket =
-                CreateBucketRequest.builder().bucket("jobsearch-bucket").build();
-
-        s3Client.createBucket(createBucket);*/
-    }
 }

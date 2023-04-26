@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS jobsearch.job(
     company_name text,
     company_logo_url text,
     scrapped_from_url text,
-    ts tsvector GENERATED ALWAYS AS (setweight(to_tsvector('english', title), 'A') || setweight(to_tsvector('english', description), 'B')) STORED,
+    ts tsvector GENERATED ALWAYS AS (to_tsvector('english', title) || to_tsvector('english', description)) STORED,
 
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP,
     created_by text,
@@ -184,6 +184,9 @@ CREATE TABLE IF NOT EXISTS jobsearch.appuser_deleted(
     PRIMARY KEY (appuser_id)
 );
 
+-- Index
+CREATE INDEX ts_idx ON jobsearch.job USING GIN (ts);
+
 -- Triggers
 CREATE FUNCTION update_value_updated_at() RETURNS TRIGGER AS $$
     BEGIN
@@ -209,6 +212,11 @@ CREATE TRIGGER job_tag_updated_at_automatic
 
 CREATE TRIGGER appuser_updated_at_automatic
     BEFORE UPDATE ON jobsearch.appuser
+    FOR EACH ROW
+    EXECUTE FUNCTION update_value_updated_at();
+
+CREATE TRIGGER confirmation_token_updated_at_automatic
+    BEFORE UPDATE ON jobsearch.confirmation_token
     FOR EACH ROW
     EXECUTE FUNCTION update_value_updated_at();
 
@@ -264,6 +272,53 @@ CREATE TRIGGER copy_deleted_job
     FOR EACH ROW
     EXECUTE FUNCTION insert_after_delete_job();
 
+CREATE FUNCTION insert_after_delete_job_tag() RETURNS TRIGGER AS $$
+    BEGIN
+        INSERT
+        INTO jobsearch.job_tag_deleted(
+            job_id,
+            tag_id)
+        VALUES(
+            NEW.job_id,
+            NEW.tag_id);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER copy_deleted_job_tag
+    AFTER DELETE ON jobsearch.job_tag
+    FOR EACH ROW
+    EXECUTE FUNCTION insert_after_delete_job_tag();
+
+CREATE FUNCTION insert_after_delete_appuser() RETURNS TRIGGER AS $$
+    BEGIN
+        INSERT
+        INTO jobsearch.appuser_deleted(
+            appuser,
+            last_name,
+            email,
+            password,
+            role,
+            locked,
+            enabled,
+            logged_at)
+        VALUES(
+            NEW.appuser,
+            NEW.last_name,
+            NEW.email,
+            NEW.password,
+            NEW.role,
+            NEW.locked,
+            NEW.enabled,
+            NEW.logged_at);
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER copy_deleted_appuser
+    AFTER DELETE ON jobsearch.appuser
+    FOR EACH ROW
+    EXECUTE FUNCTION insert_after_delete_appuser();
 
 INSERT INTO jobsearch.tag(name)
 VALUES ('.NET'),

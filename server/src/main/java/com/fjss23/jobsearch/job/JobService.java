@@ -55,12 +55,12 @@ public class JobService {
         return createdJob;
     }
 
-    public List<Job> findPaginated(Long from, int size) {
+    public List<Job> findPaginated(Filter filter) {
         List<Job> jobs;
-        if (null == from) {
-            jobs = jobRepository.findFirstPage(size);
+        if (null == filter.from()) {
+            jobs = jobRepository.findFirstPage(filter);
         } else {
-            jobs = jobRepository.findPaginated(from, size);
+            jobs = jobRepository.findPaginated(filter);
         }
 
         for (Job job : jobs) {
@@ -71,7 +71,7 @@ public class JobService {
         return jobs;
     }
 
-    public int getTotalJobs() {
-        return jobRepository.getTotalJobs();
+    public int getTotalJobs(Filter filter) {
+        return jobRepository.getTotalJobs(filter);
     }
 }

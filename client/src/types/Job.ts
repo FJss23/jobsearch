@@ -20,8 +20,9 @@ export interface Job {
 
 export interface Page<T> {
   content: T[];
-  totalPages: number;
-  totalElements: number;
+  total: number;
+  prev: number;
+  next: number;
   first: boolean;
 }
 

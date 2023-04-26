@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDisptach, useAppSelector } from "../../hooks/hooks";
 import { logout } from "../../store/auth";
-import { fetcher } from "../../util/fetcher";
+import { authFetch } from "../../util/fetcher";
 import styles from "./Navigation.module.css";
 
 function Navigation() {
@@ -11,7 +11,7 @@ function Navigation() {
 
   const logoutHandler = async () => {
     try {
-      const response = await fetcher("http://localhost:8080/api/v1/auth/logout", {
+      const response = await authFetch("http://localhost:8080/api/v1/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

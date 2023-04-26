@@ -1,14 +1,10 @@
+.jobSearch {
+  padding-bottom: 3rem;
+}
+
 .searchForm {
   display: flex;
   flex-direction: row;
-}
-
-.searchButton {
-  padding: 0.8rem 1rem;
-  background-color: #89c4e1;
-  border: solid 2px;
-  border-radius: 8px;
-  margin-left: 0.5rem;
 }
 
 .searchInput {
@@ -32,4 +28,9 @@
 
 .jobsContainer section:last-child {
   grid-column: 2 / 3;
+}
+
+.loadingSpinner {
+  text-align: center;
+  font-size: 4rem;
 }

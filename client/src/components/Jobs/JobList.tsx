@@ -6,11 +6,11 @@ import styles from "./JobList.module.css";
 export type JobsProps = {
   jobs: Job[];
   title?: string;
-  onPrevPage: string;
-  onNextPage: string;
+  prevPage: { visible: boolean; link: string };
+  nextPage: { visible: boolean; link: string };
 };
 
-const JobList = ({ jobs, title, onPrevPage, onNextPage }: JobsProps) => {
+const JobList = ({ jobs, title, prevPage, nextPage }: JobsProps) => {
   if (jobs.length === 0)
     return (
       <section>
@@ -22,11 +22,7 @@ const JobList = ({ jobs, title, onPrevPage, onNextPage }: JobsProps) => {
   return (
     <section>
       {title && <h2 className={styles.listTitle}>{title}</h2>}
-      <div>
-        <div>
-          <Link to={onPrevPage}>prev</Link>
-          <Link to={onNextPage}>next</Link>
-        </div>
+      <div className={styles.jobListContainer}>
         <ul className={styles.jobList}>
           {jobs.map((job: Job) => (
             <li key={job.id}>
@@ -34,6 +30,10 @@ const JobList = ({ jobs, title, onPrevPage, onNextPage }: JobsProps) => {
             </li>
           ))}
         </ul>
+      </div>
+      <div className={styles.pagLinks}>
+        {prevPage.visible && <Link to={prevPage.link}>prev</Link>}
+        {nextPage.visible && <Link to={nextPage.link}>next</Link>}
       </div>
     </section>
   );

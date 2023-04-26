@@ -11,7 +11,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -135,7 +134,7 @@ public class AuthController {
      */
     @PostMapping("/auth/access-token")
     public LoginResponse getAccessToken(HttpServletRequest request) {
-        Optional refreshToken = Arrays.stream(request.getCookies())
+        Optional<Cookie> refreshToken = Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE.equals(cookie.getName()))
                 .findFirst();
 
@@ -154,11 +153,11 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public void forgotPassword() {
-        // todo: implement the function
+        // TODO: implement the function
     }
 
     @PostMapping("/change-password")
     public void changePassword() {
-        // todo: implement the function
+        // TODO: implement the function
     }
 }

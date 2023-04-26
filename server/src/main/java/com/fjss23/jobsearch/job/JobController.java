@@ -1,19 +1,18 @@
 package com.fjss23.jobsearch.job;
 
 import com.fjss23.jobsearch.ApiV1PrefixController;
+import com.fjss23.jobsearch.Page;
 import com.fjss23.jobsearch.job.payload.JobRequest;
 import com.fjss23.jobsearch.job.payload.JobRequestMapper;
 import com.fjss23.jobsearch.job.payload.JobResponse;
 import com.fjss23.jobsearch.job.payload.JobResponseMapper;
 import com.fjss23.jobsearch.job.scrapping.JobScrappingService;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -42,12 +41,20 @@ public class JobController {
 
     @GetMapping("/jobs")
     public Page<JobResponse> getJobs(
-            @RequestParam(value = "from", required = false) Long from, @RequestParam("size") int size) {
-        int totalJobs = jobService.getTotalJobs();
-        PageRequest pageable = PageRequest.of(Math.toIntExact(from == null ? 0 : from), size);
-        List<Job> jobs = jobService.findPaginated(from, size);
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "from", required = false) Long from,
+            @RequestParam(value = "page", required = false) String page,
+            @RequestParam("size") int size) {
+        var filters = new Filter(search, new ArrayList<>(), new ArrayList<>(), from, size, page);
+        int totalJobs = jobService.getTotalJobs(filters);
+        List<Job> jobs = jobService.findPaginated(filters);
         List<JobResponse> jobsResponse = jobs.stream().map(jobResponseMapper).collect(Collectors.toList());
-        return new PageImpl<>(jobsResponse, pageable, totalJobs);
+        return new Page<>(
+                jobsResponse,
+                jobsResponse.get(0).id(),
+                jobsResponse.get(jobsResponse.size() - 1).id(),
+                totalJobs,
+                from == null ? true : false);
     }
 
     @GetMapping("/jobs/{id}")
@@ -75,7 +82,7 @@ public class JobController {
     }
 
     @PreAuthorize("hasAuthority('APP_ADMIN')")
-    @GetMapping("/scrapping")
+    @GetMapping("/jobs/scrapping")
     public void manualScrapping() {
         jobScrappingService.scrappingFromHackerNews();
     }

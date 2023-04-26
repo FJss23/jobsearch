@@ -40,9 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
       body: JSON.stringify(credentials),
     });
 
-    if (!response.ok) {
-      throw response;
-    }
+    if (!response.ok) throw response;
 
     const content = await response.json();
     const payload = jwtDecode<UserJwtPayload>(content.token);

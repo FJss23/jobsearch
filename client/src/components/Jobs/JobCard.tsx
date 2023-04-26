@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useAppDisptach } from "../../hooks/hooks";
 import { setSelectedJobId } from "../../store/job";
 import { Job } from "../../types/Job";
@@ -15,11 +14,11 @@ const JobCard = (props: Job) => {
   return (
     <article className={styles.cardContainer}>
       <header>
-        <h2 className={styles.cardTitle} onClick={setSelectedJobHandler}>
+        <h3 className={styles.cardTitle} onClick={setSelectedJobHandler}>
           {props.title}
-        </h2>
+        </h3>
         <p>{props.companyName}</p>
-        <span>{`${props.createdAt}`}</span>
+        <span>{`${new Date(props.createdAt).toLocaleDateString()}`}</span>
       </header>
       <img
         src={`${props.companyLogoUrl}`}
@@ -31,7 +30,7 @@ const JobCard = (props: Job) => {
         <span>{props.location}</span>
         <span>{props.workModel}</span>
       </div>
-      <ul className={styles.tags}>
+      <ul>
         <TagList tags={props.tags} />
       </ul>
     </article>

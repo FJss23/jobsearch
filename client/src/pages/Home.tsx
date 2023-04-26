@@ -45,22 +45,20 @@ function HomePage() {
     <>
       <section className={styles.jobSearch}>
         <h1>Jobs in EU & UK</h1>
-        <p>These jobs are from Hacker News and Reddit</p>
+        <h2>Jobs from Hacker News Who is Hiring montly post</h2>
         <Form className={styles.searchForm} id="search-form" role="search">
-          <label htmlFor="search" hidden>
-            Job position, company name, tags or keywords
-          </label>
           <input
             className={styles.searchInput}
             type="search"
             aria-label="Search jobs"
             name="q"
             id="search"
-            placeholder="Position, Company name, Tags or Keywords"
+            placeholder="Company, Technology or keyword... Start typing"
             onChange={searchHandler}
           />
         </Form>
       </section>
+      <hr />
       <div className={styles.loadingSpinner} aria-hidden hidden={!searching}>
         Loading...
       </div>
@@ -74,7 +72,9 @@ function HomePage() {
             }}
             nextPage={{
               visible: true,
-              link: `?${q ? "q=" + q + "&" : ""}from=${pageJobs.next}&size=${20}`,
+              link: `?${q ? "q=" + q + "&" : ""}from=${
+                pageJobs.next
+              }&size=${20}`,
             }}
           />
           <JobDetailView job={selectedJob} />

@@ -7,17 +7,12 @@
   height: 100vh;
 }
 
-.jobList li {
-  list-style-type: none;
-}
-
 .pages {
   display: flex;
   justify-content: center;
 }
 
 .pages li {
-  list-style-type: none;
   margin-left: 0.5rem;
 }
 
@@ -28,4 +23,12 @@
 .pagLinks {
   display: flex;
   justify-content: space-around;
+  margin-top: 4rem;
+}
+
+a[type="button"] {
+  border: 2px solid #1095c1;
+  color: #1095c1;
+  border-radius: 8px;
+  padding: 1rem 2rem;
 }

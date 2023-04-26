@@ -1,11 +1,12 @@
 .cardContainer {
   padding: 1rem;
   margin: 1rem 0rem;
-  border: 2px solid gray;
+  border: 2px solid #333;
   border-radius: 10px;
 }
 
 .cardTitle {
+  margin-bottom: 2rem;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;

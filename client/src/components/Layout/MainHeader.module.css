@@ -1,5 +1,6 @@
 .container {
-  background-color: #19191B;
+  border-bottom: 2px solid #333;
+  margin-bottom: 4rem;
 }
 
 .container > div {
@@ -15,4 +16,5 @@
 
 a {
   text-decoration: none;
+  color: #bbc6ce;
 }

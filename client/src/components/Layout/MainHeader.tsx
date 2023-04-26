@@ -6,7 +6,9 @@ function MainNavigation() {
   return (
     <header className={styles.container}>
       <div>
-        <NavLink to="/">JobSearch</NavLink>
+        <NavLink to="/">
+          <strong>JobSearch</strong>
+        </NavLink>
         <Navigation />
       </div>
     </header>

@@ -32,8 +32,8 @@ const JobList = ({ jobs, title, prevPage, nextPage }: JobsProps) => {
         </ul>
       </div>
       <div className={styles.pagLinks}>
-        {prevPage.visible && <Link to={prevPage.link}>prev</Link>}
-        {nextPage.visible && <Link to={nextPage.link}>next</Link>}
+        {prevPage.visible && <Link type="button" to={prevPage.link}>prev</Link>}
+        {nextPage.visible && <Link type="button" to={nextPage.link}>next</Link>}
       </div>
     </section>
   );

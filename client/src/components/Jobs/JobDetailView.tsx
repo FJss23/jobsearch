@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { Job } from "../../types/Job";
 import TagList from "../Tags/TagList";
+import styles from "./JobDetailView.module.css";
 
 function JobDetailView({ job }: { job?: Job }) {
   if (!job) {
     return <section>No job selected</section>;
   }
+
   return (
     <section>
       <Link to={`/jobs/${job.id}`} target="_blank" rel="noopener noreferrer">
@@ -24,9 +26,16 @@ function JobDetailView({ job }: { job?: Job }) {
         width="90px"
         height="90px"
       />
-      <div>{`${job.salaryFrom} - ${job.salaryUpTo} ${job.salaryCurrency}`}</div>
+      <div className={styles.salary}>
+          Salary from:{" "}
+          {`${job.salaryFrom || "NS/NC"} ${
+            job.salaryCurrency || ""
+          } Salary up to: ${job.salaryUpTo || "NS/NC"} ${
+            job.salaryCurrency || ""
+          }`}
+      </div>
       <TagList tags={job.tags} />
-      <p>{job.description}</p>
+      <p className={styles.jobDescription}>{job.description}</p>
     </section>
   );
 }

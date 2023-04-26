@@ -6,16 +6,18 @@
 html {
   /* (10% * 100%) / 16px = 62.5% (10px per rem) */
   font-size: 62.5%;
+  font-family: "Open Sans", sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 body {
   font-family: sans-serif;
   font-weight: 400;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   line-height: 1.7;
   box-sizing: border-box;
-  background-color: #19191B;
-  color: #949495;
+  background-color: #11191f;
+  color: #bbc6ce;
 }
 
 #root {
@@ -29,5 +31,10 @@ main {
 }
 
 h1 {
-  color: #FBFBFB;
+  color: #ffffff;
+  font-size: 4rem;
+}
+
+li {
+  list-style: none;
 }

@@ -1,5 +1,4 @@
 .navbar {
-  list-style-type: none;
   display: flex;
   align-items: center;
 }
@@ -12,7 +11,7 @@
   border: solid 0px;
   padding: 0.6rem 2rem;
   border-radius: 8px;
-  background-color: #C38FFF;
+  background-color: #1095c1;
 }
 
 .login > a {

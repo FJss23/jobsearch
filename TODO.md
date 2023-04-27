@@ -1,16 +1,9 @@
-- [] Investigate what is going on with <springProfile> in the logback.xml file.
-- [] Remove the soft-delete functionality, instead use a trigger to insert into a new table.
-- [] Create all the functionality of init_aws in java, and let that script for production.
-- [] Start using the enums for job properties.
-- [] Solve the problem of scrapping HN in the appropiate days.
-- [] Refactor the Scrapping class.
-- [] Rewrite the functionality of getting the aws credentials, when creating the beans.
-- [] Don't use .env and use something else instead.
-- [] Scrap the job offers from HN and Reddit.
-- [] Remove refresh tokens from the database every X amount of time.
-- [] Remove emails sent from the database every X amount of time.
-- [] Follow the spring tutorial for the registration process.
-- [] Aws ses. Maybe verify a domain instead of a specific email.
-- [] db ssl?
+# Todos
 
-- [x] Solve the host.testcontainers.internal problem. (doesn't send any request to the appropriate endpoint).
+- [] Investigate what is going on with <springProfile> in the logback.xml file.
+- [] Create all the functionality of init_aws in java, and let that script for production.
+- [] Solve the problem of scrapping HN in the appropiate days.
+- [] Find jobs on Reddit
+- [] Remove refresh tokens from the database every X amount of time. (expired ones)
+- [] Remove emails sent from the database every X amount of time.
+- [] Improve aws credentials

@@ -6,7 +6,7 @@ import com.fjss23.jobsearch.job.payload.JobRequest;
 import com.fjss23.jobsearch.job.payload.JobRequestMapper;
 import com.fjss23.jobsearch.job.payload.JobResponse;
 import com.fjss23.jobsearch.job.payload.JobResponseMapper;
-import com.fjss23.jobsearch.job.scrapping.JobScrappingService;
+import com.fjss23.jobsearch.job.scraping.JobScrapingService;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +24,19 @@ public class JobController {
     private final JobService jobService;
     private final JobResponseMapper jobResponseMapper;
     private final JobRequestMapper jobRequestMapper;
-    private final JobScrappingService jobScrappingService;
+    private final JobScrapingService jobScrapingService;
 
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);
 
     public JobController(
             JobService jobService,
-            JobScrappingService jobScrappingService,
+            JobScrapingService jobScrapingService,
             JobResponseMapper jobResponseMapper,
             JobRequestMapper jobRequestMapper) {
         this.jobService = jobService;
         this.jobResponseMapper = jobResponseMapper;
         this.jobRequestMapper = jobRequestMapper;
-        this.jobScrappingService = jobScrappingService;
+        this.jobScrapingService = jobScrapingService;
     }
 
     @GetMapping("/jobs")
@@ -45,16 +45,20 @@ public class JobController {
             @RequestParam(value = "from", required = false) Long from,
             @RequestParam(value = "page", required = false) String page,
             @RequestParam("size") int size) {
+        // Maybe I can get the number of elements left, knowing from where I'm starting
         var filters = new Filter(search, new ArrayList<>(), new ArrayList<>(), from, size, page);
         int totalJobs = jobService.getTotalJobs(filters);
         List<Job> jobs = jobService.findPaginated(filters);
+
         List<JobResponse> jobsResponse = jobs.stream().map(jobResponseMapper).collect(Collectors.toList());
-        return new Page<>(
-                jobsResponse,
-                jobsResponse.get(0).id(),
-                jobsResponse.get(jobsResponse.size() - 1).id(),
-                totalJobs,
-                from == null ? true : false);
+        Long first = jobsResponse.isEmpty() ? null : jobsResponse.get(0).id();
+        Long last = jobsResponse.isEmpty()
+                ? null
+                : jobsResponse.get(jobsResponse.size() - 1).id();
+        var isFirstPage = from == null ? true : false;
+        if (isFirstPage) first = null;
+
+        return new Page<>(jobsResponse, first, last, totalJobs, isFirstPage);
     }
 
     @GetMapping("/jobs/{id}")
@@ -72,9 +76,7 @@ public class JobController {
     @PreAuthorize("hasAuthority('APP_ADMIN')")
     @PostMapping("/jobs")
     @ResponseStatus(HttpStatus.CREATED)
-    public JobResponse createJob(@Valid @RequestBody JobRequest jobRequest, Authentication authentication) {
-        String email = authentication.getName();
-
+    public JobResponse createJob(@Valid @RequestBody JobRequest jobRequest) {
         Job jobReceived = jobRequestMapper.apply(jobRequest);
         Job jobCreated = jobService.save(jobReceived);
 
@@ -83,7 +85,13 @@ public class JobController {
 
     @PreAuthorize("hasAuthority('APP_ADMIN')")
     @GetMapping("/jobs/scrapping")
-    public void manualScrapping() {
-        jobScrappingService.scrappingFromHackerNews();
+    public void manualHackerNewsScraping() {
+        jobScrapingService.scrapingFromHackerNews();
+    }
+
+    @PreAuthorize("hasAuthority('APP_ADMIN')")
+    @GetMapping("/jobs/set-source")
+    public void manualSetSourceHackerNews() {
+        jobScrapingService.scrappingUrlFromHackerNews();
     }
 }

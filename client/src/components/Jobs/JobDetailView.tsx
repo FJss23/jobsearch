@@ -5,38 +5,61 @@ import styles from "./JobDetailView.module.css";
 
 function JobDetailView({ job }: { job?: Job }) {
   if (!job) {
-    return <section>No job selected</section>;
+    return <section></section>;
   }
 
   return (
-    <section>
-      <Link to={`/jobs/${job.id}`} target="_blank" rel="noopener noreferrer">
-        <h2>{job.title}</h2>
-      </Link>
-      <h3>{job.companyName}</h3>
-      <ul>
-        <li>{job.location}</li>
-        <li>{job.workday}</li>
-        <li>{job.workModel}</li>
-      </ul>
-      <div>{job.role}</div>
-      <img
-        src={`${job.companyLogoUrl}`}
-        alt={`Logo of the company ${job.companyName}`}
-        width="90px"
-        height="90px"
-      />
-      <div className={styles.salary}>
-          Salary from:{" "}
-          {`${job.salaryFrom || "NS/NC"} ${
-            job.salaryCurrency || ""
-          } Salary up to: ${job.salaryUpTo || "NS/NC"} ${
-            job.salaryCurrency || ""
-          }`}
-      </div>
+    <article>
+      <header className={styles.header}>
+        <img
+          className={styles.jobImg}
+          src={`${job.company.logoUrl}`}
+          alt={`Logo of the company ${job.company.name}`}
+          width="90px"
+          height="90px"
+        />
+        <Link to={`/jobs/${job.id}`} target="_blank" rel="noopener noreferrer">
+          <h2 className={styles.jobTitle}>{job.title}</h2>
+        </Link>
+      </header>
       <TagList tags={job.tags} />
+      <ul className={styles.generalInfo}>
+        <li>
+          <strong>Company:</strong> {job.company.name}
+        </li>
+        <li>
+          <strong>Location</strong>: {job.location}
+        </li>
+        <li>
+          <strong>Date</strong>:{" "}
+          {`${new Date(job.createdAt).toLocaleDateString()}`}
+        </li>
+        <li>
+          <strong>Work model</strong>: {job.workModel.replace(" ", " - ")}
+        </li>
+        <li>
+          <strong>Workday</strong>: {job.workday.replace(" ", " - ")}
+        </li>
+        {job.salary.from && (
+          <li>
+            <strong>Salary from</strong>: {job.salary.currency}
+            {job.salary.from}
+          </li>
+        )}
+        {job.salary.upTo && (
+          <li>
+            <strong>Salary up to</strong>: {job.salary.currency}
+            {job.salary.upTo}
+          </li>
+        )}
+        {job.role && (
+          <li>
+            <strong>Role</strong>: {job.role}
+          </li>
+        )}
+      </ul>
       <p className={styles.jobDescription}>{job.description}</p>
-    </section>
+    </article>
   );
 }
 

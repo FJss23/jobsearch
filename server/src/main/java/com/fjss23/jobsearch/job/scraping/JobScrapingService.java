@@ -1,14 +1,14 @@
-package com.fjss23.jobsearch.job.scrapping;
+package com.fjss23.jobsearch.job.scraping;
 
-import com.fjss23.jobsearch.job.Job;
-import com.fjss23.jobsearch.job.JobService;
-import com.fjss23.jobsearch.job.JobWorkModel;
-import com.fjss23.jobsearch.job.JobWorkday;
+import com.fjss23.jobsearch.job.*;
 import com.fjss23.jobsearch.location.Location;
 import com.fjss23.jobsearch.location.LocationRepository;
 import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.TagService;
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.text.DateFormatSymbols;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,15 +24,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /*
- * TODO: Get more jobs adding the visa sponsor option
+ * (More information about how cron expressions are implemented:
+ *      https://spring.io/blog/2020/11/10/new-in-spring-5-3-improved-cron-expressions)
  */
 @Service
 @EnableScheduling
-public class JobScrappingService {
+public class JobScrapingService {
 
     private final JobService jobService;
     private final TagService tagService;
     private final LocationRepository locationRepository;
+    private final JobScrapingRepository jobScrapingRepository;
 
     private final Pattern pWorkdayPartTime = Pattern.compile("PART[\\s|_|\\-]TIME|[Pp]art[\\s|_|\\-][Tt]ime");
     private final Pattern pWorkdayPerHours = Pattern.compile("PER[\\s|_|\\-]HOUR|[Pp]er[\\s|_|\\-][Hh]our");
@@ -43,25 +45,69 @@ public class JobScrappingService {
     private final Pattern pWorkModelOnSite =
             Pattern.compile("ON[\\s|_|\\-]SITE|ONSITE|[Oo]n[\\s|_|\\-][Ss]ite|[Oo]n[Ss]ite");
 
-    private static final Logger logger = LoggerFactory.getLogger(JobScrappingService.class);
+    private static final String HACKER_NEWS = "HACKER_NEWS";
 
-    public JobScrappingService(JobService jobService, TagService tagService, LocationRepository locationRepository) {
+    private static final Logger logger = LoggerFactory.getLogger(JobScrapingService.class);
+
+    public JobScrapingService(
+            JobService jobService,
+            TagService tagService,
+            LocationRepository locationRepository,
+            JobScrapingRepository jobScrapingRepository) {
         this.jobService = jobService;
         this.tagService = tagService;
         this.locationRepository = locationRepository;
+        this.jobScrapingRepository = jobScrapingRepository;
     }
 
-    // The post "Ask HN: Who is hiring? (<month> <year>) is created the 1st of each month, at 15.00 +/- 00.05 (my time).
-    // If the date is on the weekend, it will be moved to Monday. Companies keep posting new jobs even some days latter.
-    // Right now, we are only executing this function in a fixed day (only once).
-    // TODO: Run it every day after the 1st of <month>, to add jobs that are posted later, this will require to check
-    //       if a job is already stored in the database or not.
-    // (More information about how cron expressions are implemented:
-    //      https://spring.io/blog/2020/11/10/new-in-spring-5-3-improved-cron-expressions)
-    @Scheduled(cron = "0 0 20 3 * ?", zone = "Europe/Madrid")
-    public void scrappingFromHackerNews() {
+    /*
+     * 4.00 PM (16:00) every 12 hours on the first 5 days of the month
+     */
+    @Scheduled(cron = "0 0 16/12 1-5 * ?", zone = "Europe/Madrid")
+    public void scrappingUrlFromHackerNews() {
+        final String baseUrl = "https://news.ycombinator.com";
+        try {
+            Document doc = Jsoup.connect(baseUrl + "/ask").get();
+            Elements possibleAnchors = doc.select("tr.athing > td.title > span.titleline > a");
+            Element found = null;
+            var now = OffsetDateTime.now();
+            int month = now.getMonth().getValue() - 1;
+            int year = now.getYear();
+            String monthSymbol = DateFormatSymbols.getInstance().getMonths()[month];
+            for (Element element : possibleAnchors) {
+                var title = "Ask HN: Who is hiring? (" + monthSymbol + " " + year + ")";
+                if (title.contains(element.text())) {
+                    found = element;
+                    break;
+                }
+            }
+
+            if (found == null) return;
+
+            String partialPath = found.attr("href");
+            var ss = new ScrapingSource(HACKER_NEWS, baseUrl, baseUrl + "/" + partialPath, true);
+
+            jobScrapingRepository.setInactiveBySourceName(HACKER_NEWS);
+            jobScrapingRepository.save(ss);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /* The post "Ask HN: Who is hiring? (<month> <year>) is created the 1st of each month, at 15.00 +/- 00.05 (my time).
+     * If the date is on the weekend, it will be moved to Monday. Companies keep posting new jobs even some days latter.
+     * Right now, we are only executing this function in a fixed day (only once).
+     *
+     * 4.00 PM (16:00) every 12 hours on the first 15 days of the month
+     */
+    @Scheduled(cron = "0 0 16/12 1-15 * ?", zone = "Europe/Madrid")
+    public void scrapingFromHackerNews() {
         final var jobsInEuropeAndUk = new ArrayList<Job>();
-        final String BASE_URL = "https://news.ycombinator.com";
+        Optional<ScrapingSource> ss = jobScrapingRepository.getScrapingSourceActiveByName(HACKER_NEWS);
+        if (ss.isEmpty()) return;
+
+        final String baseUrl = ss.get().getBaseUrl();
+        final String url = ss.get().getUrl();
 
         List<Location> allLocations = locationRepository.findAll();
         StringBuilder regLocations = getRegexLocations(allLocations);
@@ -72,29 +118,31 @@ public class JobScrappingService {
         Pattern pTags = Pattern.compile(regWithAllTags.toString());
 
         try {
-            final Elements possibleJobs = new Elements();
-            // TODO: Search by the name Ask HN: Who is hiring? (<month> <year>) and get the content
-            Document doc = Jsoup.connect(BASE_URL + "/item?id=34983767").get();
+            var jobs = new ArrayList<JobElement>();
+            // Document doc = Jsoup.connect(BASE_URL + "/item?id=34983767").get();
+            Document doc = Jsoup.connect(url).get();
+
+            // If we specify the indentation 0, we can get the jobs, avoiding the comments
             Elements tdsIndent0 = doc.select("tr.athing > td > table > tbody > tr > td[indent=\"0\"]");
 
             // A HN post can have multiple pages, lets get the link to the next
             Element moreComments = doc.select(".morelink").first();
             String pathNextPage = moreComments != null ? moreComments.attr("href") : "";
 
-            possibleJobs.addAll(tdsIndent0);
+            addJobElement(tdsIndent0, jobs);
 
             while (!"".equals(pathNextPage)) {
-                doc = Jsoup.connect(BASE_URL + "/" + pathNextPage).get();
+                doc = Jsoup.connect(baseUrl + "/" + pathNextPage).get();
                 tdsIndent0 = doc.select("tr.athing > td > table > tbody > tr > td[indent=\"0\"]");
 
                 moreComments = doc.select(".morelink").first();
                 pathNextPage = moreComments != null ? moreComments.attr("href") : "";
 
-                possibleJobs.addAll(tdsIndent0);
+                addJobElement(tdsIndent0, jobs);
             }
 
-            for (Element td : possibleJobs) {
-                Element trContent = td.parent();
+            for (JobElement jobElement : jobs) {
+                Element trContent = jobElement.element().parent();
                 Element comment = trContent
                         .select("td.default > div.comment > span.commtext")
                         .first();
@@ -114,13 +162,17 @@ public class JobScrappingService {
 
                 if (!jobLocation.isEmpty()) {
                     // It is an EU country (or UK)
-                    Job job = processJob(
-                            comment.baseUri(),
+                    ProcessingJob data = new ProcessingJob(
+                            ss.get(),
                             comment.ownText(),
                             comment.children().text(),
                             jobLocation,
                             pTags,
-                            allTags);
+                            allTags,
+                            jobElement.idFromSource());
+
+                    Job job = processJob(data);
+
                     jobsInEuropeAndUk.add(job);
                 }
             }
@@ -132,36 +184,53 @@ public class JobScrappingService {
                 try {
                     jobService.save(job);
                 } catch (Exception e) {
-                    logger.error(
-                            "Error trying to save the job {} - Exception {}", job.getDescription(), e.getMessage());
+                    logger.error("Error trying to save a job {} - {}", job.getTitle(), e.getMessage());
                 }
             }
         } catch (IOException e) {
-            logger.error("Can't get the information from {} - Exception {}", BASE_URL, e.getMessage());
+            logger.error("Can't get the information from {} - Exception {}", url, e.getMessage());
         }
     }
 
-    private Job processJob(
-            String uri, String title, String description, List<String> jobLocation, Pattern pTags, List<Tag> allTags) {
-        String locations = processLocation(jobLocation);
+    private Job processJob(ProcessingJob data) {
+        String locations = processLocation(data.location());
 
-        String company = title.split("\\|")[0].trim();
+        String companyName = data.title().split("\\|")[0].trim();
 
-        String workday = getWorkDayEnums(title).stream()
+        var processedCompanyName = companyName.split(" ");
+        if (processedCompanyName.length > 3) {
+            companyName = processedCompanyName[0] + processedCompanyName[1];
+        }
+
+        String workday = getWorkDayEnums(data.title()).stream()
                 .map(jobWorkday -> jobWorkday.name() + " ")
                 .collect(Collectors.joining())
                 .trim();
 
-        String workModel = getWorkModelEnums(title).stream()
+        String workModel = getWorkModelEnums(data.title()).stream()
                 .map(jobWorkModel -> jobWorkModel.name() + " ")
                 .collect(Collectors.joining())
                 .trim();
 
-        Set<Tag> jobTags = processTags(description, pTags, allTags);
+        var searchForTags = data.title() + "\n" + data.description();
+        Set<Tag> jobTags = processTags(searchForTags, data.pTags(), data.tags());
 
-        String companyLogoUrl = "https://ui-avatars.com/api/?name=" + company;
+        String companyLogoUrl = "https://ui-avatars.com/api/?name=" + companyName;
 
-        return new Job(title, locations, workday, description, workModel, company, uri, companyLogoUrl, jobTags);
+        var company = new Company(companyName, companyLogoUrl);
+
+        var job = new Job(
+                data.title(),
+                locations,
+                workday,
+                data.description(),
+                workModel,
+                company,
+                data.idFromSource(),
+                data.ss(),
+                jobTags);
+
+        return job;
     }
 
     private Set<Tag> processTags(String description, Pattern pTags, List<Tag> allTags) {
@@ -277,4 +346,24 @@ public class JobScrappingService {
         }
         return regTags;
     }
+
+    private void addJobElement(Elements tds, List<JobElement> jobs) {
+        for (Element td : tds) {
+            Element parent = td.parent();
+            Elements anchor = parent.select("span.age > a");
+            String idFromSource = anchor.first().attr("href");
+            jobs.add(new JobElement(idFromSource, td));
+        }
+    }
+
+    record JobElement(String idFromSource, Element element) {}
+
+    record ProcessingJob(
+            ScrapingSource ss,
+            String title,
+            String description,
+            List<String> location,
+            Pattern pTags,
+            List<Tag> tags,
+            String idFromSource) {}
 }

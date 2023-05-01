@@ -1,23 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Job } from "../types/Job";
 
 export interface JobState {
-  selectedJobId?: string;
+  selectedJob?: Job;
 }
 
 const initialState: JobState = {
-  selectedJobId: undefined
+  selectedJob: undefined
 }
 
 const jobSlice = createSlice({
   name: "job",
   initialState,
   reducers: {
-    setSelectedJobId: (state, payload: PayloadAction<string>) => {
-      state.selectedJobId = payload.payload;
+    setSelectedJob: (state, payload: PayloadAction<Job | undefined>) => {
+      state.selectedJob = payload.payload;
     }
   }
 })
 
-export const { setSelectedJobId } = jobSlice.actions;
+export const { setSelectedJob } = jobSlice.actions;
 
 export default jobSlice;

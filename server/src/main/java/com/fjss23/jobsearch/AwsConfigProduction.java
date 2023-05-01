@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.sns.SnsClient;
 
@@ -20,9 +19,9 @@ public class AwsConfigProduction {
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
         return SesClient.builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-            .build();
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .build();
     }
 
     @Bean
@@ -30,18 +29,8 @@ public class AwsConfigProduction {
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
 
         return SnsClient.builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-            .build();
-    }
-
-    @Bean
-    public S3Client s3Client() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create("foo", "bar");
-
-        return S3Client.builder()
-            .region(DEFAULT_REGION)
-            .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-            .build();
+                .region(DEFAULT_REGION)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .build();
     }
 }

@@ -13,12 +13,10 @@
 }
 
 .searchInput {
-  border: solid 2px #324350;
   border-radius: 100px;
-  padding: 2.3rem 2rem;
+  padding: 1.5rem 2rem;
   width: 100%;
-  background-color: #141e26;
-  color: white;
+  font-size: 1.5rem;
 }
 
 .jobsContainer {
@@ -44,4 +42,8 @@
 hr {
   margin: 2.5rem 0rem;
   color: #333;
+}
+
+.parameters {
+  margin-bottom: 1.8rem;
 }

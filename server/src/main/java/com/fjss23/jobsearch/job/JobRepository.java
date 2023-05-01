@@ -39,8 +39,10 @@ public class JobRepository {
                 state,
                 work_model,
                 company_name,
-                scrapped_from_url,
                 company_logo_url,
+                identifier_from_source as "idFromSource",
+                visa_sponsor,
+                scraping_source_id,
                 created_at,
                 created_by,
                 updated_at,
@@ -68,8 +70,10 @@ public class JobRepository {
                 state,
                 work_model,
                 company_name,
-                scrapped_from_url,
                 company_logo_url,
+                identifier_from_source as "idFromSource",
+                visa_sponsor,
+                scraping_source_id,
                 created_at,
                 created_by,
                 updated_at,
@@ -118,24 +122,28 @@ public class JobRepository {
                 state,
                 work_model,
                 company_name,
-                scrapped_from_url,
                 company_logo_url,
+                identifier_from_source,
+                visa_sponsor,
+                scraping_source_id,
                 created_by,
                 updated_by)
              VALUES(
                  :title,
                  :role,
-                 :salaryFrom,
-                 :salaryUpTo,
-                 :salaryCurrency,
+                 :salary.from,
+                 :salary.upTo,
+                 :salary.currency,
                  :location,
                  :workday,
                  :description,
                  cast(:state.name as job_state),
                  :workModel,
-                 :companyName,
-                 :scrappedFromUrl,
-                 :companyLogoUrl,
+                 :company.name,
+                 :company.logoUrl,
+                 :idFromSource,
+                 :visaSponsor,
+                 :scrapingSource.id,
                  :createdBy,
                  :updatedBy)
              RETURNING job_id as id;
@@ -160,8 +168,10 @@ public class JobRepository {
                 state,
                 work_model,
                 company_name,
-                scrapped_from_url,
                 company_logo_url,
+                identifier_from_source as "idFromSource",
+                visa_sponsor,
+                scraping_source_id,
                 created_at,
                 created_by,
                 updated_at,
@@ -182,9 +192,9 @@ public class JobRepository {
         TextSearch ts = getTextSearchSql(filter.getTerms());
         sql.append(" WHERE job_id ")
                 .append(symbol)
-                .append(" :from")
+                .append(" :from AND ")
                 .append(ts.query())
-                .append("ORDER BY job_id DESC FETCH FIRST :size ROWS ONLY;");
+                .append(" ORDER BY job_id DESC FETCH FIRST :size ROWS ONLY;");
 
         params = ts.params();
         params.addValue("from", filter.from());
@@ -232,8 +242,10 @@ public class JobRepository {
                 state,
                 work_model,
                 company_name,
-                scrapped_from_url,
                 company_logo_url,
+                identifier_from_source as "idFromSource",
+                visa_sponsor,
+                scraping_source_id,
                 created_at,
                 created_by,
                 updated_at,

@@ -1,6 +1,9 @@
 package com.fjss23.jobsearch.job.payload;
 
+import com.fjss23.jobsearch.job.Company;
 import com.fjss23.jobsearch.job.Job;
+import com.fjss23.jobsearch.job.Salary;
+import com.fjss23.jobsearch.job.scraping.ScrapingSource;
 import com.fjss23.jobsearch.tag.Tag;
 import com.fjss23.jobsearch.tag.payload.TagRequestMapper;
 import java.util.HashSet;
@@ -21,23 +24,21 @@ public class JobRequestMapper implements Function<JobRequest, Job> {
     public Job apply(JobRequest jobRequest) {
         List<Tag> tags = jobRequest.tags().stream().map(tagRequestMapper).toList();
 
-        /*Set<JobWorkday> wkDays =
-                        jobRequest.workday().stream().map(JobWorkday::valueOf).collect(Collectors.toUnmodifiableSet());
-                Set<JobWorkModel> workModel =
-                        jobRequest.workModel().stream().map(JobWorkModel::valueOf).collect(Collectors.toUnmodifiableSet());
-        */
+        var company = new Company();
+        company.setName(jobRequest.companyName());
+
+        var salary = new Salary(jobRequest.salaryFrom(), jobRequest.salaryUpTo(), jobRequest.salaryCurrency());
+
         return new Job(
                 jobRequest.title(),
-                jobRequest.role(),
-                jobRequest.salaryFrom(),
-                jobRequest.salaryUpTo(),
-                jobRequest.salaryCurrency(),
                 jobRequest.location(),
                 jobRequest.workday(),
                 jobRequest.description(),
                 jobRequest.workModel(),
-                jobRequest.companyName(),
-                jobRequest.companyLogoUrl(),
+                salary,
+                company,
+                null,
+                new ScrapingSource(),
                 new HashSet<>(tags));
     }
 }

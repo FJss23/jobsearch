@@ -30,5 +30,4 @@ public record JobRequest(
                 String description,
         /*@TypesCheck(enumClass = JobWorkModel.class)*/ String workModel,
         String companyName,
-        String companyLogoUrl,
         @NotEmpty(message = "{error.not-empty.job.tags}") List<TagRequest> tags) {}

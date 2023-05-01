@@ -1,7 +1,21 @@
-.salary {
-  margin: 1rem 0rem;
+.header {
+  display: flex;
+  align-items: center;
 }
 
-.jobDescription {
-  margin-top: 1rem;
+.jobTitle {
+  margin-bottom: 2rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+}
+
+.jobImg {
+  margin-right: 2rem;
+}
+
+.generalInfo {
+  padding: 2rem 0rem;
 }

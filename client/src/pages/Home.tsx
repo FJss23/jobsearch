@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Form,
   json,
@@ -9,7 +9,8 @@ import {
 } from "react-router-dom";
 import JobDetailView from "../components/Jobs/JobDetailView";
 import JobList from "../components/Jobs/JobList";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppDisptach, useAppSelector } from "../hooks/hooks";
+import { setSelectedJob } from "../store/job";
 import { Job, Page } from "../types/Job";
 import styles from "./Home.module.css";
 
@@ -18,27 +19,34 @@ function HomePage() {
     pageJobs: Page<Job>;
     q?: string;
   };
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [selectedJob, setSelectedJob] = useState<Job | undefined>(undefined);
+  const [search, setSearch] = useState(q || "");
+  const selectedJob = useAppSelector((state) => state.job.selectedJob);
   const submit = useSubmit();
+  const submitForm = useCallback((content: FormData) => submit(content), []);
   const navigation = useNavigation();
-  const selectedJobId = useAppSelector((state) => state.job.selectedJobId);
-
-  useEffect(() => {
-    setSelectedJob(jobs.find((job) => job.id === selectedJobId));
-    setJobs(pageJobs.content);
-  }, [jobs, selectedJobId, pageJobs.content]);
+  const jobs = pageJobs.content
+  const dispatch = useAppDisptach();
 
   const searching =
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("q");
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search) {
+        console.log(search);
+        const form = new FormData();
+        form.set("q", search);
+        dispatch(setSelectedJob(undefined));
+        submitForm(form);
+      }
+    }, 1_000);
+
+    return () => clearTimeout(timer);
+  }, [search, submitForm, dispatch]);
+
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isFirstSearch = q === null;
-    submit(e.currentTarget.form, {
-      replace:
-        !isFirstSearch /* don't mess the browser history with every keystroke */,
-    });
+    setSearch(e.target.value);
   };
 
   return (
@@ -53,8 +61,9 @@ function HomePage() {
             aria-label="Search jobs"
             name="q"
             id="search"
-            placeholder="Company, Technology or keyword... Start typing"
+            placeholder="Company, Technology, Country, City or Keyword..."
             onChange={searchHandler}
+            value={search}
           />
         </Form>
       </section>
@@ -63,22 +72,34 @@ function HomePage() {
         Loading...
       </div>
       {!searching && (
-        <div className={styles.jobsContainer}>
-          <JobList
-            jobs={jobs}
-            prevPage={{
-              visible: !pageJobs.first,
-              link: `?q=${q}&from=${pageJobs.prev}&size=${20}`,
+        <>
+          <p
+            className={styles.parameters}
+            style={{
+              textAlign: jobs.length === 0 ? "center" : "inherit",
             }}
-            nextPage={{
-              visible: true,
-              link: `?${q ? "q=" + q + "&" : ""}from=${
-                pageJobs.next
-              }&size=${20}`,
-            }}
-          />
-          <JobDetailView job={selectedJob} />
-        </div>
+          >
+            <strong>{pageJobs.total}</strong> jobs <strong>{q}</strong> found
+          </p>
+          <div className={styles.jobsContainer}>
+            <JobList
+              jobs={jobs}
+              prevPage={{
+                visible: !pageJobs.first,
+                link: `?${q ? "q=" + q + "&" : ""}from=${
+                  pageJobs.prev
+                }&size=${20}&page=prev`,
+              }}
+              nextPage={{
+                visible: true,
+                link: `?${q ? "q=" + q + "&" : ""}from=${
+                  pageJobs.next
+                }&size=${20}`,
+              }}
+            />
+            <JobDetailView job={selectedJob} />
+          </div>
+        </>
       )}
     </>
   );
@@ -89,13 +110,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const q = url.searchParams.get("q");
   const from = url.searchParams.get("from");
   const size = url.searchParams.get("size") || 20;
-  console.log(q, from, size);
+  const page = url.searchParams.get("page");
 
   let response;
   try {
     let params = `jobs?size=${size}`;
     if (q) params += `&search=${q}`;
     if (from) params += `&from=${from}`;
+    if (page) params += `&page=${page}`;
 
     response = await fetch(`http://localhost:8080/api/v1/${params}`);
 

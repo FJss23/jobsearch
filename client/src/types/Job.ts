@@ -4,17 +4,21 @@ export interface Job {
   id: string;
   title: string;
   role?: string;
-  salaryFrom?: number;
-  salaryUpTo?: number;
-  salaryCurrency?: string;
+  salary: {
+    from?: number;
+    upTo?: number;
+    currency?: string;
+  };
   location: string;
   workday: string;
   description: string;
   state: string;
   workModel: string;
   createdAt: Date;
-  companyName: string;
-  companyLogoUrl: string
+  company: {
+    name: string;
+    logoUrl: string;
+  };
   tags: Tag[];
 }
 
@@ -25,4 +29,3 @@ export interface Page<T> {
   next: number;
   first: boolean;
 }
-

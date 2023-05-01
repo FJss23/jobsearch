@@ -11,14 +11,6 @@ export type JobsProps = {
 };
 
 const JobList = ({ jobs, title, prevPage, nextPage }: JobsProps) => {
-  if (jobs.length === 0)
-    return (
-      <section>
-        {title && <h2>{title}</h2>}
-        <p>No jobs found</p>
-      </section>
-    );
-
   return (
     <section>
       {title && <h2 className={styles.listTitle}>{title}</h2>}
@@ -32,8 +24,16 @@ const JobList = ({ jobs, title, prevPage, nextPage }: JobsProps) => {
         </ul>
       </div>
       <div className={styles.pagLinks}>
-        {prevPage.visible && <Link type="button" to={prevPage.link}>prev</Link>}
-        {nextPage.visible && <Link type="button" to={nextPage.link}>next</Link>}
+        {prevPage.visible && (
+          <Link type="button" to={prevPage.link}>
+            prev
+          </Link>
+        )}
+        {nextPage.visible && (
+          <Link type="button" to={nextPage.link}>
+            next
+          </Link>
+        )}
       </div>
     </section>
   );

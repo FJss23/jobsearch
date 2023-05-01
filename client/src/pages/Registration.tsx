@@ -3,22 +3,6 @@ import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 function RegistrationPage() {
   return (
     <form>
-      <fieldset>
-        <legend>Account type</legend>
-        <div>
-          <label htmlFor="company">Company</label>
-          <input type="radio" name="accountType" id="company" />
-        </div>
-        <div>
-          <label htmlFor="candidate">Candidate</label>
-          <input
-            type="radio"
-            name="accountType"
-            id="candidate"
-            defaultChecked={true}
-          />
-        </div>
-      </fieldset>
       <div>
         <label htmlFor="firstName">First Name</label>
         <input type="text" name="firstName" id="fistName" />

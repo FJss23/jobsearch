@@ -1,12 +1,10 @@
 .cardContainer {
   padding: 1rem;
   margin: 1rem 0rem;
-  border: 2px solid #333;
   border-radius: 10px;
 }
 
 .cardTitle {
-  margin-bottom: 2rem;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -14,3 +12,18 @@
   cursor: pointer;
 }
 
+.cardDefaultBorder {
+  border: 2px solid #333;
+}
+
+.cardSelectedBorder {
+  border: 2px solid #9baab5;
+}
+
+.generalInfo{
+  display: flex;
+  flex-direction: column;
+  color: #a9b7c0;
+  font-size: 1.4rem;
+  padding: 1rem 0rem;
+}

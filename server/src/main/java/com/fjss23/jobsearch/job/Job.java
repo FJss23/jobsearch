@@ -1,6 +1,7 @@
 package com.fjss23.jobsearch.job;
 
 import com.fjss23.jobsearch.Auditable;
+import com.fjss23.jobsearch.job.scraping.ScrapingSource;
 import com.fjss23.jobsearch.tag.Tag;
 import java.util.Set;
 
@@ -8,17 +9,16 @@ public class Job extends Auditable {
     private Long id;
     private String title;
     private String role;
-    private Double salaryFrom;
-    private Double salaryUpTo;
-    private String salaryCurrency;
+    private Salary salary = new Salary();
     private String location;
     private String workday;
     private String description;
-    private JobState state;
+    private JobState state = JobState.CREATED;
     private String workModel;
-    private String companyName;
-    private String scrappedFromUrl;
-    private String companyLogoUrl;
+    private Company company = new Company();
+    private String idFromSource;
+    private Boolean visaSponsor;
+    private ScrapingSource scrapingSource = new ScrapingSource();
 
     private Set<Tag> tags;
 
@@ -26,28 +26,25 @@ public class Job extends Auditable {
 
     public Job(
             String title,
-            String role,
-            Double salaryFrom,
-            Double salaryUpTo,
-            String salaryCurrency,
             String location,
             String workday,
             String description,
             String workModel,
-            String companyName,
-            String companyLogoUrl,
+            Company company,
+            String idFromSource,
+            ScrapingSource scrapingSource,
             Set<Tag> tags) {
         this.title = title;
-        this.role = role;
-        this.salaryFrom = salaryFrom;
-        this.salaryUpTo = salaryUpTo;
-        this.salaryCurrency = salaryCurrency;
+        this.role = null;
+        this.salary = new Salary();
         this.location = location;
         this.workday = workday;
         this.description = description;
         this.workModel = workModel;
-        this.companyName = companyName;
-        this.companyLogoUrl = companyLogoUrl;
+        this.company = company;
+        this.visaSponsor = false;
+        this.idFromSource = idFromSource;
+        this.scrapingSource = scrapingSource;
         this.tags = tags;
     }
 
@@ -57,18 +54,22 @@ public class Job extends Auditable {
             String workday,
             String description,
             String workModel,
-            String companyName,
-            String scrappedFromUrl,
-            String companyLogoUrl,
+            Salary salary,
+            Company company,
+            String idFromSource,
+            ScrapingSource scrapingSource,
             Set<Tag> tags) {
         this.title = title;
+        this.role = null;
+        this.salary = salary;
         this.location = location;
         this.workday = workday;
         this.description = description;
         this.workModel = workModel;
-        this.companyName = companyName;
-        this.scrappedFromUrl = scrappedFromUrl;
-        this.companyLogoUrl = companyLogoUrl;
+        this.company = company;
+        this.visaSponsor = false;
+        this.idFromSource = idFromSource;
+        this.scrapingSource = scrapingSource;
         this.tags = tags;
     }
 
@@ -96,28 +97,12 @@ public class Job extends Auditable {
         this.role = role;
     }
 
-    public Double getSalaryFrom() {
-        return salaryFrom;
+    public Salary getSalary() {
+        return salary;
     }
 
-    public void setSalaryFrom(Double salaryFrom) {
-        this.salaryFrom = salaryFrom;
-    }
-
-    public Double getSalaryUpTo() {
-        return salaryUpTo;
-    }
-
-    public void setSalaryUpTo(Double salaryUpTo) {
-        this.salaryUpTo = salaryUpTo;
-    }
-
-    public String getSalaryCurrency() {
-        return salaryCurrency;
-    }
-
-    public void setSalaryCurrency(String salaryCurrency) {
-        this.salaryCurrency = salaryCurrency;
+    public void setSalary(Salary salary) {
+        this.salary = salary;
     }
 
     public String getLocation() {
@@ -152,20 +137,12 @@ public class Job extends Auditable {
         this.tags = tags;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getScrappedFromUrl() {
-        return scrappedFromUrl;
-    }
-
-    public void setScrappedFromUrl(String scrappedFromUrl) {
-        this.scrappedFromUrl = scrappedFromUrl;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getWorkday() {
@@ -184,11 +161,51 @@ public class Job extends Auditable {
         this.workModel = workModel;
     }
 
-    public String getCompanyLogoUrl() {
-        return companyLogoUrl;
+    public String getIdFromSource() {
+        return idFromSource;
     }
 
-    public void setCompanyLogoUrl(String companyLogoUrl) {
-        this.companyLogoUrl = companyLogoUrl;
+    public void setIdFromSource(String idFromSource) {
+        this.idFromSource = idFromSource;
+    }
+
+    public Boolean getVisaSponsor() {
+        return visaSponsor;
+    }
+
+    public void setVisaSponsor(Boolean visaSponsor) {
+        this.visaSponsor = visaSponsor;
+    }
+
+    public ScrapingSource getScrapingSource() {
+        return scrapingSource;
+    }
+
+    public void setScrapingSource(ScrapingSource scrapingSource) {
+        this.scrapingSource = scrapingSource;
+    }
+
+    public void setSalaryUpTo(Double upTo) {
+        this.salary.setUpTo(upTo);
+    }
+
+    public void setSalaryFrom(Double from) {
+        this.salary.setFrom(from);
+    }
+
+    public void setSalaryCurrency(String currency) {
+        this.salary.setCurrency(currency);
+    }
+
+    public void setCompanyName(String name) {
+        this.company.setName(name);
+    }
+
+    public void setCompanyLogoUrl(String url) {
+        this.company.setLogoUrl(url);
+    }
+
+    public void setScrapingSourceId(Long id) {
+        this.scrapingSource.setId(id);
     }
 }

@@ -1,7 +1,7 @@
 .card {
   padding: 4rem;
-  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 35%;
 }

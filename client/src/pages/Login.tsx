@@ -6,10 +6,11 @@ import { setCredentials } from "../store/auth";
 import { store } from "../store/store";
 import { ADMIN, CANDIDATE } from "../types/Roles";
 import { User, UserJwtPayload } from "../types/User";
+import styles from './Login.module.css';
 
 function LoginPage() {
   return (
-    <section>
+    <section className={styles.login}>
       <Card>
         <>
           <LoginForm />

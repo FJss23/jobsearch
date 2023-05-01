@@ -38,3 +38,13 @@ h1 {
 li {
   list-style: none;
 }
+
+input {
+  margin-top: 1rem;
+  border: solid 2px #324350;
+  border-radius: 6px;
+  background-color: #141e26;
+  color: white;
+  padding: 1.2rem 1rem;
+  border-radius: 10px;
+}
